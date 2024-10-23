@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Item
+  - FxTemporaire
+  - HORIZONTAL_STRIPED
+  - VERTICAL_STRIPED
+  - MARMALADE
+  - PACKAGE
+  - MULTICOLOR
+  - INGREDIENT
+  - SPIRAL
+  - MarmaladeAnimation
+  - Multicolor_firework
+  - Simple_firework
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Item
+  - LevelPin
+  - Square
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Arrow
+    uniqueID: 2226258467
+    locked: 0
+  - name: Item mask
+    uniqueID: 1397149363
+    locked: 0
+  - name: UI
+    uniqueID: 58496801
+    locked: 0

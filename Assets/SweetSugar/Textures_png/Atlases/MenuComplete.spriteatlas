@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MenuComplete
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 2dbba8a900759409aa6a238f07aa3710, type: 3}
+    - {fileID: 2800000, guid: aad0eac933abe4e46ac9d898587f66ff, type: 3}
+    - {fileID: 2800000, guid: 9f738bb1ab53044ce8a2a749f588731a, type: 3}
+    - {fileID: 102900000, guid: 4f876bc3bab8c47c3bc6051960ec4e72, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 9f738bb1ab53044ce8a2a749f588731a: 21300000
+    - d14a9272e60184071b47f46ae4a4ef05: 21300000
+    - 06b0af64104d94c00a2fc58fcd819080: 21300000
+    - 15552a6695fe74e23983b12b1f490d3d: 21300000
+    - 2dbba8a900759409aa6a238f07aa3710: 21300000
+    - aad0eac933abe4e46ac9d898587f66ff: 21300000
+    - e0fdfd7b623794a19b62ab9c07412040: 21300000
+    - d2ca30adfcc684ce8b15d3e4be9adc46: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 9f738bb1ab53044ce8a2a749f588731a, type: 3}
+  - {fileID: 21300000, guid: d14a9272e60184071b47f46ae4a4ef05, type: 3}
+  - {fileID: 21300000, guid: 06b0af64104d94c00a2fc58fcd819080, type: 3}
+  - {fileID: 21300000, guid: 15552a6695fe74e23983b12b1f490d3d, type: 3}
+  - {fileID: 21300000, guid: 2dbba8a900759409aa6a238f07aa3710, type: 3}
+  - {fileID: 21300000, guid: aad0eac933abe4e46ac9d898587f66ff, type: 3}
+  - {fileID: 21300000, guid: e0fdfd7b623794a19b62ab9c07412040, type: 3}
+  - {fileID: 21300000, guid: d2ca30adfcc684ce8b15d3e4be9adc46, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - orange_banner
+  - Star_03
+  - Star_01
+  - win_banne_02
+  - blue_banner
+  - main_button
+  - grey_stars
+  - Star_02
+  m_RenderDataMap: {}
+  m_Tag: MenuComplete
+  m_IsVariant: 0
