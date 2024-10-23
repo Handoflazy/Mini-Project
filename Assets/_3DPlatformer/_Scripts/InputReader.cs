@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -27,8 +25,9 @@ namespace Platformer
 				_inputActions = new PlayerInputActions();
 				_inputActions.Player.SetCallbacks(this);
 			}
-			_inputActions.Player.Enable();
 		}
+
+		public void EnablePlayerActions() => _inputActions.Enable();
 
 		public void OnFire(InputAction.CallbackContext context)
 		{
@@ -42,7 +41,7 @@ namespace Platformer
 
 		public void OnLook(InputAction.CallbackContext context)
 		{
-			
+			Look?.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
 		}
 
 		public void OnMouseControlCamera(InputAction.CallbackContext context)
@@ -54,8 +53,6 @@ namespace Platformer
 					break;
 				case InputActionPhase.Canceled:
 					DisableMouseControlCamera.Invoke();
-					break;
-				default:
 					break;
 			}
 		}
