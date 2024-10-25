@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -9,10 +10,12 @@ namespace Platformer
 	[CreateAssetMenu(fileName ="InputReader",menuName ="Platformer/Input/InputReader"),]
 	public class InputReader : ScriptableObject, IPlayerActions
 	{
+		[SerializeField, Range(1, 20f)] private float MouseSensitivity = 1f;
 		public event UnityAction<Vector2> Move = delegate{};
 		public event UnityAction<Vector2,bool> Look = delegate { };
 		public event UnityAction EnableMouseControlCamera = delegate { };
 		public event UnityAction DisableMouseControlCamera = delegate { };
+		public event UnityAction<bool> Jump = delegate { };
 
 		PlayerInputActions _inputActions;
 
@@ -36,12 +39,20 @@ namespace Platformer
 
 		public void OnJump(InputAction.CallbackContext context)
 		{
-			
+			switch (context.phase)
+			{
+				case InputActionPhase.Started:
+					Jump?.Invoke(true);
+					break;
+				case InputActionPhase.Canceled:
+					Jump?.Invoke(false);
+					break;
+			}
 		}
 
 		public void OnLook(InputAction.CallbackContext context)
 		{
-			Look?.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
+			Look?.Invoke(context.ReadValue<Vector2>()*MouseSensitivity, IsDeviceMouse(context));
 		}
 
 		public void OnMouseControlCamera(InputAction.CallbackContext context)

@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90a495a30be0f224ab04bd4205de845e, type: 3}
   m_Name: MainInput
   m_EditorClassIdentifier: 
+  MouseSensitivity: 1

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 0126882fb1d83bd47a3c18e5fc868a49
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221357
+  packageName: Green Meadows - Stylized Environment URP
+  packageVersion: 1.0
+  assetPath: Assets/Ilumisoft/Green Meadows/Shaders/BackgroundTerrainShader.shadergraph
+  uploadId: 501268

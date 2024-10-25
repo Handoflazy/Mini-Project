@@ -11,7 +11,21 @@ public static class Setup
 		Folders.CreateDefault ("_Project", "Animation", "Art", "Materials", "Prefabs", "Resoureces", "_Scripts", "Settings","Scene");
 		UnityEditor.AssetDatabase.Refresh();
 	}
+
+	[MenuItem("Tools/Setup/Import Default Assets")]
+	public static void ImportDefaultAssets()
+	{
+		Assets.ImportAssets("DOTween Pro.unitypackage","Default Assets");
+		Assets.ImportAssets("Odin Inspector and Serializer.unitypackage","Default Assets");
+		Assets.ImportAssets("Play Mode Save.unitypackage","Default Assets");
+		Assets.ImportAssets("Text Animator for Unity.unitypackage","Default Assets");
+		Assets.ImportAssets("vFolders 2.unitypackage","Default Assets");
+		Assets.ImportAssets("vHierarchy 2.unitypackage","Default Assets");
+		Assets.ImportAssets("vTabs 2.unitypackage","Default Assets");
+		
+	}	
 }
+
 
 static class Folders
 {
@@ -27,5 +41,13 @@ static class Folders
 				Directory.CreateDirectory(path);
 			}
 		}
+	}
+}
+
+static class Assets
+{
+	public static void ImportAssets(string asset, string subfolder, string folder = "C:/Users/aclon/OneDrive - ut.edu.vn/UnityAssetCollector")
+	{
+		AssetDatabase.ImportPackage(Path.Combine(asset, subfolder, folder),false);
 	}
 }

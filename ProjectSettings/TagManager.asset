@@ -4,18 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Item
-  - FxTemporaire
-  - HORIZONTAL_STRIPED
-  - VERTICAL_STRIPED
-  - MARMALADE
-  - PACKAGE
-  - MULTICOLOR
-  - INGREDIENT
-  - SPIRAL
-  - MarmaladeAnimation
-  - Multicolor_firework
-  - Simple_firework
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX
@@ -28,7 +17,7 @@ TagManager:
   - Item
   - LevelPin
   - Square
-  - 
+  - Ground
   - 
   - 
   - 
