@@ -20,7 +20,7 @@ namespace Platformer
             
             _spawnTimer.OnTimeStop += () =>
             {
-                if (_counter >= collectibleData.Length)
+                if (_counter >= _spawnPoints.Length)
                 {
                     _spawnTimer.Stop();
                     return;

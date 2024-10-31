@@ -16,10 +16,12 @@ namespace Platformer
 		public event UnityAction EnableMouseControlCamera = delegate { };
 		public event UnityAction DisableMouseControlCamera = delegate { };
 		public event UnityAction<bool> Jump = delegate { };
+		public event UnityAction<bool> Dash = delegate { };
 
 		PlayerInputActions _inputActions;
 
 		public Vector3 Direction => _inputActions.Player.Move.ReadValue<Vector2>();
+		public Vector3 LookDirection => _inputActions.Player.Look.ReadValue<Vector2>();
 		
 		void OnEnable()
 		{
@@ -75,7 +77,17 @@ namespace Platformer
 
 		public void OnRun(InputAction.CallbackContext context)
 		{
-			Look.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
+		
+				switch (context.phase)
+				{
+					case InputActionPhase.Started:
+						Dash?.Invoke(true);
+						break;
+					case InputActionPhase.Canceled:
+						Dash?.Invoke(false);
+						break;
+				}
+			
 		}
 		private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
 	}

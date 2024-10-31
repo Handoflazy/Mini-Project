@@ -37,6 +37,7 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-656736bad88c7a149918e64db9be1c82-83501981-0
         - globalObjectIdString: GlobalObjectId_V1-2-656736bad88c7a149918e64db9be1c82-1604265587-0
         - globalObjectIdString: GlobalObjectId_V1-2-656736bad88c7a149918e64db9be1c82-2080133628-0
+        - globalObjectIdString: GlobalObjectId_V1-2-656736bad88c7a149918e64db9be1c82-5910927258602339605-1918948829
         values:
         - colorIndex: 0
           iconNameOrGuid: Light Icon
@@ -48,6 +49,8 @@ MonoBehaviour:
           iconNameOrGuid: AvatarMask On Icon
         - colorIndex: 5
           iconNameOrGuid: AvatarMask On Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
     - goDatas_byGlobalId:
         keys:
         - globalObjectIdString: GlobalObjectId_V1-2-b492c86983cf3014fba0daaf04b5fe40-1700769367-0

@@ -1,12 +1,12 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Platformer
 {
-    public abstract class EntitySpawnManager : MonoBehaviour
+    public abstract class EntitySpawnManager: MonoBehaviour
     {
         [SerializeField] protected SpawnPointStratgyType _spawnPointStratgyType = SpawnPointStratgyType.Linear;
-        [SerializeField] protected Transform[] spawnPoints;
-        
+        [SerializeField] protected Transform[] _spawnPoints;
         protected ISpawnPointStrategy _spawnPointStratgy;
        protected enum SpawnPointStratgyType
         {
@@ -18,8 +18,8 @@ namespace Platformer
         {
             _spawnPointStratgy = _spawnPointStratgyType switch
             {
-                SpawnPointStratgyType.Linear => new LinearSpawnPointStrategy(spawnPoints),
-                SpawnPointStratgyType.Random => new RandomSpawnPointStrategy(spawnPoints),
+                SpawnPointStratgyType.Linear => new LinearSpawnPointStrategy(_spawnPoints),
+                SpawnPointStratgyType.Random => new RandomSpawnPointStrategy(_spawnPoints),
                 _ => _spawnPointStratgy
             };
         }

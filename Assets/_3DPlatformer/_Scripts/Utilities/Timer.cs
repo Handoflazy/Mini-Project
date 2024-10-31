@@ -1,19 +1,21 @@
 using System;
+using UnityEngine.LowLevel;
 
 namespace Utilities
 {
-    public abstract class Timer 
+    public abstract class Timer
     {
         protected float _initialTime;
         protected float Time { get; set; }
         public bool IsRunning { get; private set; }
-        
-        public float Progress => Time/_initialTime;
+
+        public float Progress => Time / _initialTime;
 
         public Action OnTimeStart = delegate { };
         public Action OnTimeStop = delegate { };
-        
-        protected Timer(float value) {
+
+        protected Timer(float value)
+        {
             _initialTime = value;
             IsRunning = false;
         }
@@ -37,13 +39,13 @@ namespace Utilities
                 OnTimeStop.Invoke();
             }
         }
-        public void Resume()=> IsRunning = true;
+
+        public void Resume() => IsRunning = true;
         public void Pause() => IsRunning = false;
         public abstract void Tick(float deltaTime);
-        
     }
 
-    public class CooldownTimer: Timer
+    public class CooldownTimer : Timer
     {
         public CooldownTimer(float value) : base(value)
         {
@@ -55,14 +57,15 @@ namespace Utilities
             {
                 Time -= deltaTime;
             }
+
             if (IsRunning && Time < 0)
             {
                 Stop();
             }
         }
-        public bool IsFinish()=> Time <= 0;
+
+        public bool IsFinish() => Time <= 0;
         public void Reset() => Time = 0;
-        public float GetTime()=> Time;
-        
+        public float GetTime() => Time;
     }
 }
