@@ -10,7 +10,6 @@ namespace Platformer
 	[CreateAssetMenu(fileName ="InputReader",menuName ="Platformer/Input/InputReader"),]
 	public class InputReader : ScriptableObject, IPlayerActions
 	{
-		[SerializeField, Range(1, 20f)] private float MouseSensitivity = 1f;
 		public event UnityAction<Vector2> Move = delegate{};
 		public event UnityAction<Vector2,bool> Look = delegate { };
 		public event UnityAction EnableMouseControlCamera = delegate { };
@@ -54,7 +53,7 @@ namespace Platformer
 
 		public void OnLook(InputAction.CallbackContext context)
 		{
-			Look?.Invoke(context.ReadValue<Vector2>()*MouseSensitivity, IsDeviceMouse(context));
+			Look?.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
 		}
 
 		public void OnMouseControlCamera(InputAction.CallbackContext context)

@@ -20,7 +20,7 @@ namespace Platformer.AdvancePlayerController
             private Transform tr;
             private PlayerMover mover;
             
-            bool jumpInputIsLocked, JumpKeyWasPressed, jumpKeyWasLetGo, jumpKeyIsPressed;
+            bool jumpInputIsLocked, jumpKeyWasPressed, jumpKeyWasLetGo, jumpKeyIsPressed;
 
             public float MovementSpeed = 7f;
             public float AirControlRate = 2f;
@@ -57,6 +57,7 @@ namespace Platformer.AdvancePlayerController
             {
                 inputReader.Jump += HandleJumpKeyInput;
                 inputReader.EnablePlayerActions();
+                
             }
 
             private void OnDisable()
@@ -68,33 +69,34 @@ namespace Platformer.AdvancePlayerController
             private void SetupStateMachine()
             {
                 stateMachine = new StateMachine();
+            
                 var grounded = new GroundedState(this);
                 var falling = new FallingState(this);
                 var sliding = new SlidingState(this);
                 var rising = new RisingState(this);
                 var jumping = new JumpingState(this);
-                
-                At(grounded,rising,()=>IsRising());
-                At(grounded,sliding,()=>mover.IsGrounded()&&IsGroundTooSteep());
-                At(grounded,falling,()=>!mover.IsGrounded());
-                At(grounded,jumping,()=>(JumpKeyWasPressed||jumpKeyIsPressed)&&!jumpInputIsLocked);
-                
-                At(falling,rising,()=>IsRising());
-                At(falling,grounded,()=>mover.IsGrounded());
-                At(falling,sliding,()=>mover.IsGrounded()&&IsGroundTooSteep());
-                
-                At(sliding, rising,()=>IsRising());
-                At(sliding,falling,()=>!mover.IsGrounded());
-                At(sliding,grounded,()=>mover.IsGrounded()&&!IsGroundTooSteep());
-                
-                At(rising,grounded,()=>mover.IsGrounded()&&!IsGroundTooSteep());
-                At(rising,sliding,()=>mover.IsGrounded()&&IsGroundTooSteep());
-                At(rising,falling,()=>IsFalling());
-                At(rising,falling,()=>ceilingDetector!=null&& ceilingDetector.HitCeiling());
-                
-                
-                At(jumping,rising,()=>jumpTimer.IsFinished||jumpKeyWasLetGo);
-                At(jumping,falling,()=>ceilingDetector!=null&& ceilingDetector.HitCeiling());
+            
+                At(grounded, rising, () => IsRising());
+                At(grounded, sliding, () => mover.IsGrounded() && IsGroundTooSteep());
+                At(grounded, falling, () => !mover.IsGrounded());
+                At(grounded, jumping, () => (jumpKeyIsPressed || jumpKeyWasPressed) && !jumpInputIsLocked);
+            
+                At(falling, rising, () => IsRising());
+                At(falling, grounded, () => mover.IsGrounded() && !IsGroundTooSteep());
+                At(falling, sliding, () => mover.IsGrounded() && IsGroundTooSteep());
+            
+                At(sliding, rising, () => IsRising());
+                At(sliding, falling, () => !mover.IsGrounded());
+                At(sliding, grounded, () => mover.IsGrounded() && !IsGroundTooSteep());
+            
+                At(rising, grounded, () => mover.IsGrounded() && !IsGroundTooSteep());
+                At(rising, sliding, () => mover.IsGrounded() && IsGroundTooSteep());
+                At(rising, falling, () => IsFalling());
+                At(rising, falling, () => ceilingDetector != null && ceilingDetector.HitCeiling());
+            
+                At(jumping, rising, () => jumpTimer.IsFinished || jumpKeyWasLetGo);
+                At(jumping, falling, () => ceilingDetector != null && ceilingDetector.HitCeiling());
+            
                 stateMachine.SetState(falling);
                 
 
@@ -111,7 +113,7 @@ namespace Platformer.AdvancePlayerController
             {
                 if (!jumpKeyIsPressed && isButtonPressed)
                 {
-                    JumpKeyWasPressed = true;
+                    jumpKeyWasPressed = true;
                 }
 
                 if (jumpKeyIsPressed && !isButtonPressed)
@@ -124,7 +126,7 @@ namespace Platformer.AdvancePlayerController
             }
             void ResetJumpKeys() {
                 jumpKeyWasLetGo = false;
-                JumpKeyWasPressed = false;
+                jumpKeyWasPressed = false;
             }
             void FixedUpdate()
             {
@@ -147,6 +149,7 @@ namespace Platformer.AdvancePlayerController
             private void Update()
             {
                 stateMachine.Update();
+                print(savedVelocity);
             }
 
             private void HandleMomentum()
@@ -175,7 +178,9 @@ namespace Platformer.AdvancePlayerController
                 horizontalMomentum = Vector3.MoveTowards(horizontalMomentum,Vector3.zero,friction*Time.deltaTime);
 
                 momentum = horizontalMomentum + verticalMomentum;
-                
+                if (stateMachine.CurrentState is JumpingState) {
+                    HandleJumping();
+                }
                 if (stateMachine.CurrentState is SlidingState) {
                     momentum = Vector3.ProjectOnPlane(momentum, mover.GetGroundNormal());
                     if (VectorMath.GetDotProduct(momentum, tr.up) > 0f) {
@@ -192,11 +197,7 @@ namespace Platformer.AdvancePlayerController
                 if(useLocalMomentum) momentum = tr.worldToLocalMatrix * momentum;
             }
 
-            private void HandleJumping()
-            {
-               momentum = VectorMath.RemoveDotVector(momentum, tr.up);
-               momentum += tr.up * JumpSpeed;
-            }
+       
 
             private void HandleSliding(ref Vector3 horizontalMomentum)
             {
@@ -252,9 +253,9 @@ namespace Platformer.AdvancePlayerController
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 Vector3 velocity = GetMovemenVelocity();
-                if (velocity.sqrMagnitude >= 0f && momentum.sqrMagnitude >= 0f)
+                if (velocity.sqrMagnitude >= 0f && momentum.sqrMagnitude > 0f)
                 {
-                    Vector3 projectedMomentum = Vector3.ProjectOnPlane(momentum,velocity.normalized);
+                    Vector3 projectedMomentum = Vector3.Project(momentum,velocity.normalized);
                     float dot = VectorMath.GetDotProduct(projectedMomentum.normalized,velocity.normalized);
 
                     if (projectedMomentum.sqrMagnitude >= velocity.sqrMagnitude && dot > 0f) velocity = Vector3.zero;
@@ -270,12 +271,18 @@ namespace Platformer.AdvancePlayerController
             public void OnJumpStart()
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                momentum+= tr.up * JumpSpeed;
-                print(1);
+                
+                momentum += tr.up * JumpSpeed;
                 jumpTimer.Start();
                 jumpInputIsLocked = true;
                 OnJump.Invoke(momentum);
+                
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
+            }
+            private void HandleJumping()
+            {
+                momentum = VectorMath.RemoveDotVector(momentum, tr.up);
+                momentum += tr.up * JumpSpeed;
             }
     }
 }

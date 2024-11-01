@@ -21,12 +21,12 @@ namespace Platformer.AdvancePlayerController
         }
         private void HandleLand(Vector2 obj)
         {
-           
+            animator.SetBool(isJumpingHash, false);
         }
 
         private void HandleJump(Vector2 obj)
         {
-           
+            animator.SetBool(isJumpingHash, true);
         }
         
         
