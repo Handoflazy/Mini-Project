@@ -6,15 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/SweetSugar/Scenes/main.unity
-    guid: 5a1da6f22e6f4dd48919e014948915b4
-  - enabled: 1
-    path: Assets/SweetSugar/Scenes/game.unity
-    guid: e1598a256fd12c548bf8bcbe4d821fe7
-  - enabled: 1
-    path: Assets/SweetSugar/Scenes/gameStatic.unity
-    guid: 2d0d93538b9f447f5860fee1ef81d59b
+    path: Assets/_3DPlatformer/Scenes/Bootstrapper.unity
+    guid: e37176b3d3e193d4aabe7bce3c156343
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 962c56841daf8974fad5859b72779fd6,
+      type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 0bf34fc2f6696014aabfb7cbd27523fc,
       type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: af5b8d3553082464aab57e3f50f42e39,
+      type: 3}
   m_UseUCBPForAssetBundles: 0

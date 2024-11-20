@@ -1,4 +1,5 @@
-using KBCore.Refs;
+
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,7 +7,7 @@ namespace Platformer.AdvancePlayerController
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
-    public class PlayerMover : ValidatedMonoBehaviour
+    public class PlayerMover : MonoBehaviour
     {
         #region Fields
         [Header("Collider Settings")] [Range(0f, 1f)] [SerializeField]
@@ -16,9 +17,13 @@ namespace Platformer.AdvancePlayerController
         [FormerlySerializedAs("_colliderThickness")] [SerializeField] private float colliderThickness = 1f;
         [FormerlySerializedAs("_offset")] [SerializeField] private Vector3 offset = Vector3.zero;
 
+       
+        
+        
+        
         private Rigidbody rb;
         private Transform tr;
-        [SerializeField,Self] CapsuleCollider col;
+        [SerializeField,Required] CapsuleCollider col;
         RayCastSensor sensor;
 
         private bool isGrounded;
@@ -48,9 +53,8 @@ namespace Platformer.AdvancePlayerController
             rb.useGravity = false;
            
         }
-        protected override void OnValidate()
+        protected  void OnValidate()
         {
-            base.OnValidate();
             tr = transform;
             if (gameObject.activeInHierarchy)
             {
@@ -83,6 +87,7 @@ namespace Platformer.AdvancePlayerController
             float length = colliderHeight * (1f - stepHeightRatio) * 0.5f + colliderHeight * stepHeightRatio;
             baseSensorRange = length * (1f + safetyDistanceFactor) * tr.localScale.x;
             sensor.CastLength = length * tr.localScale.x;
+            //sensor.SetCastRadius(new Vector3(colliderThickness/2, 0,colliderThickness/2));
         }
 
         private void RecalculateSensorLayerMask()
@@ -129,7 +134,7 @@ namespace Platformer.AdvancePlayerController
 
         }
 
-        public void SetVelocity(Vector3 velocity) => rb.velocity = velocity + currentGroundAdjustmentVelocity;
+        public void SetVelocity(Vector3 velocity) => rb.linearVelocity = velocity + currentGroundAdjustmentVelocity;
         public void SetExtendSensorRange(bool isEntended)=>isUsingExtendedSensorRange = isEntended;
         public Vector3 GetGroundNormal() => sensor.GetNormal();
         public bool IsGrounded() => isGrounded;

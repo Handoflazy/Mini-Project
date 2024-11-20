@@ -1,6 +1,5 @@
 using System;
 using Platformer.AdvancePlayerController;
-using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -9,8 +8,8 @@ namespace Platformer.Advanced
 {
     public class CameraDistaneRaycaster : MonoBehaviour
     {
-        [SerializeField, Required] private Transform cameraTransform;
-        [SerializeField, Required] private Transform cameraTargetTransform;
+        [SerializeField] private Transform cameraTransform;
+        [SerializeField] private Transform cameraTargetTransform;
 
         public LayerMask layerMask = Physics.AllLayers;
         public float minimumDistanceFromObstacles = 0.1f;

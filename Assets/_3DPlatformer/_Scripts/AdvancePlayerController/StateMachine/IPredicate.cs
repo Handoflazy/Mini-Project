@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,7 +18,7 @@ namespace UnityUtils {
     }
 
     public class Not : IPredicate {
-        [SerializeField, LabelWidth(80)] IPredicate rule;
+        [SerializeField] IPredicate rule;
         public bool Evaluate() => !rule.Evaluate();
     }
 }

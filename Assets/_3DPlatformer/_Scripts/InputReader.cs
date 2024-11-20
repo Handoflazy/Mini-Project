@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -16,6 +17,7 @@ namespace Platformer
 		public event UnityAction DisableMouseControlCamera = delegate { };
 		public event UnityAction<bool> Jump = delegate { };
 		public event UnityAction<bool> Dash = delegate { };
+		public event UnityAction Attack = delegate { };
 
 		PlayerInputActions _inputActions;
 
@@ -35,7 +37,8 @@ namespace Platformer
 
 		public void OnFire(InputAction.CallbackContext context)
 		{
-			
+			if(context.performed)
+				Attack.Invoke();
 		}
 
 		public void OnJump(InputAction.CallbackContext context)

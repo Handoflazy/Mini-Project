@@ -9,9 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4775044282250495944}
-  - component: {fileID: 5580051749970957435}
   - component: {fileID: 8187540537053730305}
+  - component: {fileID: -3447619756331591760}
+  - component: {fileID: 6124901144281778851}
+  - component: {fileID: 5580051749970957435}
   - component: {fileID: 6922433076999327553}
+  - component: {fileID: 7315280082363709940}
   m_Layer: 0
   m_Name: CollectibleCoin
   m_TagString: Untagged
@@ -35,18 +38,6 @@ Transform:
   - {fileID: 4533974975678806877}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5580051749970957435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5667406321631971879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38e6ccd571da44f1b0a4329025ddc545, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &8187540537053730305
 AudioSource:
   m_ObjectHideFlags: 0
@@ -144,6 +135,81 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!54 &-3447619756331591760
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5667406321631971879}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &6124901144281778851
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5667406321631971879}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.47
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5580051749970957435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5667406321631971879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e6ccd571da44f1b0a4329025ddc545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnCollect:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7315280082363709940}
+        m_TargetAssemblyTypeName: Platformer.CollectEffect, Assembly-CSharp
+        m_MethodName: Collect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6922433076999327553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +225,21 @@ MonoBehaviour:
   _spawnVFX: {fileID: 6672970066802684815, guid: bc51a0999ed6bca4bb752db2eb30149d,
     type: 3}
   animationDuration: 1
+--- !u!114 &7315280082363709940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5667406321631971879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec251eaa35c44a09b7f7d31ead95f61f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnVFX: {fileID: 7437692672010622128, guid: 880e0aa9a46bc614e97f15d3d10b1423,
+    type: 3}
+  soundSFX: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
 --- !u!1001 &4553853554659853797
 PrefabInstance:
   m_ObjectHideFlags: 0

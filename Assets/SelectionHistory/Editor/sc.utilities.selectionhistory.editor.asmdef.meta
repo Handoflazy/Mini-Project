@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c4a587ca2f60b604280fc576f0c8729d
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 184204
+  packageName: Selection History
+  packageVersion: 1.0.0
+  assetPath: Assets/SelectionHistory/Editor/sc.utilities.selectionhistory.editor.asmdef
+  uploadId: 448995

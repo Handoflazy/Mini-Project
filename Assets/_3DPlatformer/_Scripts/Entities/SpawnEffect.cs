@@ -8,6 +8,7 @@ namespace Platformer
     {
         [SerializeField] private GameObject _spawnVFX;
         [SerializeField] private float animationDuration = 1f;
+        
 
         private void Start()
         {
@@ -15,9 +16,10 @@ namespace Platformer
             transform.DOScale(Vector3.one, animationDuration).SetEase(Ease.OutBounce);
             if (_spawnVFX != null)
             {
-                Instantiate(_spawnVFX, transform.position, Quaternion.identity);
+                GameObject go = Instantiate(_spawnVFX, transform.position, Quaternion.identity,this.transform);
+          
             }
-            GetComponent<AudioSource>().Play();
+            //GetComponent<AudioSource>().Play();
         }
     }
 }

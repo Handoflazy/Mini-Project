@@ -1,155 +1,228 @@
 using System;
-using System.Numerics;
-using AdvancedController;
 using ImprovedTimers;
+using AdvancePlayerController.State_Machine;
+using Platformer._Scripts.ScriptableObject;
 using Platformer.Advanced;
+using Platformer.AdvancePlayerController;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityUtils;
-using IState = UnityUtils.StateMachine.IState;
-using StateMachine = UnityUtils.StateMachine.StateMachine;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
+using IPredicate = AdvancePlayerController.State_Machine.IPredicate;
 
-namespace Platformer.AdvancePlayerController
+namespace AdvancePlayerController
 {
+    [RequireComponent(typeof(Health))]
     public class PlayerController : MonoBehaviour
     {
         #region Fields
-            [SerializeField,Required] InputReader inputReader;
-            private Transform tr;
-            private PlayerMover mover;
-            
-            bool jumpInputIsLocked, jumpKeyWasPressed, jumpKeyWasLetGo, jumpKeyIsPressed;
-
-            public float MovementSpeed = 7f;
-            public float AirControlRate = 2f;
-            public float JumpSpeed = 10f;
-            public float JumpDuration = 0.2f;
-            public float AirFriction = 0.6f;
-            public float GroundFiction = 100f;
-            public float Gravity = 30f;
-            public float SlideGravity = 5f;
-            public float SlopeLimit = 30f;
+            [Header("Elements")]
+            [SerializeField] Platformer.InputReader inputReader;
+            [SerializeField] PlayerData data;
+            [SerializeField] private CeilingDetector ceilingDetector;
+            [SerializeField] Transform cameraTransform;
+            [SerializeField] private Health playerHealth;
+            [FormerlySerializedAs("animtor")] [SerializeField] private Animator animator;
             public bool useLocalMomentum;
 
+            private Transform tr;
+            private PlayerMover mover;
             private StateMachine stateMachine;
-            private CountdownTimer jumpTimer;
-            [SerializeField, Required] private CeilingDetector ceilingDetector;
 
-            [SerializeField] Transform cameraTransform;
+            #region Timers
+
+            private CountdownTimer jumpBuffer;
+            private CountdownTimer sprintTimer;
+            private CountdownTimer runCooldownTimer;
+            private CountdownTimer attackCooldownTimer;
+            private CountdownTimer attackTimer;
+
+            #endregion
+            
+
+            [Header("Attack Settings")] [SerializeField]
+            private float attackTime;
+            [SerializeField] private float attackCooldown;
+            
+        
+            private bool isDashPressed;
+            [Header("Run Settings")]
+            [SerializeField]
+            private float RunMultiplier = 1.5f;
+
+            [SerializeField] private float runCooldownTime = 2f;
+            [SerializeField] private float runTime = 3f;
+            [ReadOnly] [SerializeField] private string currentState;
+           
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
+            private bool isJumpButtonHeld;
+            
             // ex: for animation effect
             public event Action<Vector2> OnJump = delegate { };
             public event Action<Vector2> OnLand = delegate { };
-                
+            public event Action OnAttack = delegate { };
+            public event Action<bool> OnRun = delegate { };
+            public event Action OnDeath = delegate { };
+
             #endregion
 
             private void Awake()
             {
                 tr = transform;
                 mover = GetComponent<PlayerMover>();
-                jumpTimer = new CountdownTimer(JumpDuration);
+                SetUpTimers();
                 SetupStateMachine();
             }
+
+        
 
             private void Start()
             {
                 inputReader.Jump += HandleJumpKeyInput;
+                inputReader.Dash +=HandleSprintKey;
+                inputReader.Attack += HandleAttackInput;
                 inputReader.EnablePlayerActions();
                 
             }
-
+            void FixedUpdate()
+            {
+                if (playerHealth.isDead)
+                    return;
+                stateMachine.FixedUpdate();
+                mover.CheckForGround();
+                HandleMomentum();
+                Vector3 velocity = stateMachine.CurrentState is LocomotionState? CalculateMovementVelocity():Vector3.zero;
+                velocity = sprintTimer.IsRunning? velocity*RunMultiplier: velocity;
+                velocity += useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
+                mover.SetExtendSensorRange(IsGroundedStates());
+                mover.SetVelocity(velocity);
+                savedVelocity = velocity;
+                savedMovementVelocity = CalculateMovementVelocity();
+                
+                ceilingDetector.Reset();
+                
+               
+            }
             private void OnDisable()
             {
                 inputReader.Jump -= HandleJumpKeyInput;
+                inputReader.Dash -= HandleSprintKey;
+                inputReader.Attack -= HandleAttackInput;
             }
+            private void SetUpTimers()
+            {
+                jumpBuffer = new CountdownTimer(data.JumpInputBufferTime);
+                
+                sprintTimer = new CountdownTimer(runTime);
+                runCooldownTimer = new CountdownTimer(runCooldownTime);
+                
+                attackCooldownTimer = new CountdownTimer(attackCooldown);
+                attackTimer = new CountdownTimer(attackTime);
+                attackTimer.OnTimerStop += () => attackCooldownTimer.Start();
+                
+                sprintTimer.OnTimerStop += () => runCooldownTimer.Start();
+                sprintTimer.OnTimerStop += StopSprint;
+            }
+            private void HandleAttackInput()
+            {
+                if(!attackTimer.IsRunning&& !attackCooldownTimer.IsRunning && stateMachine.CurrentState is LocomotionState)
+                    attackTimer.Start();
+            }
+
+            private void HandleSprintKey(bool isPerformSprint)
+            {
+                if (savedVelocity != Vector3.zero && isPerformSprint&& !sprintTimer.IsRunning&&!runCooldownTimer.IsRunning)
+                {
+                    OnRun.Invoke(true);
+                    sprintTimer.Start();
+                }
+                else if (!isPerformSprint)
+                {
+                    StopSprint();
+                }
+                
+            }
+
+            private void StopSprint()
+            {
+                OnRun.Invoke(false);
+                sprintTimer.Stop();
+            }
+
+            
 
 
             private void SetupStateMachine()
             {
                 stateMachine = new StateMachine();
-            
-                var grounded = new GroundedState(this);
-                var falling = new FallingState(this);
-                var sliding = new SlidingState(this);
-                var rising = new RisingState(this);
-                var jumping = new JumpingState(this);
-            
-                At(grounded, rising, () => IsRising());
-                At(grounded, sliding, () => mover.IsGrounded() && IsGroundTooSteep());
-                At(grounded, falling, () => !mover.IsGrounded());
-                At(grounded, jumping, () => (jumpKeyIsPressed || jumpKeyWasPressed) && !jumpInputIsLocked);
-            
-                At(falling, rising, () => IsRising());
-                At(falling, grounded, () => mover.IsGrounded() && !IsGroundTooSteep());
-                At(falling, sliding, () => mover.IsGrounded() && IsGroundTooSteep());
-            
-                At(sliding, rising, () => IsRising());
-                At(sliding, falling, () => !mover.IsGrounded());
-                At(sliding, grounded, () => mover.IsGrounded() && !IsGroundTooSteep());
-            
-                At(rising, grounded, () => mover.IsGrounded() && !IsGroundTooSteep());
-                At(rising, sliding, () => mover.IsGrounded() && IsGroundTooSteep());
-                At(rising, falling, () => IsFalling());
-                At(rising, falling, () => ceilingDetector != null && ceilingDetector.HitCeiling());
-            
-                At(jumping, rising, () => jumpTimer.IsFinished || jumpKeyWasLetGo);
-                At(jumping, falling, () => ceilingDetector != null && ceilingDetector.HitCeiling());
-            
-                stateMachine.SetState(falling);
                 
+                var locomotionState = new LocomotionState(this, animator);
+                var jumpState = new JumpState(this, animator);
+                var slideState = new SlidingState(this, animator);
+                var risingState = new RisingState(this, animator);
+                var fallingState = new FallingState(this, animator);
+                var attackState = new AttackState(this, animator);
+
+                At(locomotionState, jumpState, new FuncPredicate(() => jumpBuffer.IsRunning));
+                At(locomotionState, risingState, new FuncPredicate(IsRising));
+                At(locomotionState,slideState,new FuncPredicate(IsGroundTooSteep));
+                At(locomotionState,fallingState,new FuncPredicate(IsFalling));
+                At(locomotionState,fallingState,new FuncPredicate(()=>!mover.IsGrounded()));
+                At(locomotionState,attackState,new FuncPredicate(()=>attackTimer.IsRunning));
+
+                At(slideState,locomotionState, new FuncPredicate(()=>!IsGroundTooSteep()));
+                
+                At(jumpState, risingState, new FuncPredicate(IsRising));
+                
+                At(risingState,fallingState, new FuncPredicate(IsFalling));
+                At(risingState,fallingState, new FuncPredicate(()=>!isJumpButtonHeld));
+                At(risingState,fallingState, new FuncPredicate(()=>ceilingDetector.HitCeiling()));
+                
+                At(fallingState,locomotionState, new FuncPredicate(()=>mover.IsGrounded()));
+                
+                At(attackState,locomotionState, new FuncPredicate(()=>attackTimer.IsFinished));
+                
+                stateMachine.SetState(fallingState);
+
 
             }
-            void At(IState from, IState to, Func<bool> codition) => stateMachine.AddTransition(from, to, codition);
-            void Any(IState to, Func<bool> codition) =>stateMachine.AddAnyTransition(to, codition);
+
+        
+
+            void At(IState from, IState to, IPredicate codition) => stateMachine.AddTransition(from, to, codition);
+            void Any(IState to, IPredicate codition) =>stateMachine.AddAnyTransition(to, codition);
             public Vector2 GetMomentum() => useLocalMomentum?tr.localToWorldMatrix * momentum: momentum;
-            
-            bool IsRising()=>VectorMath.GetDotProduct(GetMomentum(), tr.up) > 0f;
-            bool IsFalling()=>VectorMath.GetDotProduct(GetMomentum(), tr.up) <0f;
-            bool IsGroundTooSteep()=>Vector3.Angle(mover.GetGroundNormal(), tr.up) > SlopeLimit;
 
-            void HandleJumpKeyInput(bool isButtonPressed)
-            {
-                if (!jumpKeyIsPressed && isButtonPressed)
-                {
-                    jumpKeyWasPressed = true;
-                }
+            private bool IsRising()=>VectorMath.GetDotProduct(GetMomentum(), tr.up) > 0f;
+            private bool IsFalling()=>VectorMath.GetDotProduct(GetMomentum(), tr.up) <0f;
+            public bool IsRunning() => sprintTimer.IsRunning;
+            bool IsGroundTooSteep()=>Vector3.Angle(mover.GetGroundNormal(), tr.up) > data.SlopeLimit;
 
-                if (jumpKeyIsPressed && !isButtonPressed)
-                {
-                    jumpKeyWasLetGo = true;
-                    jumpInputIsLocked = false;
 
-                }
-                jumpKeyIsPressed = isButtonPressed;
-            }
-            void ResetJumpKeys() {
-                jumpKeyWasLetGo = false;
-                jumpKeyWasPressed = false;
-            }
-            void FixedUpdate()
-            {
-                stateMachine.FixedUpdate();
-                mover.CheckForGround();
-                HandleMomentum();
-                Vector3 velocity = stateMachine.CurrentState is GroundedState? CalculateMovementVelocity():Vector3.zero;
-                velocity += useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                mover.SetExtendSensorRange(IsGrounded());
-                mover.SetVelocity(velocity);
-                savedVelocity = velocity;
-                savedMovementVelocity = CalculateMovementVelocity();
-                
-                ResetJumpKeys();
-                ceilingDetector.Reset();
-                
-               
-            }
+
+
+
 
             private void Update()
             {
                 stateMachine.Update();
-                print(savedVelocity);
+            }
+            
+                
+
+            void HandleJumpKeyInput(bool isButtonPressed)
+            {
+                if (!jumpBuffer.IsRunning && isButtonPressed)
+                {
+                    jumpBuffer.Start();
+                }
+
+                if (jumpBuffer.IsRunning && !isButtonPressed)
+                {
+                    jumpBuffer.Stop();
+                }
+
+                isJumpButtonHeld = isButtonPressed;
             }
 
             private void HandleMomentum()
@@ -157,28 +230,25 @@ namespace Platformer.AdvancePlayerController
                 if(useLocalMomentum) momentum = tr.localToWorldMatrix * momentum; //_tf.localToWorldMatrix.MultipleVector(momentum)
                 Vector3 verticalMomentum = VectorMath.ExtractDotVector(momentum, tr.up);
                 Vector3 horizontalMomentum = momentum - verticalMomentum;
-                
-                verticalMomentum -= transform.up*(Gravity*Time.deltaTime);
+                verticalMomentum = HandleGravity(verticalMomentum);
 
-                if (stateMachine.CurrentState is GroundedState &&
+                if (stateMachine.CurrentState is LocomotionState &&
                     VectorMath.GetDotProduct(verticalMomentum, tr.up) < 0f)
-                {
                     verticalMomentum = Vector3.zero;
-                }
-                if (!IsGrounded())
+                if (!IsGroundedStates())
                 {
                     AdjustHorinzontalMomentum(ref horizontalMomentum, CalculateMovementVelocity());
                 }
-
+                
                 if (stateMachine.CurrentState is SlidingState) 
                 {
                     HandleSliding(ref horizontalMomentum);
                 }
-                float friction = stateMachine.CurrentState is GroundedState ? GroundFiction: AirFriction;
+                float friction = stateMachine.CurrentState is LocomotionState ? data.GroundFriction: data.AirFriction;
+                
                 horizontalMomentum = Vector3.MoveTowards(horizontalMomentum,Vector3.zero,friction*Time.deltaTime);
-
                 momentum = horizontalMomentum + verticalMomentum;
-                if (stateMachine.CurrentState is JumpingState) {
+                if (stateMachine.CurrentState is JumpState) {
                     HandleJumping();
                 }
                 if (stateMachine.CurrentState is SlidingState) {
@@ -188,16 +258,32 @@ namespace Platformer.AdvancePlayerController
                     }
             
                     Vector3 slideDirection = Vector3.ProjectOnPlane(-tr.up, mover.GetGroundNormal()).normalized;
-                    momentum += slideDirection * (SlideGravity * Time.deltaTime);
+                    momentum += slideDirection * (data.SlideGravity * Time.deltaTime);
                 }
-
+                
    
                 
                 
                 if(useLocalMomentum) momentum = tr.worldToLocalMatrix * momentum;
             }
 
-       
+            private Vector3 HandleGravity(Vector3 verticalMomentum)
+            {
+                if (stateMachine.CurrentState is JumpState or RisingState)
+                {
+                    verticalMomentum -= transform.up*(data.Gravity*data.GravityScale*Time.deltaTime);
+                }
+                else if(stateMachine.CurrentState is FallingState)
+                    verticalMomentum -= transform.up*(data.Gravity*data.FallGravityMult*Time.deltaTime);
+
+                float maxFallSpeed = data.MaxFallSpeed;
+                if (verticalMomentum.magnitude > maxFallSpeed)
+                {
+                    verticalMomentum = verticalMomentum.normalized * maxFallSpeed;
+                }
+                return verticalMomentum;
+            }
+
 
             private void HandleSliding(ref Vector3 horizontalMomentum)
             {
@@ -205,29 +291,31 @@ namespace Platformer.AdvancePlayerController
                 Vector3 movementVelocity = CalculateMovementVelocity();
                 movementVelocity = VectorMath.RemoveDotVector(movementVelocity, pointDownVector);
                 horizontalMomentum += movementVelocity*Time.fixedDeltaTime; 
-                
-                
             }
 
-            bool IsGrounded() => stateMachine.CurrentState is GroundedState or SlidingState;
+            public bool IsGroundedStates() => stateMachine.CurrentState is LocomotionState or SlidingState or AttackState;
 
             void AdjustHorinzontalMomentum(ref Vector3 horizontalMomentum, Vector3 movementVelocity)
             {
-                if (horizontalMomentum.magnitude > MovementSpeed)
+                
+                if (horizontalMomentum.magnitude > data.RunMaxSpeed)
                 {
                     if (VectorMath.GetDotProduct(movementVelocity, horizontalMomentum.normalized) > 0f)
                     {
-                        movementVelocity = VectorMath.ExtractDotVector(movementVelocity, horizontalMomentum.normalized);
+                        movementVelocity = VectorMath.RemoveDotVector(movementVelocity, horizontalMomentum.normalized);
                     }
-                    horizontalMomentum += movementVelocity * (AirControlRate * Time.deltaTime*0.25f);
+                    horizontalMomentum += movementVelocity * (data.AirControlRate * Time.deltaTime*0.25f);
                 }
                 else
-                {
-                    horizontalMomentum += movementVelocity * (AirControlRate * Time.deltaTime);
-                    horizontalMomentum = Vector3.ClampMagnitude(horizontalMomentum, MovementSpeed);
+                {   
+                    horizontalMomentum += movementVelocity * (data.AirControlRate * Time.deltaTime);
+                    horizontalMomentum = Vector3.ClampMagnitude(horizontalMomentum, data.RunMaxSpeed);
+                   
                 }
+               
+               
             }
-            private Vector3 CalculateMovementVelocity() => CalculateMovementDirection() * MovementSpeed;
+            private Vector3 CalculateMovementVelocity() => CalculateMovementDirection() * data.RunMaxSpeed;
             private Vector3 CalculateMovementDirection()
             {
                 Vector3 direction = cameraTransform==null ? tr.right* inputReader.Direction.x+tr.forward*inputReader.Direction.y
@@ -240,6 +328,7 @@ namespace Platformer.AdvancePlayerController
             {
                 Vector3 collisionVelocity = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 OnLand.Invoke(collisionVelocity);
+                momentum = Vector3.zero;
             }
 
             public void OnFallStart()
@@ -249,32 +338,31 @@ namespace Platformer.AdvancePlayerController
                 momentum -= tr.up * currentUpMomemtum.magnitude;
             }
 
-            public void OnGroundContactLost()
+            public void OnGroundContactLost() // dieu chinh huong nhay
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                Vector3 velocity = GetMovemenVelocity();
+                Vector3 velocity = GetMovementVelocity();
                 if (velocity.sqrMagnitude >= 0f && momentum.sqrMagnitude > 0f)
                 {
                     Vector3 projectedMomentum = Vector3.Project(momentum,velocity.normalized);
                     float dot = VectorMath.GetDotProduct(projectedMomentum.normalized,velocity.normalized);
-
                     if (projectedMomentum.sqrMagnitude >= velocity.sqrMagnitude && dot > 0f) velocity = Vector3.zero;
                     else if(dot > 0f) velocity -= projectedMomentum;
+                    
                 }
 
                 momentum += velocity;
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
             }
 
-            public Vector3 GetMovemenVelocity() => savedVelocity;
+            public Vector3 GetInputVelocity() => savedMovementVelocity;
+            public Vector3 GetMovementVelocity() => savedVelocity;
 
             public void OnJumpStart()
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                
-                momentum += tr.up * JumpSpeed;
-                jumpTimer.Start();
-                jumpInputIsLocked = true;
+                //jumpTimer.Start();
+                momentum += tr.up * data.JumpForce;
                 OnJump.Invoke(momentum);
                 
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
@@ -282,7 +370,19 @@ namespace Platformer.AdvancePlayerController
             private void HandleJumping()
             {
                 momentum = VectorMath.RemoveDotVector(momentum, tr.up);
-                momentum += tr.up * JumpSpeed;
+                
+                momentum += tr.up * data.JumpForce;
+            }
+
+            public void Attack()
+            {
+                OnAttack.Invoke();
+            }
+
+            public void Die()
+            {
+                mover.SetVelocity(Vector3.zero);
+                OnDeath?.Invoke();
             }
     }
 }

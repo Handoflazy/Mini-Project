@@ -1,6 +1,6 @@
 using System.Collections;
 using Cinemachine;
-using KBCore.Refs;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Platformer
@@ -11,9 +11,9 @@ namespace Platformer
         // Group of component references for ease of editing in the inspector
         [Header("Elements")]
         // Reference to the InputReader component for capturing camera-related inputs
-        [SerializeField, Anywhere] private InputReader _input;
+        [SerializeField, Required] private InputReader _input;
         // Reference to the Cinemachine FreeLook virtual camera component
-        [SerializeField, Anywhere] private CinemachineFreeLook _freeLookVCam;
+        [SerializeField, Required] private CinemachineFreeLook _freeLookVCam;
 
         // Group of settings for camera movement behavior
         [Header("Settings")]

@@ -17,6 +17,7 @@ namespace ImprovedTimers
 
             if (IsRunning && CurrentTime <= 0)
             {
+                CurrentTime=0;
                 Stop();
             }
         }

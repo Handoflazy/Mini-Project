@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ namespace Platformer.AdvancePlayerController
         private CastDirection _castDirection;
         private RaycastHit _hitInfor;
 
+        private Vector3 _boxWidth = new Vector3(0.2f, 0.2f, 0.2f);
+
         public RayCastSensor(Transform transform)
         {
             _tf = transform;
@@ -27,6 +30,7 @@ namespace Platformer.AdvancePlayerController
             Vector3 origin = _tf.TransformPoint(_origin);
             Vector3 direction = GetCastDirection();
             
+            //Physics.BoxCast(origin,_boxWidth, direction, out _hitInfor,quaternion.identity, CastLength, LayerMask,QueryTriggerInteraction.Ignore);
             Physics.Raycast(origin, direction, out _hitInfor, CastLength, LayerMask,QueryTriggerInteraction.Ignore);
         }
         public bool HasDetectedHit()=>_hitInfor.collider != null;
@@ -37,6 +41,7 @@ namespace Platformer.AdvancePlayerController
         
         
         public void SetCastDirection(CastDirection castDirection)=>_castDirection = castDirection;
+        //public void SetCastRadius(Vector3 boxWidth)=>_boxWidth = boxWidth;
         public void SetCastOrigin(Vector3 origin) => _origin = _tf.InverseTransformPoint(origin);
         private Vector3 GetCastDirection()
         {

@@ -1,14 +1,14 @@
-using System;
+
 using Sirenix.OdinInspector;
-using AdvancedController;
 using UnityEngine;
 using UnityUtils;
+using AdvancePlayerController;
 
 namespace Platformer.Advanced
 {
     public class TurnTowardController : MonoBehaviour
     {
-        [SerializeField, Required] private AdvancePlayerController.PlayerController controller;
+        [SerializeField, Required] private PlayerController controller;
         public float turnSpeed = 50f;
         private Transform tr;
 
@@ -23,7 +23,7 @@ namespace Platformer.Advanced
 
         void LateUpdate()
         {
-            Vector3 velocity = Vector3.ProjectOnPlane(controller.GetMovemenVelocity(), tr.parent.up);
+            Vector3 velocity = Vector3.ProjectOnPlane(controller.GetMovementVelocity(), tr.parent.up);
             if (velocity.magnitude < 0.001f)
                 return;
             float angleDifferrence = VectorMath.GetAngle(tr.forward, velocity.normalized, tr.parent.up);

@@ -1,34 +1,35 @@
-using System;
+/*using System;
 using System.Collections.Generic;
 using Cinemachine;
-using KBCore.Refs;
+using Platformer._Scripts.ScriptableObject;
 using Unity.VisualScripting;
 using UnityEngine;
 using Utilities;
 using Timer = Utilities.Timer;
 using Platformer.State_Machine;
+using Sirenix.OdinInspector;
 using IState = Platformer.State_Machine.IState;
 using StateMachine = Platformer.State_Machine.StateMachine;
 
 namespace Platformer
 {
     // PlayerController class handles player movement, rotation, and interaction with the camera
-    public class PlayerController : ValidatedMonoBehaviour
+    public class PlayerController : MonoBehaviour
     {
         // Editor header for better organization of serialized fields
         [Header(" Elements ")] 
         // Reference to the CharacterController component attached to the player
-        [SerializeField, Self] private Rigidbody RB;
+        [SerializeField, Required] private Rigidbody RB;
         // Reference to the Animator component of the player
-        [SerializeField, Child] private Animator _animator;
+        [SerializeField, Required] private Animator _animator;
         // Reference to the Cinemachine free-look camera
-        [SerializeField, Anywhere] private CinemachineFreeLook _freeLookCamera;
+        [SerializeField, Required] private CinemachineFreeLook _freeLookCamera;
         // Reference to the InputReader component for handling player input
-        [SerializeField, Anywhere] private InputReader _input;
+        [SerializeField, Required] private InputReader _input;
         // Reference to the Transform component of the player
-        [SerializeField, Self] private Transform _transform;
-        [SerializeField, Self] private GroundCheck _groundCheck;
-        [SerializeField, Anywhere] private PlayerData _data;
+        [SerializeField, Required] private Transform _transform;
+        [SerializeField, Required] private GroundCheck _groundCheck;
+        [SerializeField, Required] private PlayerData _data;
         
         private Transform _mainCam;
         private Vector3 _movement;
@@ -59,7 +60,7 @@ namespace Platformer
         private void InitalizeStateMachine()
         {
             //State Machine
-            _stateMachine = new StateMachine();
+            /*_stateMachine = new StateMachine();
             //Declare States
             var locomotionState = new LocomotionState(this, _animator);
             var jumpState = new JumpState(this, _animator);
@@ -71,7 +72,7 @@ namespace Platformer
                                                        && _groundCheck.IsGrounded 
                                                        && !_isDashing));
             
-            _stateMachine.SetState(locomotionState);
+            _stateMachine.SetState(locomotionState);#1#
         }
         void At(IState from, IState to, IPredicate codition) => _stateMachine.AddTransition(from, to, codition);
         void Any(IState to, IPredicate codition) =>_stateMachine.AddAnyTransition(to, codition);
@@ -92,11 +93,11 @@ namespace Platformer
 
         private void InitializeJumpTimers()
         {
-            _jumpTimer = new CooldownTimer(_data.JumpTimeToApex);
+            /*_jumpTimer = new CooldownTimer(_data.JumpTimeToApex);
             _jumpCooldownTimer = new CooldownTimer(_data.JumpCooldown);
             _timers = new List<Timer>(2){_jumpTimer,_jumpCooldownTimer};
             _jumpTimer.OnTimeStart +=() =>_jumpVelocity = _data.JumpForce;
-            _jumpTimer.OnTimeStop += () => _jumpCooldownTimer.Start();
+            _jumpTimer.OnTimeStop += () => _jumpCooldownTimer.Start();#1#
         }
 
         private void Start() => _input.EnablePlayerActions();
@@ -169,9 +170,9 @@ namespace Platformer
 
             if (!_jumpTimer.IsRunning)
             {
-                _jumpVelocity += Physics.gravity.y * _data.GravilityMultiplier * Time.deltaTime;
+               // _jumpVelocity += Physics.gravity.y * _data.GravilityMultiplier * Time.deltaTime;
             }
-            RB.velocity = new Vector3(RB.velocity.x, _jumpVelocity, RB.velocity.z);
+            RB.linearVelocity = new Vector3(RB.linearVelocity.x, _jumpVelocity, RB.linearVelocity.z);
         }
         
         private void UpdateAnimator() => _animator.SetFloat(Speed, _currentSpeed);
@@ -189,24 +190,24 @@ namespace Platformer
             else
             {
                 SmoothSpeed(ZERO);
-                RB.velocity = new Vector3(ZERO, RB.velocity.y, ZERO);
+                RB.linearVelocity = new Vector3(ZERO, RB.linearVelocity.y, ZERO);
             }
         }
 
         private void HandleHorizontalMovement(Vector3 adjustedDirection)
         {
-            var Velocity = adjustedDirection * (_data.MoveSpeed * Time.fixedDeltaTime);
-            RB.velocity = new Vector3(Velocity.x, RB.velocity.y, Velocity.z);
+            //var Velocity = adjustedDirection * (_data.MoveSpeed * Time.fixedDeltaTime);
+            //RB.velocity = new Vector3(Velocity.x, RB.velocity.y, Velocity.z);
         }
         private void HandleRotation(Vector3 adjustedDirection)
         {
             var targetRotation = Quaternion.LookRotation(adjustedDirection);
-            _transform.rotation = Quaternion.RotateTowards(_transform.rotation, targetRotation, _data.RotationSpeed * Time.deltaTime);
+            //_transform.rotation = Quaternion.RotateTowards(_transform.rotation, targetRotation, _data.RotationSpeed * Time.deltaTime);
         }
 
         private void SmoothSpeed(float targetSpeed)
         {
-            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref _velocity, _data.smoothTime);
+            //_currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref _velocity, _data.smoothTime);
         }
 
 
@@ -214,10 +215,10 @@ namespace Platformer
         {
             var adjustedDirection = Quaternion.AngleAxis(_mainCam.eulerAngles.y, Vector3.up) * _movement;
             if (!(adjustedDirection.magnitude > ZERO)) return;
-            var Velocity = adjustedDirection * (_data.DashSpeed * Time.fixedDeltaTime);
-            RB.velocity = new Vector3(Velocity.x, RB.velocity.y, Velocity.z);
+            //var Velocity = adjustedDirection * (_data.DashSpeed * Time.fixedDeltaTime);
+            //RB.velocity = new Vector3(Velocity.x, RB.velocity.y, Velocity.z);
             HandleRotation(adjustedDirection);
 
         }
     }
-}
+}*/

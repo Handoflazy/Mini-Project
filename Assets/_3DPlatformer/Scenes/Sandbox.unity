@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 735507147}
   - component: {fileID: 735507146}
   - component: {fileID: 735507145}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Obstacle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 962082143}
   - component: {fileID: 962082142}
   - component: {fileID: 962082141}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Obstacle (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -454,7 +454,7 @@ GameObject:
   - component: {fileID: 1043611706}
   - component: {fileID: 1043611705}
   - component: {fileID: 1043611704}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -561,7 +561,7 @@ GameObject:
   - component: {fileID: 1179755471}
   - component: {fileID: 1179755470}
   - component: {fileID: 1179755469}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -668,7 +668,7 @@ GameObject:
   - component: {fileID: 1452494938}
   - component: {fileID: 1452494937}
   - component: {fileID: 1452494936}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +777,7 @@ GameObject:
   - component: {fileID: 1469197834}
   - component: {fileID: 1469197833}
   - component: {fileID: 1469197832}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -885,7 +885,7 @@ GameObject:
   - component: {fileID: 2046375967}
   - component: {fileID: 2046375966}
   - component: {fileID: 2046375965}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -992,7 +992,7 @@ GameObject:
   - component: {fileID: 2065042667}
   - component: {fileID: 2065042666}
   - component: {fileID: 2065042665}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1330,6 +1330,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5615737543709677556, guid: 5fa66b9c230228846947131830314407,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

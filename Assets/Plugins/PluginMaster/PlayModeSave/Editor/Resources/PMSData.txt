@@ -1,0 +1,1 @@
+{"_rootDirectory":"D:\\Games\\Mini Project\\Assets\\Plugins","_alwaysSave":[],"_alwaysSaveFull":[]}
