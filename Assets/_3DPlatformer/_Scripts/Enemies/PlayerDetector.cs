@@ -1,6 +1,6 @@
 using System;
 using Utilities.ImprovedTimers;
-using Platformer.AdvancePlayerController;
+using Character;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;

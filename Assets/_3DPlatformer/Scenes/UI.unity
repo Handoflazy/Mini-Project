@@ -253,9 +253,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 615a0a6f0c64d48c0bf5b6fff88cacca, type: 2}
-  m_sharedMaterial: {fileID: 21976591372562464, guid: 615a0a6f0c64d48c0bf5b6fff88cacca,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -388,12 +387,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 74f522c8cd99741fd9a0624aaf6b1b14, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 40bfe6d90e9ed4cf3bc9ddc5bfc66a5c, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 1
+  m_FillAmount: 0.28
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -519,6 +518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1539845079}
   - component: {fileID: 1539845080}
+  - component: {fileID: 1539845081}
   m_Layer: 5
   m_Name: Health
   m_TagString: Untagged
@@ -556,17 +556,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 1539845078}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa9dd06a5c7746a08e0be69d1503fd10, type: 3}
+  m_Script: {fileID: 11500000, guid: 03d620b0c40447be9a62a5021404e8d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventChannel: {fileID: 11400000, guid: 69e60b20ab585b14d91d331dd32e50a9, type: 2}
+  healthBarImage: {fileID: 1031310718}
+  protagonistHealth: {fileID: 11400000, guid: 8beca7af9bd1ea047ba6ab66405c5069, type: 2}
+--- !u!114 &1539845081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539845078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49747ca2c1404f1c828b3d1f9ed07c24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: 00a90958ce0d3114eb440d8b434be589, type: 2}
   unityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1031310718}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
-        m_MethodName: set_fillAmount
-        m_Mode: 0
+      - m_Target: {fileID: 1539845080}
+        m_TargetAssemblyTypeName: Platformer.UI.UIHealthBarManager, Assembly-CSharp
+        m_MethodName: UpdateHealthUI
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

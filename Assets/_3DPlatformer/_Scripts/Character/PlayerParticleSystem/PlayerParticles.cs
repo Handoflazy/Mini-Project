@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Platformer.AdvancePlayerController.PlayerParticleSystem
+namespace Character.PlayerParticleSystem
 {
     public class PlayerParticles : MonoBehaviour
     {

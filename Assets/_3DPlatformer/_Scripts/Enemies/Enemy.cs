@@ -94,10 +94,10 @@ namespace Platformer
         }
         public void Attack()
         {
-            if (attackTimer.IsRunning&&!detector.PlayerDamageable.IsDead)
+            if (attackTimer.IsRunning||detector.PlayerDamageable.IsDead)
                 return;
             attackTimer.Start();
-            detector.PlayerDamageable.TakeDamage(10);
+            detector.PlayerDamageable.ReceiveAnAttack(10);
             
            animator.Play("Slash Attack",0,0);
         }

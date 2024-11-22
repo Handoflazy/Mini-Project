@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using Platformer;
 
 namespace Utilities.Event_System.EventChannel
 {
-    public abstract class EventChannel<T> : ScriptableObject
+    public abstract class EventChannel<T> : DescriptionBaseSO
     {
         private readonly HashSet<EventListenter<T>> observers = new();
 
@@ -18,13 +17,5 @@ namespace Utilities.Event_System.EventChannel
 
         public void Register(EventListenter<T> observer) => observers.Add(observer);
         public void DeRegister(EventListenter<T> observer) => observers.Remove(observer);
-    }
-
-    public readonly struct Empty{}
-    
-    [CreateAssetMenu(menuName = "Events/Empty Channel")]
-    public class EmptyEventChannel : EventChannel<Empty>
-    {
-        
     }
 }

@@ -254,11 +254,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 530507969}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -889.57, y: -447}
-  m_SizeDelta: {x: 968.6, y: 100}
-  m_Pivot: {x: 0, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 100}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &178846150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,7 +307,6 @@ GameObject:
   m_Component:
   - component: {fileID: 252984759}
   - component: {fileID: 252984758}
-  - component: {fileID: 252984757}
   - component: {fileID: 252984756}
   m_Layer: 0
   m_Name: LoadingCamera
@@ -360,14 +359,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &252984757
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 252984755}
-  m_Enabled: 0
 --- !u!20 &252984758
 Camera:
   m_ObjectHideFlags: 0
@@ -509,11 +500,11 @@ RectTransform:
   - {fileID: 178846149}
   m_Father: {fileID: 26606106}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &737470391
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,6 +516,7 @@ GameObject:
   - component: {fileID: 737470392}
   - component: {fileID: 737470393}
   - component: {fileID: 737470394}
+  - component: {fileID: 737470395}
   m_Layer: 0
   m_Name: SceneLoader
   m_TagString: Untagged
@@ -573,17 +565,18 @@ MonoBehaviour:
   - GroupName: GamePlay
     Scenes:
     - Reference:
-        asset: {fileID: 102900000, guid: b492c86983cf3014fba0daaf04b5fe40, type: 3}
-        guid: b492c86983cf3014fba0daaf04b5fe40
-      SceneType: 3
-    - Reference:
         asset: {fileID: 102900000, guid: 17378ada42dc6c047a476c8d206439f3, type: 3}
         guid: 17378ada42dc6c047a476c8d206439f3
       SceneType: 2
     - Reference:
+        asset: {fileID: 102900000, guid: b492c86983cf3014fba0daaf04b5fe40, type: 3}
+        guid: b492c86983cf3014fba0daaf04b5fe40
+      SceneType: 3
+    - Reference:
         asset: {fileID: 102900000, guid: d87e641afab75394d8494d040076a619, type: 3}
         guid: d87e641afab75394d8494d040076a619
       SceneType: 0
+  OnSceneReady: {fileID: 11400000, guid: ca05d2b548740284b8a4025984ee2d99, type: 2}
 --- !u!114 &737470394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,6 +590,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 10000
+--- !u!114 &737470395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737470391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df4f1e379fe74b15a58e1897cac07ecc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: 8cbabc70dedfeb14cb6cfa6ab388f35a, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 737470393}
+        m_TargetAssemblyTypeName: System.SceneManagement.SceneLoader, Assembly-CSharp
+        m_MethodName: LoadSceneGroupWrapper
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &905693096
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,8 +788,8 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 256446875}
   - {fileID: 252984759}
   - {fileID: 737470392}
-  - {fileID: 256446875}
   - {fileID: 26606106}
   - {fileID: 1090931772}

@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Platformer.AdvancePlayerController
+namespace Character
 {
     public class RayCastSensor
     {

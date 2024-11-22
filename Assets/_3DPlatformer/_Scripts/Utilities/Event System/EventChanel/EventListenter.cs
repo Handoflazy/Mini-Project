@@ -24,9 +24,4 @@ namespace Utilities.Event_System.EventChannel
             eventChannel.DeRegister(this);
         }
     }
-
-    public class EventListener : EventListenter<Empty>
-    {
-        
-    }
 }

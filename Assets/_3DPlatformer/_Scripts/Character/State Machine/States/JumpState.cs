@@ -11,7 +11,7 @@ namespace AdvancePlayerController.State_Machine
 
         public override void OnEnter()
         {
-            player.OnJumpStart();
+            player.JumpStart();
             animator.SetTrigger(JumpHash);
             player.OnGroundContactLost();
      

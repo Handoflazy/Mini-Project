@@ -3,7 +3,7 @@ using Utilities.ImprovedTimers;
 using AdvancePlayerController.State_Machine;
 using Platformer._Scripts.ScriptableObject;
 using Platformer.Advanced;
-using Platformer.AdvancePlayerController;
+using Character;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -17,8 +17,9 @@ namespace AdvancePlayerController
     public class Protagonist : MonoBehaviour
     {
         #region Fields
+            [FormerlySerializedAs("inputReader")]
             [Header("Elements")]
-            [SerializeField] Platformer.InputReader inputReader;
+            [SerializeField] Platformer.InputReader input;
             [SerializeField] PlayerData data;
             [SerializeField] private CeilingDetector ceilingDetector;
             [SerializeField] Transform cameraTransform;
@@ -31,7 +32,6 @@ namespace AdvancePlayerController
             private StateMachine stateMachine;
 
             #region Timers
-
             private CountdownTimer jumpBuffer;
             private CountdownTimer sprintTimer;
             private CountdownTimer runCooldownTimer;
@@ -58,6 +58,7 @@ namespace AdvancePlayerController
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
             private bool isJumpButtonHeld;
             private bool isDeath;
+            private bool isRising;
             
             // ex: for animation effect
             public event Action<Vector2> OnJump = delegate { };
@@ -78,27 +79,11 @@ namespace AdvancePlayerController
                 SetUpTimers();
                 SetupStateMachine();
             }
+            private void Start() => input.EnablePlayerActions();
 
-            void HandleTestEvent()
-            {
-                print("Test event Received");
-            }
-            void HandlePlayerEvent(PlayerEvents playerEvent){
-                print("Player event Reiceived ");
-            }
 
-            private void Start()
-            {
-                inputReader.Jump += HandleJumpKeyInput;
-                inputReader.Dash +=HandleSprintKey;
-                inputReader.Attack += HandleAttackInput;
-                inputReader.EnablePlayerActions();
-                
-            }
             void FixedUpdate()
             {
-                if (playerDamageable.IsDead)
-                    return;
                 stateMachine.FixedUpdate();
                 mover.CheckForGround();
                 HandleMomentum();
@@ -117,20 +102,26 @@ namespace AdvancePlayerController
 
             private void OnEnable()
             {
-                testEventBinding = new EventBinding<TestEvents>(HandleTestEvent);
-                EventBus<TestEvents>.Register(testEventBinding);
-                playerEventBinding = new EventBinding<PlayerEvents>(HandlePlayerEvent);
-                EventBus<PlayerEvents>.Register(playerEventBinding);
+                input.JumpEvent += OnJumpInitiated;
+                input.JumpCanceledEvent += OnJumpCanceled;
+                input.StartedRunning += OnStartedSprinting;
+                input.StoppedRunning += OnStoppedSprinting;
+                input.AttackEvent += OnStartedAttack;
+                //
+                
             }
+
+           
 
             private void OnDisable()
             {
-                inputReader.Jump -= HandleJumpKeyInput;
-                inputReader.Dash -= HandleSprintKey;
-                inputReader.Attack -= HandleAttackInput;
+                input.JumpEvent -= OnJumpInitiated;
+                input.JumpCanceledEvent -= OnJumpCanceled;
+                input.StartedRunning -= OnStartedSprinting;
+                input.StoppedRunning -= OnStoppedSprinting;
+                input.AttackEvent -= OnStartedAttack;
+                //
                 
-                EventBus<TestEvents>.Deregister(testEventBinding);
-                EventBus<PlayerEvents>.Deregister(playerEventBinding);
             }
             private void SetUpTimers()
             {
@@ -144,37 +135,9 @@ namespace AdvancePlayerController
                 attackTimer.OnTimerStop += () => attackCooldownTimer.Start();
                 
                 sprintTimer.OnTimerStop += () => runCooldownTimer.Start();
-                sprintTimer.OnTimerStop += StopSprint;
+                sprintTimer.OnTimerStop += OnStoppedSprinting;
             }
-            private void HandleAttackInput()
-            {
-                //Try to Attack
-                if(!attackTimer.IsRunning&& !attackCooldownTimer.IsRunning && stateMachine.CurrentState is LocomotionState)
-                    attackTimer.Start();
-            }
-
-            private void HandleSprintKey(bool isPerformSprint)
-            {
-                if (savedVelocity != Vector3.zero && isPerformSprint&& !sprintTimer.IsRunning&&!runCooldownTimer.IsRunning)
-                {
-                    OnRun.Invoke(true);
-                    sprintTimer.Start();
-                }
-                else if (!isPerformSprint)
-                {
-                    StopSprint();
-                }
-                
-            }
-
-            private void StopSprint()
-            {
-                OnRun.Invoke(false);
-                sprintTimer.Stop();
-            }
-
-            
-
+           
 
             private void SetupStateMachine()
             {
@@ -197,7 +160,7 @@ namespace AdvancePlayerController
 
                 At(slideState,locomotionState, new FuncPredicate(()=>!IsGroundTooSteep()));
                 
-                At(jumpState, risingState, new FuncPredicate(IsRising));
+                At(jumpState, risingState, new FuncPredicate(()=>isRising));
                 
                 At(risingState,fallingState, new FuncPredicate(IsFalling));
                 At(risingState,fallingState, new FuncPredicate(()=>!isJumpButtonHeld));
@@ -217,38 +180,16 @@ namespace AdvancePlayerController
 
             void At(IState from, IState to, IPredicate codition) => stateMachine.AddTransition(from, to, codition);
             void Any(IState to, IPredicate codition) =>stateMachine.AddAnyTransition(to, codition);
-            public Vector2 GetMomentum() => useLocalMomentum?tr.localToWorldMatrix * momentum: momentum;
+            Vector2 GetMomentum() => useLocalMomentum?tr.localToWorldMatrix * momentum: momentum;
 
-            private bool IsRising()=>VectorMath.GetDotProduct(GetMomentum(), tr.up) > 0f;
-            private bool IsFalling()=>VectorMath.GetDotProduct(GetMomentum(), tr.up) <0f;
+            bool IsRising()=>VectorMath.GetDotProduct(GetMomentum(), tr.up) > 0f;
+            bool IsFalling()=>VectorMath.GetDotProduct(GetMomentum(), tr.up) <0f;
             public bool IsRunning() => sprintTimer.IsRunning;
             bool IsGroundTooSteep()=>Vector3.Angle(mover.GetGroundNormal(), tr.up) > data.SlopeLimit;
-
-
-
-
-
 
             private void Update()
             {
                 stateMachine.Update();
-            }
-            
-                
-
-            void HandleJumpKeyInput(bool isButtonPressed)
-            {
-                if (!jumpBuffer.IsRunning && isButtonPressed)
-                {
-                    jumpBuffer.Start();
-                }
-
-                if (jumpBuffer.IsRunning && !isButtonPressed)
-                {
-                    jumpBuffer.Stop();
-                }
-
-                isJumpButtonHeld = isButtonPressed;
             }
 
             private void HandleMomentum()
@@ -274,9 +215,6 @@ namespace AdvancePlayerController
                 
                 horizontalMomentum = Vector3.MoveTowards(horizontalMomentum,Vector3.zero,friction*Time.deltaTime);
                 momentum = horizontalMomentum + verticalMomentum;
-                if (stateMachine.CurrentState is JumpState) {
-                    HandleJumping();
-                }
                 if (stateMachine.CurrentState is SlidingState) {
                     momentum = Vector3.ProjectOnPlane(momentum, mover.GetGroundNormal());
                     if (VectorMath.GetDotProduct(momentum, tr.up) > 0f) {
@@ -295,12 +233,15 @@ namespace AdvancePlayerController
 
             private Vector3 HandleGravity(Vector3 verticalMomentum)
             {
-                if (stateMachine.CurrentState is JumpState or RisingState)
+                switch (stateMachine.CurrentState)
                 {
-                    verticalMomentum -= transform.up*(data.Gravity*data.GravityScale*Time.deltaTime);
+                    case JumpState or RisingState:
+                        verticalMomentum -= transform.up*(data.Gravity*data.GravityScale*Time.deltaTime);
+                        break;
+                    case FallingState:
+                        verticalMomentum -= transform.up*(data.Gravity*data.FallGravityMult*Time.deltaTime);
+                        break;
                 }
-                else if(stateMachine.CurrentState is FallingState)
-                    verticalMomentum -= transform.up*(data.Gravity*data.FallGravityMult*Time.deltaTime);
 
                 float maxFallSpeed = data.MaxFallSpeed;
                 if (verticalMomentum.magnitude > maxFallSpeed)
@@ -319,7 +260,7 @@ namespace AdvancePlayerController
                 horizontalMomentum += movementVelocity*Time.fixedDeltaTime; 
             }
 
-            public bool IsGroundedStates() => stateMachine.CurrentState is LocomotionState or SlidingState or AttackState;
+            private bool IsGroundedStates() => stateMachine.CurrentState is LocomotionState or SlidingState or AttackState;
 
             void AdjustHorinzontalMomentum(ref Vector3 horizontalMomentum, Vector3 movementVelocity)
             {
@@ -344,9 +285,9 @@ namespace AdvancePlayerController
             private Vector3 CalculateMovementVelocity() => CalculateMovementDirection() * data.RunMaxSpeed;
             private Vector3 CalculateMovementDirection()
             {
-                Vector3 direction = cameraTransform==null ? tr.right* inputReader.Direction.x+tr.forward*inputReader.Direction.y
-                : Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized*inputReader.Direction.x + 
-                Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized*inputReader.Direction.y ;
+                Vector3 direction = cameraTransform==null ? tr.right* input.Direction.x+tr.forward*input.Direction.y
+                : Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized*input.Direction.x + 
+                Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized*input.Direction.y ;
                 return direction.magnitude > 1f ? direction.normalized : direction;
             }
 
@@ -355,13 +296,7 @@ namespace AdvancePlayerController
                 Vector3 collisionVelocity = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 OnLand.Invoke(collisionVelocity);
                 momentum = Vector3.zero;
-            }
-
-            public void OnFallStart()
-            {
-                var currentUpMomemtum = VectorMath.ExtractDotVector(momentum, tr.up);
-                momentum = VectorMath.RemoveDotVector(momentum, tr.up);
-                momentum -= tr.up * currentUpMomemtum.magnitude;
+                isRising = false;
             }
 
             public void OnGroundContactLost() // dieu chinh huong nhay
@@ -379,25 +314,20 @@ namespace AdvancePlayerController
 
                 momentum += velocity;
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
+                isRising = true;
             }
 
             public Vector3 GetInputVelocity() => savedMovementVelocity;
             public Vector3 GetMovementVelocity() => savedVelocity;
 
-            public void OnJumpStart()
+            public void JumpStart()
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 //jumpTimer.Start();
                 momentum += tr.up * data.JumpForce;
                 OnJump.Invoke(momentum);
-                
+                isRising = true;
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
-            }
-            private void HandleJumping()
-            {
-                momentum = VectorMath.RemoveDotVector(momentum, tr.up);
-                
-                momentum += tr.up * data.JumpForce;
             }
             
 
@@ -406,5 +336,42 @@ namespace AdvancePlayerController
                 mover.SetVelocity(Vector3.zero);
                 isDeath = true;
             }
+
+            #region ---- EVENT LISTENERS ----
+            void OnJumpInitiated()
+            {
+                if (!jumpBuffer.IsRunning)
+                {
+                    jumpBuffer.Start();
+                }
+                isJumpButtonHeld = true;
+            }
+            void OnJumpCanceled()
+            {
+                isJumpButtonHeld = false;
+            }
+            
+            private void OnStartedSprinting()
+            {
+                if (sprintTimer.IsRunning || runCooldownTimer.IsRunning) return;
+                OnRun.Invoke(true);
+                sprintTimer.Start();
+
+            }
+            private void OnStoppedSprinting()
+            {
+                OnRun.Invoke(false);
+                sprintTimer.Stop();
+            }
+            private void OnStartedAttack()
+            {
+               attackTimer.Start();
+            }
+
+            #endregion
+           
+            
+            
+            
     }
 }

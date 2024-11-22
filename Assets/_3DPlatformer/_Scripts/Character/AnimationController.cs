@@ -1,7 +1,7 @@
-using Platformer.AdvancePlayerController.PlayerParticleSystem;
+using Character.PlayerParticleSystem;
 using Unity.VisualScripting;
 using UnityEngine;
-namespace Platformer.AdvancePlayerController
+namespace Character
 {   
     [RequireComponent(typeof(global::AdvancePlayerController.Protagonist))]
     public class AnimationController: MonoBehaviour

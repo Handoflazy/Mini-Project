@@ -186,12 +186,12 @@ namespace Platformer
 
 		public void OnNavigate(InputAction.CallbackContext context)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public void OnSubmit(InputAction.CallbackContext context)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public void OnConfirm(InputAction.CallbackContext context)
@@ -246,17 +246,17 @@ namespace Platformer
 
 		public void OnClick(InputAction.CallbackContext context)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public void OnPoint(InputAction.CallbackContext context)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public void OnRightClick(InputAction.CallbackContext context)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public void OnCloseInventory(InputAction.CallbackContext context)

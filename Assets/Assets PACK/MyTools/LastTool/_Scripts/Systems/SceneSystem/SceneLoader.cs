@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Utilities.Event_System.EventChannel;
 
 namespace System.SceneManagement
 {
@@ -16,6 +17,8 @@ namespace System.SceneManagement
         [SerializeField] private Canvas _loadingCanvas;
         [SerializeField] private Camera _loadingCamera;
         [SerializeField] private SceneGroup[] _sceneGroup;
+        [SerializeField] private VoidEventChannel OnSceneReady;// picked up by the SpawnSystem
+        
 
         private float _targetProgress;
         public bool IsLoading { get; private set; }
@@ -45,6 +48,11 @@ namespace System.SceneManagement
             float dynamicFillSpeed = progressDiffer * _fillSpeed;
             _loadingBar.fillAmount = Mathf.Lerp(currentFillAmount,_targetProgress, dynamicFillSpeed*Time.deltaTime);
         }
+
+        public void LoadSceneGroupWrapper(int index)
+        {
+            _ = LoadSceneGroup(index);
+        }
         public async Task LoadSceneGroup(int index)
         {
             _loadingBar.fillAmount = 0;
@@ -62,6 +70,7 @@ namespace System.SceneManagement
 
             await manager.LoadScenes(_sceneGroup[index],progress);
             EnableLoadingCanvas(false);
+            OnSceneReady.Invoke();
         }
 
         private void EnableLoadingCanvas(bool Enable = true)

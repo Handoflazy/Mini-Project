@@ -365,7 +365,7 @@ PrefabInstance:
     - target: {fileID: 6846370713673310616, guid: dad366863b431204194b7f8740c1b906,
         type: 3}
       propertyPath: m_Name
-      value: Player Variant
+      value: Male Hero
       objectReference: {fileID: 0}
     - target: {fileID: 6846370713673310616, guid: dad366863b431204194b7f8740c1b906,
         type: 3}
@@ -404,6 +404,7 @@ PrefabInstance:
       objectReference: {fileID: 6670112130182413352}
     m_RemovedComponents:
     - {fileID: 378185757563576599, guid: dad366863b431204194b7f8740c1b906, type: 3}
+    - {fileID: 7737295874808081670, guid: dad366863b431204194b7f8740c1b906, type: 3}
     m_RemovedGameObjects:
     - {fileID: 4738476114377814398, guid: dad366863b431204194b7f8740c1b906, type: 3}
     m_AddedGameObjects:

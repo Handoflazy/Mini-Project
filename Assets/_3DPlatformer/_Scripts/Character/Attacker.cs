@@ -1,5 +1,5 @@
 using System;
-using Platformer.AdvancePlayerController;
+using Character;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -30,10 +30,10 @@ namespace AdvancePlayerController
             for (int i = 0; i < size; i++)
             {
                 var hitCollider = results[i];
-                if (hitCollider.TryGetComponent(out Damageable health))
+                if (hitCollider.TryGetComponent(out Damageable damageable))
                 {
                     
-                    health.TakeDamage(attackPoint); // Sửa lỗi chính tả "TakeDame" thành "TakeDamage"
+                    damageable.ReceiveAnAttack(attackPoint); // Sửa lỗi chính tả "TakeDame" thành "TakeDamage"
                 }
             }
             OnSwingSword?.Invoke();
