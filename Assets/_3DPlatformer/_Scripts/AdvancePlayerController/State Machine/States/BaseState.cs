@@ -5,7 +5,7 @@ namespace AdvancePlayerController.State_Machine
 {
     public abstract class BaseState : IState
     {
-        protected readonly PlayerController player;
+        protected readonly Protagonist player;
         protected readonly Animator animator;
         
         protected static readonly int locomotionHash = Animator.StringToHash("Locomotion");
@@ -14,10 +14,11 @@ namespace AdvancePlayerController.State_Machine
         protected static readonly int LandHash = Animator.StringToHash("Land");
         protected static readonly int SpeedHash = Animator.StringToHash("MoveSpeed");
         protected static readonly int AttackHash = Animator.StringToHash("Attack");
+        protected static readonly int DieHash = Animator.StringToHash("Die");
 
         protected const float CROSS_FADE_DURATION = 0.1f;
 
-        protected BaseState(PlayerController player, Animator animator)
+        protected BaseState(Protagonist player, Animator animator)
         {
             this.player = player;
             this.animator = animator;

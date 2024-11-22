@@ -5,7 +5,7 @@ using UnityEngine.LowLevel;
 using UnityUtils.LowLevel;
 using Update = UnityEngine.PlayerLoop.Update;
 
-namespace ImprovedTimers
+namespace Utilities.ImprovedTimers
 {
     internal static class TimerBootstrapper
     {

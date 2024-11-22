@@ -6,13 +6,13 @@ namespace AdvancePlayerController.State_Machine
     public class LocomotionState : BaseState
     {
         private float smoothSpeed = 0;
-        public LocomotionState(PlayerController player, Animator animator) : base(player, animator)
+        public LocomotionState(Protagonist player, Animator animator) : base(player, animator)
         {
         }
 
         public override void OnEnter()
         {
-            //animator.CrossFade(locomotionHash,CROSS_FADE_DURATION);
+            
             player.OnGroundContactRegained();
         }
 

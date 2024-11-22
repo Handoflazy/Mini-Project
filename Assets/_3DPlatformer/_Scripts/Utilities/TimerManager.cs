@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VTabs.Libs;
 
-namespace ImprovedTimers
+namespace Utilities.ImprovedTimers
 {
     public static class TimerManager
     {

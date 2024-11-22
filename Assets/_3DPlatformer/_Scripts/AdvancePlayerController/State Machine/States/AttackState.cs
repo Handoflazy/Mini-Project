@@ -5,13 +5,13 @@ namespace AdvancePlayerController.State_Machine
 {
     public class AttackState : BaseState
     {
-        public AttackState(PlayerController player, Animator animator) : base(player, animator)
+        public AttackState(Protagonist player, Animator animator) : base(player, animator)
         {
         }
 
         public override void OnEnter()
         {
-            animator.Play(AttackHash);
+            animator.SetTrigger(AttackHash);
         }
     }
 }

@@ -25,6 +25,9 @@ MonoBehaviour:
     - febe0c20c545d4047a3aaea96b8f2876
     - ee23975e87049434096385b7b6df7d1c
     - 65c18d699fcadad459bc3e16558c2bd2
+    - 048965c94c7eec644b6805deffe53c86
+    - 8a39a12cf61f5d54aa6dc89ce7c66b13
+    - cfcb0768c99b87241a950535f9de478d
     values:
     - colorIndex: 0
       iconNameOrGuid: cs Script Icon
@@ -48,3 +51,9 @@ MonoBehaviour:
       iconNameOrGuid: 
     - colorIndex: 0
       iconNameOrGuid: PrefabModel Icon
+    - colorIndex: 0
+      iconNameOrGuid: ScriptableObject Icon
+    - colorIndex: 0
+      iconNameOrGuid: Settings Icon
+    - colorIndex: 0
+      iconNameOrGuid: Texture Icon

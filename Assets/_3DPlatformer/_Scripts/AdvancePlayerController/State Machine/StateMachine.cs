@@ -45,8 +45,18 @@ namespace AdvancePlayerController.State_Machine
             _current = _nodes[state.GetType()];
             OnStateChange?.Invoke(_current.State);
         }
-        private ITransition GetTransition() => anyTransitions.Concat(_current.Transitions).FirstOrDefault(transition => transition.Condition.Evaluate());
+        ITransition GetTransition() {
+            foreach (var transition in anyTransitions)
+                if (transition.Condition.Evaluate())
+                    return transition;
 
+            foreach (var transition in _current.Transitions) {
+                if (transition.Condition.Evaluate())
+                    return transition;
+            }
+
+            return null;
+        }
         public void AddTransition(IState from, IState to, IPredicate condition)
         {
             GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);

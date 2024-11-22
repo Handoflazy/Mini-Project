@@ -1,5 +1,5 @@
 using System;
-using ImprovedTimers;
+using Utilities.ImprovedTimers;
 using Platformer.AdvancePlayerController;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,7 +23,7 @@ namespace Platformer
         private IDectionStragedy detectionStragedy;
 
         private CountdownTimer detectionTimer;
-        public Health playerHealth { get; private set; }
+        public Damageable PlayerDamageable { get; private set; }
         
         
         private void Awake()
@@ -41,7 +41,7 @@ namespace Platformer
             player = GameObject.FindGameObjectWithTag("Player").transform;
             if (player)
             {
-                playerHealth = player.GetComponent<Health>();
+                PlayerDamageable = player.GetComponent<Damageable>();
             }
         }
 

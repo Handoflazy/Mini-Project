@@ -44,14 +44,14 @@ namespace Platformer.Advanced
 
         private void OnEnable()
         {
-            input.Look += OnLook;
+            input.CameraMoveEvent += OnCameraMoveEvent;
             input.EnableMouseControlCamera += OnEnableMouseControlCamera;
             input.DisableMouseControlCamera += OnDisableMouseControlCamera;
         }
 
         private void OnDisable()
         {
-            input.Look -= OnLook;
+            input.CameraMoveEvent -= OnCameraMoveEvent;
             input.EnableMouseControlCamera -= OnEnableMouseControlCamera;
             input.DisableMouseControlCamera -= OnDisableMouseControlCamera;
         }
@@ -80,7 +80,7 @@ namespace Platformer.Advanced
         }
 
 
-        private void OnLook(Vector2 cameraMovement, bool isDeviceMouse)
+        private void OnCameraMoveEvent(Vector2 cameraMovement, bool isDeviceMouse)
         {
             if (_cameraMovementLock)
                 return;

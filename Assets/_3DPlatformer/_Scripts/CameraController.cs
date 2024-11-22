@@ -28,7 +28,7 @@ namespace Platformer
         // Event subscription when the object is enabled
         private void OnEnable()
         {
-            _input.Look += OnLook;
+            _input.CameraMoveEvent += OnCameraMoveEvent;
             _input.EnableMouseControlCamera += OnEnableMouseControlCamera;
             _input.DisableMouseControlCamera += OnDisableMouseControlCamera;
         }
@@ -36,7 +36,7 @@ namespace Platformer
         // Event unsubscription when the object is disabled
         private void OnDisable()
         {
-            _input.Look -= OnLook;
+            _input.CameraMoveEvent -= OnCameraMoveEvent;
             _input.EnableMouseControlCamera -= OnEnableMouseControlCamera;
             _input.DisableMouseControlCamera -= OnDisableMouseControlCamera;
         }
@@ -71,7 +71,7 @@ namespace Platformer
         }
 
         // Handles the camera movement based on input
-        private void OnLook(Vector2 cameraMovement, bool isDeviceMouse)
+        private void OnCameraMoveEvent(Vector2 cameraMovement, bool isDeviceMouse)
         {
             // Skip processing if the camera movement is locked
             if (_cameraMovementLock)

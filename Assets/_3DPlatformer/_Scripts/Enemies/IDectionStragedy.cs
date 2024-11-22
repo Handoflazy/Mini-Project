@@ -1,4 +1,4 @@
-using ImprovedTimers;
+using Utilities.ImprovedTimers;
 using UnityEngine;
 
 namespace Platformer

@@ -3,61 +3,147 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using static PlayerInputActions;
+using static GameInput;
 
 
 namespace Platformer
 {
 	[CreateAssetMenu(fileName ="InputReader",menuName ="Platformer/Input/InputReader"),]
-	public class InputReader : ScriptableObject, IPlayerActions
+	public class InputReader : DescriptionBaseSO, IPlayerActions, IDialoguesActions, IMenusActions
 	{
-		public event UnityAction<Vector2> Move = delegate{};
-		public event UnityAction<Vector2,bool> Look = delegate { };
+		//TODO: SPECIFIC GAME STATE CAN'T RECEIVED INPUT;
+		
+		//Game Play
+		public event UnityAction JumpEvent = delegate { };
+		public event UnityAction JumpCanceledEvent = delegate { };
+		public event UnityAction AttackEvent = delegate { };
+		public event UnityAction AttackCanceledEvent = delegate { };
+		public event UnityAction InteractEvent = delegate { }; // Used to talk, pickup objects, interact with tools like the cooking cauldron
+		public event UnityAction InventoryActionButtonEvent = delegate { };
+		public event UnityAction SaveActionButtonEvent = delegate { };
+		public event UnityAction ResetActionButtonEvent = delegate { };
+		
+		
+		public event UnityAction<Vector2> MoveEvent = delegate{};
+		public event UnityAction<Vector2,bool> CameraMoveEvent = delegate { };
 		public event UnityAction EnableMouseControlCamera = delegate { };
 		public event UnityAction DisableMouseControlCamera = delegate { };
-		public event UnityAction<bool> Jump = delegate { };
-		public event UnityAction<bool> Dash = delegate { };
-		public event UnityAction Attack = delegate { };
+		public event UnityAction StartedRunning = delegate { };
+		public event UnityAction StoppedRunning = delegate { };
+		// Shared between menus and dialogues
+		public event UnityAction MoveSelectionEvent = delegate { };
 
-		PlayerInputActions _inputActions;
+		// Dialogues
+		public event UnityAction AdvanceDialogueEvent = delegate { };
 
-		public Vector3 Direction => _inputActions.Player.Move.ReadValue<Vector2>();
-		public Vector3 LookDirection => _inputActions.Player.Look.ReadValue<Vector2>();
+		// Menus
+		public event UnityAction MenuMouseMoveEvent = delegate { };
+		public event UnityAction MenuClickButtonEvent = delegate { };
+		public event UnityAction MenuUnpauseEvent = delegate { };
+		public event UnityAction MenuPauseEvent = delegate { };
+		public event UnityAction MenuCloseEvent = delegate { };
+		public event UnityAction OpenInventoryEvent = delegate { }; // Used to bring up the inventory
+		public event UnityAction CloseInventoryEvent = delegate { }; // Used to bring up the inventory
+		public event UnityAction<float> TabSwitched = delegate { };
+
+		GameInput input;
+
+		public Vector3 Direction => input.Player.Move.ReadValue<Vector2>();
+		public Vector3 LookDirection => input.Player.RotateCamera.ReadValue<Vector2>();
 		
 		void OnEnable()
 		{
-			if( _inputActions == null)
+			if (input != null) return;
+			input = new GameInput();
+				
+			input.Player.SetCallbacks(this);
+			input.Menus.SetCallbacks(this);
+			input.Dialogues.SetCallbacks(this);
+		}
+
+		private void OnDisable()
+		{
+			DisableAllInput();
+		}
+		public void OnAttack(InputAction.CallbackContext context)
+		{
+			switch (context.phase)
 			{
-				_inputActions = new PlayerInputActions();
-				_inputActions.Player.SetCallbacks(this);
+				case InputActionPhase.Started:
+					AttackEvent?.Invoke();
+					break;
+				case InputActionPhase.Canceled:
+					AttackCanceledEvent?.Invoke();
+					break;
+				
 			}
 		}
-
-		public void EnablePlayerActions() => _inputActions.Enable();
-
-		public void OnFire(InputAction.CallbackContext context)
+		public void EnableGameplayInput()
 		{
-			if(context.performed)
-				Attack.Invoke();
+			input.Player.Enable();
+			input.Menus.Disable();
+			input.Dialogues.Disable();
 		}
+		public void EnableMenusInput()
+		{
+			input.Player.Disable();
+			input.Menus.Enable();
+			input.Dialogues.Disable();
+		}
+
+		public void EnableDialogueInput()
+		{
+			input.Player.Disable();
+			input.Menus.Disable();
+			input.Dialogues.Enable();
+		}
+		private void DisableAllInput()
+		{
+			input.Player.Disable();
+			input.Menus.Disable();
+			input.Dialogues.Disable();
+		}
+
+		public void EnablePlayerActions() => input.Enable();
 
 		public void OnJump(InputAction.CallbackContext context)
 		{
 			switch (context.phase)
 			{
 				case InputActionPhase.Started:
-					Jump?.Invoke(true);
+					JumpEvent?.Invoke();
 					break;
 				case InputActionPhase.Canceled:
-					Jump?.Invoke(false);
+					JumpCanceledEvent?.Invoke();
 					break;
 			}
 		}
 
-		public void OnLook(InputAction.CallbackContext context)
+		
+
+		public void OnInteract(InputAction.CallbackContext context)
 		{
-			Look?.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
+			if ((context.phase == InputActionPhase.Performed)) //TODO: STATE IS GAMEPLAY
+					InteractEvent.Invoke();
 		}
+
+		public void OnPause(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				MenuPauseEvent.Invoke();
+		}
+
+		public void OnOpenInventory(InputAction.CallbackContext context)
+		{
+			if(context.phase==InputActionPhase.Performed)
+				OpenInventoryEvent.Invoke();
+		}
+
+		public void OnRotateCamera(InputAction.CallbackContext context)
+		{
+			CameraMoveEvent?.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
+		}
+		
 
 		public void OnMouseControlCamera(InputAction.CallbackContext context)
 		{
@@ -74,7 +160,7 @@ namespace Platformer
 
 		public void OnMove(InputAction.CallbackContext context)
 		{
-			Move.Invoke(context.ReadValue<Vector2>());
+			MoveEvent.Invoke(context.ReadValue<Vector2>());
 		}
 
 		public void OnRun(InputAction.CallbackContext context)
@@ -83,14 +169,105 @@ namespace Platformer
 				switch (context.phase)
 				{
 					case InputActionPhase.Started:
-						Dash?.Invoke(true);
+						StartedRunning.Invoke();
 						break;
 					case InputActionPhase.Canceled:
-						Dash?.Invoke(false);
+						StoppedRunning.Invoke();
 						break;
 				}
 			
 		}
-		private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
+		private static bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
+		public void OnMoveSelection(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				MoveSelectionEvent.Invoke();
+		}
+
+		public void OnNavigate(InputAction.CallbackContext context)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void OnSubmit(InputAction.CallbackContext context)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void OnConfirm(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				MenuClickButtonEvent.Invoke();
+		}
+
+		public void OnCancel(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+			{
+				MenuCloseEvent.Invoke();
+			}
+		}
+
+		public void OnMouseMove(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				MenuMouseMoveEvent.Invoke();
+		}
+
+		public void OnUnpause(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				MenuUnpauseEvent.Invoke();
+		}
+
+		public void OnChangeTab(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				TabSwitched.Invoke(context.ReadValue<float>());
+		}
+
+		public void OnInventoryActionButton(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				InventoryActionButtonEvent.Invoke();
+		}
+
+		public void OnSaveActionButton(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				SaveActionButtonEvent.Invoke();
+		}
+
+		public void OnResetActionButton(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				ResetActionButtonEvent.Invoke();
+		}
+
+		public void OnClick(InputAction.CallbackContext context)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void OnPoint(InputAction.CallbackContext context)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void OnRightClick(InputAction.CallbackContext context)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void OnCloseInventory(InputAction.CallbackContext context)
+		{
+			CloseInventoryEvent.Invoke();
+		}
+
+		public void OnAdvanceDialogue(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				AdvanceDialogueEvent.Invoke();
+		}
 	}
 }

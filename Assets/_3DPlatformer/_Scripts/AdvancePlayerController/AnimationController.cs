@@ -3,10 +3,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 namespace Platformer.AdvancePlayerController
 {   
-    [RequireComponent(typeof(global::AdvancePlayerController.PlayerController))]
+    [RequireComponent(typeof(global::AdvancePlayerController.Protagonist))]
     public class AnimationController: MonoBehaviour
     {
-        global::AdvancePlayerController.PlayerController controller;
+        global::AdvancePlayerController.Protagonist controller;
         private Animator animator;
         private PlayerParticles particles;
         readonly int speedHash = Animator.StringToHash("Speed");    
@@ -21,7 +21,7 @@ namespace Platformer.AdvancePlayerController
         
         
         void Start() {
-            controller = GetComponent<global::AdvancePlayerController.PlayerController>();
+            controller = GetComponent<global::AdvancePlayerController.Protagonist>();
             animator = GetComponentInChildren<Animator>();
             particles = GetComponentInChildren<PlayerParticles>();
             
@@ -29,7 +29,6 @@ namespace Platformer.AdvancePlayerController
             controller.OnLand += HandleLand;
             controller.OnRun += HandleRun;
             controller.OnAttack += HandleAttack;
-            controller.OnDeath += HandleDeath;
         }
 
         private void HandleDeath()
@@ -43,7 +42,6 @@ namespace Platformer.AdvancePlayerController
             controller.OnLand -= HandleLand;
             controller.OnRun -= HandleRun;
             controller.OnAttack -= HandleAttack;
-            controller.OnDeath -= HandleDeath;
         }
         void Update()
         {

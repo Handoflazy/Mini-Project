@@ -5,7 +5,7 @@ namespace AdvancePlayerController.State_Machine
 {
     public class JumpState : BaseState
     {
-        public JumpState(PlayerController player, Animator animator) : base(player, animator)
+        public JumpState(Protagonist player, Animator animator) : base(player, animator)
         {
         }
 

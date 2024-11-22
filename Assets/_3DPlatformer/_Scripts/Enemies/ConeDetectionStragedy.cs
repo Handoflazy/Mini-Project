@@ -1,4 +1,4 @@
-using ImprovedTimers;
+using Utilities.ImprovedTimers;
 using Unity.VisualScripting;
 using UnityEngine;
 using Timer = Unity.VisualScripting.Timer;

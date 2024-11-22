@@ -4,7 +4,7 @@ namespace AdvancePlayerController.State_Machine
 {
     public class SprintState : BaseState
     {
-        public SprintState(PlayerController player, Animator animator) : base(player, animator)
+        public SprintState(Protagonist player, Animator animator) : base(player, animator)
         {
         }
 

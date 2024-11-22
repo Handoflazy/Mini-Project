@@ -8,7 +8,7 @@ namespace Platformer.Advanced
 {
     public class TurnTowardController : MonoBehaviour
     {
-        [SerializeField, Required] private PlayerController controller;
+        [SerializeField, Required] private Protagonist controller;
         public float turnSpeed = 50f;
         private Transform tr;
 

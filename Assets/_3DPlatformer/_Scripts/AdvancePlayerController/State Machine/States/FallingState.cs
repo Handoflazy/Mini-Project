@@ -5,7 +5,7 @@ namespace AdvancePlayerController.State_Machine
 {
     public class FallingState : BaseState
     {
-        public FallingState(PlayerController player, Animator animator) : base(player, animator)
+        public FallingState(Protagonist player, Animator animator) : base(player, animator)
         {
         }
 
