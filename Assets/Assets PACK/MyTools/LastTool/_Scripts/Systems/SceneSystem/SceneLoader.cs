@@ -17,6 +17,7 @@ namespace System.SceneManagement
         [SerializeField] private Canvas _loadingCanvas;
         [SerializeField] private Camera _loadingCamera;
         [SerializeField] private SceneGroup[] _sceneGroup;
+        [Header("Broadcast On")]
         [SerializeField] private VoidEventChannel OnSceneReady;// picked up by the SpawnSystem
         
 

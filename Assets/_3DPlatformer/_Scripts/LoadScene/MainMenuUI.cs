@@ -19,7 +19,7 @@ namespace Platformer.LoadScene
         {
             sceneLoader = GlobalObjectManager.Instance.GetObject(10000).GetComponent<SceneLoader>();
             playerButton.onClick.AddListener(()=>_ = sceneLoader.LoadSceneGroup(loadGroupSceneIndex));
-            exitButton.onClick.AddListener(()=>Helpers.QuitGame());
+            exitButton.onClick.AddListener(()=>QuitHelpers.QuitGame());
         }
 
     

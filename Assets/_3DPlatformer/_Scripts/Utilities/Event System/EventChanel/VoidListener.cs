@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,6 +17,7 @@ namespace Utilities.Event_System.EventChannel
         {
             unityEvent?.Invoke();
         }
+        
         private void OnDestroy()
         {
             eventChannel.DeRegister(this);

@@ -33,6 +33,7 @@ namespace AdvancePlayerController
 
             #region Timers
             private CountdownTimer jumpBuffer;
+            private CountdownTimer jumpStartTimer;
             private CountdownTimer sprintTimer;
             private CountdownTimer runCooldownTimer;
             private CountdownTimer attackCooldownTimer;
@@ -58,7 +59,6 @@ namespace AdvancePlayerController
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
             private bool isJumpButtonHeld;
             private bool isDeath;
-            private bool isRising;
             
             // ex: for animation effect
             public event Action<Vector2> OnJump = delegate { };
@@ -126,7 +126,7 @@ namespace AdvancePlayerController
             private void SetUpTimers()
             {
                 jumpBuffer = new CountdownTimer(data.JumpInputBufferTime);
-                
+                jumpStartTimer = new CountdownTimer(0.25f);
                 sprintTimer = new CountdownTimer(runTime);
                 runCooldownTimer = new CountdownTimer(runCooldownTime);
                 
@@ -160,7 +160,8 @@ namespace AdvancePlayerController
 
                 At(slideState,locomotionState, new FuncPredicate(()=>!IsGroundTooSteep()));
                 
-                At(jumpState, risingState, new FuncPredicate(()=>isRising));
+                At(jumpState, risingState, new FuncPredicate(IsRising));
+                At(jumpState,locomotionState,new FuncPredicate(()=>mover.IsGrounded()));
                 
                 At(risingState,fallingState, new FuncPredicate(IsFalling));
                 At(risingState,fallingState, new FuncPredicate(()=>!isJumpButtonHeld));
@@ -190,6 +191,7 @@ namespace AdvancePlayerController
             private void Update()
             {
                 stateMachine.Update();
+                print(stateMachine.CurrentState);
             }
 
             private void HandleMomentum()
@@ -296,7 +298,6 @@ namespace AdvancePlayerController
                 Vector3 collisionVelocity = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 OnLand.Invoke(collisionVelocity);
                 momentum = Vector3.zero;
-                isRising = false;
             }
 
             public void OnGroundContactLost() // dieu chinh huong nhay
@@ -314,7 +315,6 @@ namespace AdvancePlayerController
 
                 momentum += velocity;
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
-                isRising = true;
             }
 
             public Vector3 GetInputVelocity() => savedMovementVelocity;
@@ -323,10 +323,9 @@ namespace AdvancePlayerController
             public void JumpStart()
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                //jumpTimer.Start();
+                jumpStartTimer.Start();
                 momentum += tr.up * data.JumpForce;
                 OnJump.Invoke(momentum);
-                isRising = true;
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
             }
             

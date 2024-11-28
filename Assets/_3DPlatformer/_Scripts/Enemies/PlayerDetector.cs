@@ -26,17 +26,8 @@ namespace Platformer
         public Damageable PlayerDamageable { get; private set; }
         
         
-        private void Awake()
-        {
-            SceneManager.sceneLoaded += SetUp;
-        }
 
-        private void OnDestroy()
-        {
-            SceneManager.sceneLoaded -= SetUp;
-        }
-
-        private void SetUp(Scene scene,LoadSceneMode mode)
+        public void SetUp(Transform playerTransform)
         {
             player = GameObject.FindGameObjectWithTag("Player").transform;
             if (player)

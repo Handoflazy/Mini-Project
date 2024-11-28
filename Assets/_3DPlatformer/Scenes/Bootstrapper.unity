@@ -562,19 +562,25 @@ MonoBehaviour:
         asset: {fileID: 102900000, guid: 1996947411f8ff34297231a829b5e537, type: 3}
         guid: 1996947411f8ff34297231a829b5e537
       SceneType: 2
-  - GroupName: GamePlay
+  - GroupName: Valley
     Scenes:
     - Reference:
         asset: {fileID: 102900000, guid: 17378ada42dc6c047a476c8d206439f3, type: 3}
         guid: 17378ada42dc6c047a476c8d206439f3
       SceneType: 2
     - Reference:
-        asset: {fileID: 102900000, guid: b492c86983cf3014fba0daaf04b5fe40, type: 3}
-        guid: b492c86983cf3014fba0daaf04b5fe40
-      SceneType: 3
-    - Reference:
         asset: {fileID: 102900000, guid: d87e641afab75394d8494d040076a619, type: 3}
         guid: d87e641afab75394d8494d040076a619
+      SceneType: 0
+  - GroupName: Canyon
+    Scenes:
+    - Reference:
+        asset: {fileID: 102900000, guid: 17378ada42dc6c047a476c8d206439f3, type: 3}
+        guid: 17378ada42dc6c047a476c8d206439f3
+      SceneType: 0
+    - Reference:
+        asset: {fileID: 102900000, guid: 6bddc30eb14ded945bab4269f1224b91, type: 3}
+        guid: 6bddc30eb14ded945bab4269f1224b91
       SceneType: 0
   OnSceneReady: {fileID: 11400000, guid: ca05d2b548740284b8a4025984ee2d99, type: 2}
 --- !u!114 &737470394

@@ -324,6 +324,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3663842168373723196, guid: dad366863b431204194b7f8740c1b906,
         type: 3}
+      propertyPath: deathEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: d95cbaafaca8c8c4cbca7028842b04ad,
+        type: 2}
+    - target: {fileID: 3663842168373723196, guid: dad366863b431204194b7f8740c1b906,
+        type: 3}
+      propertyPath: healthConfigSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 31a496239319e2747b4ff4999706dfd6,
+        type: 2}
+    - target: {fileID: 3663842168373723196, guid: dad366863b431204194b7f8740c1b906,
+        type: 3}
+      propertyPath: updateHealthUI
+      value: 
+      objectReference: {fileID: 11400000, guid: ca05d2b548740284b8a4025984ee2d99,
+        type: 2}
+    - target: {fileID: 3663842168373723196, guid: dad366863b431204194b7f8740c1b906,
+        type: 3}
+      propertyPath: currentHealthSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 8beca7af9bd1ea047ba6ab66405c5069,
+        type: 2}
+    - target: {fileID: 3663842168373723196, guid: dad366863b431204194b7f8740c1b906,
+        type: 3}
       propertyPath: OnDie.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
