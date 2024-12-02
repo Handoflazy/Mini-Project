@@ -20,8 +20,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b492c86983cf3014fba0daaf04b5fe40
-    m_Address: Assets/_3DPlatformer/Scenes/Hero.unity
+  - m_GUID: 1996947411f8ff34297231a829b5e537
+    m_Address: Assets/_3DPlatformer/Scenes/MenuScreen.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bddc30eb14ded945bab4269f1224b91
+    m_Address: Assets/_3DPlatformer/Scenes/Caniyon/Demo.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

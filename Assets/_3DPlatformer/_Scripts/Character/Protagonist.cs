@@ -16,8 +16,6 @@ namespace AdvancePlayerController
     [RequireComponent(typeof(Damageable))]
     public class Protagonist : MonoBehaviour
     {
-        #region Fields
-            [FormerlySerializedAs("inputReader")]
             [Header("Elements")]
             [SerializeField] Platformer.InputReader input;
             [SerializeField] PlayerData data;
@@ -70,8 +68,6 @@ namespace AdvancePlayerController
             private EventBinding<PlayerEvents> playerEventBinding;
             private EventBinding<TestEvents> testEventBinding;
 
-            #endregion
-
             private void Awake()
             {
                 tr = transform;
@@ -87,14 +83,13 @@ namespace AdvancePlayerController
                 stateMachine.FixedUpdate();
                 mover.CheckForGround();
                 HandleMomentum();
-                Vector3 velocity = stateMachine.CurrentState is LocomotionState? CalculateMovementVelocity():Vector3.zero;
+                var velocity = stateMachine.CurrentState is LocomotionState? CalculateMovementVelocity():Vector3.zero;
                 velocity = sprintTimer.IsRunning? velocity*RunMultiplier: velocity;
                 velocity += useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 mover.SetExtendSensorRange(IsGroundedStates());
                 mover.SetVelocity(velocity);
                 savedVelocity = velocity;
                 savedMovementVelocity = CalculateMovementVelocity();
-                
                 ceilingDetector.Reset();
                 
                
@@ -191,7 +186,6 @@ namespace AdvancePlayerController
             private void Update()
             {
                 stateMachine.Update();
-                print(stateMachine.CurrentState);
             }
 
             private void HandleMomentum()

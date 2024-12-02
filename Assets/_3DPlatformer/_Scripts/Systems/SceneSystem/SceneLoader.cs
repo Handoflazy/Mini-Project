@@ -44,10 +44,14 @@ namespace System.SceneManagement
         {
             if (!IsLoading) return;
 
-            float currentFillAmount = _loadingBar.fillAmount;
-            float progressDiffer = Mathf.Abs(currentFillAmount-_targetProgress);
-            float dynamicFillSpeed = progressDiffer * _fillSpeed;
-            _loadingBar.fillAmount = Mathf.Lerp(currentFillAmount,_targetProgress, dynamicFillSpeed*Time.deltaTime);
+            if (_loadingBar)
+            {
+                float currentFillAmount = _loadingBar.fillAmount;
+                float progressDiffer = Mathf.Abs(currentFillAmount-_targetProgress);
+                float dynamicFillSpeed = progressDiffer * _fillSpeed;
+                _loadingBar.fillAmount = Mathf.Lerp(currentFillAmount,_targetProgress, dynamicFillSpeed*Time.deltaTime);
+            }
+
         }
 
         public void LoadSceneGroupWrapper(int index)
@@ -71,7 +75,8 @@ namespace System.SceneManagement
 
             await manager.LoadScenes(_sceneGroup[index],progress);
             EnableLoadingCanvas(false);
-            OnSceneReady.Invoke();
+            StartGamePlay();
+            
         }
 
         private void EnableLoadingCanvas(bool Enable = true)
@@ -80,7 +85,12 @@ namespace System.SceneManagement
             _loadingCamera.gameObject.SetActive(Enable);
             _loadingCanvas.gameObject.SetActive(Enable);
         }
+        private void StartGamePlay()
+        {
+            OnSceneReady.Invoke();
+        }
     }
+    
     public class LoadProgress : IProgress<float>
     {
         public event Action<float> Progressed;
@@ -91,4 +101,5 @@ namespace System.SceneManagement
         }
 
     }
+   
 }

@@ -12,7 +12,6 @@ namespace Platformer.UI
 
         public void UpdateHealthUI()
         {
-            print(protagonistHealth.CurrentHealth);
             if (healthBarImage != null)
                 healthBarImage.fillAmount =(float)protagonistHealth.CurrentHealth / protagonistHealth.MaxHealth;
         }

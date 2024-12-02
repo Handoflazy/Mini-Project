@@ -29,11 +29,9 @@ namespace Platformer
 
         public void SetUp(Transform playerTransform)
         {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+            player = playerTransform;
             if (player)
-            {
                 PlayerDamageable = player.GetComponent<Damageable>();
-            }
         }
 
         private void Start()
@@ -41,7 +39,9 @@ namespace Platformer
             detectionTimer = new CountdownTimer(detectionCooldown);
             detectionStragedy = new ConeDetectionStragedy(detectionRadius, detectionAngle, innerDetectionRadius);
         }
-        public bool CanDetectPlayer() {
+        public bool CanDetectPlayer()
+        {
+            if (!player) return false;
             return detectionTimer.IsRunning || detectionStragedy.Execute(player, transform, detectionTimer);
         }
 

@@ -114,7 +114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4467291070396743476
 Transform:
   m_ObjectHideFlags: 0
@@ -340,7 +340,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8012241066740736364
 Transform:
   m_ObjectHideFlags: 0
@@ -739,7 +739,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4209906274461783900
 Transform:
   m_ObjectHideFlags: 0
@@ -1112,7 +1112,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7686824614151995719
 Transform:
   m_ObjectHideFlags: 0
@@ -1197,7 +1197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2402965933809323769
 Transform:
   m_ObjectHideFlags: 0
@@ -1417,7 +1417,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1131024270154599075}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: CameraTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1432,7 +1432,7 @@ Transform:
   m_GameObject: {fileID: 4239247125207329720}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1515,7 +1515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2450295949260747676}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: CameraRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1530,7 +1530,7 @@ Transform:
   m_GameObject: {fileID: 4843103429432264789}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1588,7 +1588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1921031187321590618
 Transform:
   m_ObjectHideFlags: 0
@@ -2238,7 +2238,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3901049491948137485
 Transform:
   m_ObjectHideFlags: 0
@@ -2392,8 +2392,9 @@ GameObject:
   - component: {fileID: 42292845827096064}
   - component: {fileID: 4647173154740897701}
   - component: {fileID: 839594402265514339}
+  - component: {fileID: 5429978325886361803}
   m_Layer: 0
-  m_Name: FemakehERO
+  m_Name: MaleHero
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2436,9 +2437,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.315
-  m_Height: 1.2
+  m_Height: 1.35
   m_Direction: 1
-  m_Center: {x: 0, y: 0.87, z: 0}
+  m_Center: {x: 0, y: 0.8175, z: 0}
 --- !u!54 &5268331973942683041
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2482,7 +2483,7 @@ MonoBehaviour:
   colliderHeight: 1.5
   colliderThickness: 0.63
   offset: {x: 0, y: 0.5, z: 0}
-  col: {fileID: 0}
+  col: {fileID: 5899435673137501464}
   isInDebugMode: 0
 --- !u!114 &4647173154740897701
 MonoBehaviour:
@@ -2496,13 +2497,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 364c347401a44e33bcc06d2686015323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputReader: {fileID: 0}
-  data: {fileID: 0}
-  ceilingDetector: {fileID: 0}
-  cameraTransform: {fileID: 2928177380274487925}
-  playerHealth: {fileID: 0}
-  animator: {fileID: 0}
-  knight: {fileID: 0}
+  input: {fileID: 11400000, guid: add27cf6b3bfff44d8c37e96822dd137, type: 2}
+  data: {fileID: 11400000, guid: 76bb8c03ba9bfc948aa5da671e66515f, type: 2}
+  ceilingDetector: {fileID: 5429978325886361803}
+  cameraTransform: {fileID: 5797051797486011748}
+  animator: {fileID: 2037866299723322763}
+  attacker: {fileID: 0}
   useLocalMomentum: 1
   attackTime: 0
   attackCooldown: 0
@@ -2522,12 +2522,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83b9a838573e44fe8868b996c67ef908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealh: 100
-  playerHealthChannel: {fileID: 0}
-  currentHealth: 0
-  OnDie:
-    m_PersistentCalls:
-      m_Calls: []
+  healthConfigSO: {fileID: 11400000, guid: 31a496239319e2747b4ff4999706dfd6, type: 2}
+  currentHealthSO: {fileID: 11400000, guid: 8beca7af9bd1ea047ba6ab66405c5069, type: 2}
+  updateHealthUI: {fileID: 11400000, guid: 00a90958ce0d3114eb440d8b434be589, type: 2}
+  deathEvent: {fileID: 11400000, guid: d95cbaafaca8c8c4cbca7028842b04ad, type: 2}
+--- !u!114 &5429978325886361803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7385184586051920071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9ba3daba242408e93cc02f51636067e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ceilingAngleLimit: 10
+  isInDebugMode: 0
 --- !u!1 &7402009350858902660
 GameObject:
   m_ObjectHideFlags: 0
@@ -2720,8 +2732,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5797051797486011748}
+  - component: {fileID: 7654532661024035304}
+  - component: {fileID: 7114601868812510425}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: CameraController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2743,6 +2757,42 @@ Transform:
   - {fileID: 1131024270154599075}
   m_Father: {fileID: 2450295949260747676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7654532661024035304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8088722581470875625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba8b68a56bd3d3d42a5b77c9dd8b1a79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upperVerticalLimit: 35
+  lowerVerticalLimit: 35
+  cameraSpeed: 5
+  input: {fileID: 11400000, guid: add27cf6b3bfff44d8c37e96822dd137, type: 2}
+--- !u!114 &7114601868812510425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8088722581470875625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f92d40851594051af55b1bed2106aa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 2928177380274487925}
+  cameraTargetTransform: {fileID: 1131024270154599075}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 7991
+  minimumDistanceFromObstacles: 0.1
+  smoothingFactor: 25
+  sphereRadius: 0.15
 --- !u!1 &8205638035122203754
 GameObject:
   m_ObjectHideFlags: 0
@@ -2760,7 +2810,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7088233412688802055
 Transform:
   m_ObjectHideFlags: 0
@@ -2876,7 +2926,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2186780431158919968
 Transform:
   m_ObjectHideFlags: 0
@@ -3044,7 +3094,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6191256930822494739
 Transform:
   m_ObjectHideFlags: 0
@@ -3154,6 +3204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5696974797668922126}
   - component: {fileID: 2037866299723322763}
+  - component: {fileID: 96043029653337026}
   m_Layer: 0
   m_Name: PlayerRenderer
   m_TagString: Untagged
@@ -3203,6 +3254,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &96043029653337026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8699882769764560929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210d5ea1676144d4ba1e95d895b60619, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 4647173154740897701}
+  turnSpeed: 800
 --- !u!1 &8999772328840767353
 GameObject:
   m_ObjectHideFlags: 0

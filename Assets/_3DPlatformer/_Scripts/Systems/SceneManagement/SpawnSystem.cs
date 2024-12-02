@@ -18,7 +18,7 @@ namespace Platformer.Systems.SpawnSystem
         
         private Transform defaultSpawnPoint;
         private LocationEntrance[] spawnLocation;
-
+        
         private void Awake()
         {
             spawnLocation = FindObjectsOfType<LocationEntrance>();
@@ -27,8 +27,9 @@ namespace Platformer.Systems.SpawnSystem
 
         public void SpawnPlayer()
         {
-            Transform spawnLocation = GetSpawnLocation();
-            Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
+            print(1);
+            Transform location = GetSpawnLocation();
+            Protagonist playerInstance = Instantiate(playerPrefab, location.position, location.rotation);
             playerInstantiatedChannel.Invoke(playerInstance.transform);
         }
 

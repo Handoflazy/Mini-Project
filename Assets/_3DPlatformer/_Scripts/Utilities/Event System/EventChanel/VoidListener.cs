@@ -20,6 +20,7 @@ namespace Utilities.Event_System.EventChannel
         
         private void OnDestroy()
         {
+            print("disable"+ gameObject.name);
             eventChannel.DeRegister(this);
         }
     }

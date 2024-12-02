@@ -18,8 +18,6 @@ namespace Platformer.Advanced
         [Range(0,90f)] public float lowerVerticalLimit = 35f;
 
         public float cameraSpeed = 50f;
-        public bool smoothCameraRotation;
-        [Range(0,50f)] public float cameraSmoothingFactor = 25f;
         Transform tr;
         Camera cam;
         [SerializeField,Required] InputReader input;
@@ -94,13 +92,6 @@ namespace Platformer.Advanced
 
         private void RotateCamera(float horizontalInput, float verticalInput)
         {
-            /*if (smoothCameraRotation)
-            {
-                horizontalInput = Mathf.Lerp(0,horizontalInput, Time.deltaTime * cameraSmoothingFactor);
-                verticalInput = Mathf.Lerp(0,verticalInput, Time.deltaTime * cameraSmoothingFactor);
-            }*/
-            /*currentXAngle += verticalInput * Time.deltaTime * cameraSpeed;
-            currentYAngle += horizontalInput * Time.deltaTime * cameraSpeed;*/
             currentXAngle += verticalInput* cameraSpeed;
             currentYAngle += horizontalInput  * cameraSpeed;
             
