@@ -11,19 +11,16 @@ namespace AdvancePlayerController.State_Machine
 
         public override void OnEnter()
         {
-            
+            animator.SetBool(AirHash,true);
         }
 
         public override void OnExit()
-        { 
-            if(player.GetInputVelocity().magnitude>0.1)
+        {
+            if (player.GetInputVelocity().magnitude > 0.1)
             {
-                animator.CrossFade(locomotionHash,CROSS_FADE_DURATION);
+                animator.SetBool(WalkHash,true);
             }
-            else
-            {
-                animator.CrossFade(LandHash,CROSS_FADE_DURATION);
-            }
+
             animator.SetBool(AirHash,false);
         }
     }

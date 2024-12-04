@@ -27,10 +27,11 @@ namespace Platformer.Systems.SpawnSystem
 
         public void SpawnPlayer()
         {
-            print(1);
             Transform location = GetSpawnLocation();
             Protagonist playerInstance = Instantiate(playerPrefab, location.position, location.rotation);
+            
             playerInstantiatedChannel.Invoke(playerInstance.transform);
+            input.EnableGameplayInput();
         }
 
         private Transform GetSpawnLocation()

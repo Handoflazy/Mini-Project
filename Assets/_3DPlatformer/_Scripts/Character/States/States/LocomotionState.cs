@@ -10,21 +10,14 @@ namespace AdvancePlayerController.State_Machine
         {
         }
 
-        public override void OnEnter()
-        {
-            
-            player.OnGroundContactRegained();
-        }
+        public override void OnEnter() => player.OnGroundContactRegained();
 
         public override void Update()
         {
-            smoothSpeed = Mathf.SmoothStep(smoothSpeed, player.GetMovementVelocity().magnitude, 0.5f); //TODO: speedMultilier
+            var playerSpeed = player.GetMovementVelocity().magnitude;
+            smoothSpeed = Mathf.SmoothStep(smoothSpeed, playerSpeed, 0.5f); //TODO: speedMultilier
             animator.SetFloat(SpeedHash,smoothSpeed);
-        }
-
-        public override void FixedUpdate()
-        {
-            
+            animator.SetBool(WalkHash,playerSpeed>0.01f);
         }
     }
 }

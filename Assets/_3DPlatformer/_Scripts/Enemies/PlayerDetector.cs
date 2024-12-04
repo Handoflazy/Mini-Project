@@ -41,7 +41,6 @@ namespace Platformer
         }
         public bool CanDetectPlayer()
         {
-            if (!player) return false;
             return detectionTimer.IsRunning || detectionStragedy.Execute(player, transform, detectionTimer);
         }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using AdvancePlayerController;
 using AdvancePlayerController.State_Machine;
 using AdvancePlayerController.State_Machine.EnemyStates;
@@ -29,13 +30,20 @@ namespace Platformer
 
         public bool IsDeath { get; set; } = false;
         public bool WasHit { get; set; } = false;
+        [SerializeField]
+        private bool isGamePlayReady = false;
 
-        private void Start()
+
+
+        IEnumerator WaitCoroutine(float time)
+        {
+            yield return new WaitForSeconds(time);
+        }
+        public void OnPlayerSpawn(Transform tf)
         {
             SetUpTimers();
-
             SetUpStateMachine();
-            
+            isGamePlayReady = true;
         }
 
         private void SetUpTimers()
@@ -74,12 +82,17 @@ namespace Platformer
 
         private void Update()
         {
-            stateMachine.Update();
+            if(isGamePlayReady)
+                stateMachine.Update();
              
         }
 
-        private void FixedUpdate() => stateMachine.FixedUpdate();
-        
+        private void FixedUpdate()
+        {
+            if(isGamePlayReady)
+                stateMachine.FixedUpdate();
+        }
+
         private bool HasReachDestination()
         {
             return !navMeshAgent.pathPending

@@ -11307,68 +11307,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 970556637}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &992416537 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4425858458575158432, guid: 30e9a242035a61446a82ba2fe1abf317,
-    type: 3}
-  m_PrefabInstance: {fileID: 8829410566299143737}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &992416538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 992416537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83b9a838573e44fe8868b996c67ef908, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthConfigSO: {fileID: 0}
-  currentHealthSO: {fileID: 0}
-  updateHealthUI: {fileID: 0}
-  deathEvent: {fileID: 0}
---- !u!114 &992416539 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5244979540814600775, guid: 30e9a242035a61446a82ba2fe1abf317,
-    type: 3}
-  m_PrefabInstance: {fileID: 8829410566299143737}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 992416537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e90d7d062e2493ca8f42f74c3487fde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &992416544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 992416537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd13ec6fe02a4fccae1d934b455d1a8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eventChannel: {fileID: 11400000, guid: 4313beb62772aec4d95f2651c19312b6, type: 2}
-  unityEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 992416539}
-        m_TargetAssemblyTypeName: Platformer.PlayerDetector, Assembly-CSharp
-        m_MethodName: SetUp
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1001 &1007144812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27613,23 +27551,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
-    - target: {fileID: 4425858458575158432, guid: 30e9a242035a61446a82ba2fe1abf317,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4425858458575158432, guid: 30e9a242035a61446a82ba2fe1abf317,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 992416538}
-    - targetCorrespondingSourceObject: {fileID: 4425858458575158432, guid: 30e9a242035a61446a82ba2fe1abf317,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 992416544}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30e9a242035a61446a82ba2fe1abf317, type: 3}
 --- !u!1001 &9090259269265676377
 PrefabInstance:

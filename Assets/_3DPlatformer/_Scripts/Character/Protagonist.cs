@@ -17,12 +17,15 @@ namespace AdvancePlayerController
     public class Protagonist : MonoBehaviour
     {
             [Header("Elements")]
-            [SerializeField] Platformer.InputReader input;
-            [SerializeField] PlayerData data;
-            [SerializeField] private CeilingDetector ceilingDetector;
-            [SerializeField] Transform cameraTransform;
-            [SerializeField] private Animator animator;
-            [SerializeField] private Attacker attacker;
+            [SerializeField,Required] Platformer.InputReader input;
+            [SerializeField,Required] PlayerData data;
+            [SerializeField,Required] private CeilingDetector ceilingDetector;
+            [SerializeField,Required] Transform cameraTransform;
+            [SerializeField,Required] private Animator animator;
+            [SerializeField,Required] private Attacker attacker;
+            [SerializeField,Required] private Damageable damageable;
+            
+            
             public bool useLocalMomentum;
 
             private Transform tr;
@@ -31,11 +34,11 @@ namespace AdvancePlayerController
 
             #region Timers
             private CountdownTimer jumpBuffer;
-            private CountdownTimer jumpStartTimer;
             private CountdownTimer sprintTimer;
             private CountdownTimer runCooldownTimer;
             private CountdownTimer attackCooldownTimer;
             private CountdownTimer attackTimer;
+            private CountdownTimer surprisedTimer;
 
             #endregion
             
@@ -52,17 +55,19 @@ namespace AdvancePlayerController
 
             [SerializeField] private float runCooldownTime = 2f;
             [SerializeField] private float runTime = 3f;
+            [SerializeField] private float surprisedAnimationTime =1f;
             [ReadOnly] [SerializeField] private string currentState;
            
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
             private bool isJumpButtonHeld;
-            private bool isDeath;
             
             // ex: for animation effect
             public event Action<Vector2> OnJump = delegate { };
             public event Action<Vector2> OnLand = delegate { };
             public event Action OnAttack = delegate { };
             public event Action<bool> OnRun = delegate { };
+
+            private bool attackInput;
 
 
             private EventBinding<PlayerEvents> playerEventBinding;
@@ -83,7 +88,7 @@ namespace AdvancePlayerController
                 stateMachine.FixedUpdate();
                 mover.CheckForGround();
                 HandleMomentum();
-                var velocity = stateMachine.CurrentState is LocomotionState? CalculateMovementVelocity():Vector3.zero;
+                var velocity = stateMachine.CurrentState is LocomotionState or WalkAttackState? CalculateMovementVelocity():Vector3.zero;
                 velocity = sprintTimer.IsRunning? velocity*RunMultiplier: velocity;
                 velocity += useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 mover.SetExtendSensorRange(IsGroundedStates());
@@ -102,8 +107,9 @@ namespace AdvancePlayerController
                 input.StartedRunning += OnStartedSprinting;
                 input.StoppedRunning += OnStoppedSprinting;
                 input.AttackEvent += OnStartedAttack;
+                input.AttackCanceledEvent += OnStopAttack;
                 //
-                
+
             }
 
            
@@ -121,9 +127,9 @@ namespace AdvancePlayerController
             private void SetUpTimers()
             {
                 jumpBuffer = new CountdownTimer(data.JumpInputBufferTime);
-                jumpStartTimer = new CountdownTimer(0.25f);
                 sprintTimer = new CountdownTimer(runTime);
                 runCooldownTimer = new CountdownTimer(runCooldownTime);
+                surprisedTimer = new CountdownTimer(surprisedAnimationTime);
                 
                 attackCooldownTimer = new CountdownTimer(attackCooldown);
                 attackTimer = new CountdownTimer(attackTime);
@@ -140,20 +146,25 @@ namespace AdvancePlayerController
                 
                 var locomotionState = new LocomotionState(this, animator);
                 var jumpState = new JumpState(this, animator);
-                var slideState = new SlidingState(this, animator);
+                var slidingState = new SlidingState(this, animator);
                 var risingState = new RisingState(this, animator);
                 var fallingState = new FallingState(this, animator);
-                var attackState = new AttackState(this, animator);
-                var dieState = new DeathState(this, animator);
+                var idleAttackState = new IdleAttackState(this, animator);
+                var walkAttackState = new WalkAttackState(this, animator);
+                var dyingState = new DyingState(this, animator);
+                var gettingHitState = new GetttingHit(this, animator, damageable,surprisedTimer);
 
-                At(locomotionState, jumpState, new FuncPredicate(() => jumpBuffer.IsRunning));
-                At(locomotionState, risingState, new FuncPredicate(IsRising));
-                At(locomotionState,slideState,new FuncPredicate(IsGroundTooSteep));
+                At(locomotionState,walkAttackState,new FuncPredicate(()=>attackInput&&GetInputVelocity()!=Vector3.zero));
+                At(locomotionState,idleAttackState,new FuncPredicate(()=>attackInput&&GetInputVelocity()==Vector3.zero));
+                
+                At(locomotionState,slidingState,new FuncPredicate(IsGroundTooSteep));
+                At(locomotionState,jumpState, new FuncPredicate(() => jumpBuffer.IsRunning));
+                At(locomotionState,risingState, new FuncPredicate(IsRising));
                 At(locomotionState,fallingState,new FuncPredicate(IsFalling));
                 At(locomotionState,fallingState,new FuncPredicate(()=>!mover.IsGrounded()));
-                At(locomotionState,attackState,new FuncPredicate(()=>attackTimer.IsRunning));
+                At(locomotionState,gettingHitState,new FuncPredicate(()=>damageable.GetHit));
 
-                At(slideState,locomotionState, new FuncPredicate(()=>!IsGroundTooSteep()));
+                At(slidingState,locomotionState, new FuncPredicate(()=>!IsGroundTooSteep()));
                 
                 At(jumpState, risingState, new FuncPredicate(IsRising));
                 At(jumpState,locomotionState,new FuncPredicate(()=>mover.IsGrounded()));
@@ -164,9 +175,17 @@ namespace AdvancePlayerController
                 
                 At(fallingState,locomotionState, new FuncPredicate(()=>mover.IsGrounded()));
                 
-                At(attackState,locomotionState, new FuncPredicate(()=>attackTimer.IsFinished));
+                At(idleAttackState,locomotionState, new FuncPredicate(()=>!attackInput));
+                At(idleAttackState,gettingHitState, new FuncPredicate(()=>damageable.GetHit));
                 
-                Any(dieState,new FuncPredicate(()=>isDeath&&IsGroundedStates()));
+                At(walkAttackState,locomotionState, new FuncPredicate(()=>!attackInput));
+                At(walkAttackState,gettingHitState, new FuncPredicate(()=>damageable.GetHit));
+                At(walkAttackState,idleAttackState, new FuncPredicate(()=>GetInputVelocity()==Vector3.zero));
+                
+                At(gettingHitState,dyingState,new FuncPredicate(()=>damageable.IsDead));
+                At(gettingHitState,locomotionState, new FuncPredicate(()=>!surprisedTimer.IsFinished));
+                
+                Any(gettingHitState,new FuncPredicate(()=>damageable.GetHit));
                 stateMachine.SetState(fallingState);
 
 
@@ -195,7 +214,7 @@ namespace AdvancePlayerController
                 Vector3 horizontalMomentum = momentum - verticalMomentum;
                 verticalMomentum = HandleGravity(verticalMomentum);
 
-                if (stateMachine.CurrentState is LocomotionState &&
+                if (stateMachine.CurrentState is LocomotionState or WalkAttackState &&
                     VectorMath.GetDotProduct(verticalMomentum, tr.up) < 0f)
                     verticalMomentum = Vector3.zero;
                 if (!IsGroundedStates())
@@ -256,7 +275,7 @@ namespace AdvancePlayerController
                 horizontalMomentum += movementVelocity*Time.fixedDeltaTime; 
             }
 
-            private bool IsGroundedStates() => stateMachine.CurrentState is LocomotionState or SlidingState or AttackState;
+            private bool IsGroundedStates() => stateMachine.CurrentState is LocomotionState or SlidingState or IdleAttackState or WalkAttackState;
 
             void AdjustHorinzontalMomentum(ref Vector3 horizontalMomentum, Vector3 movementVelocity)
             {
@@ -317,7 +336,6 @@ namespace AdvancePlayerController
             public void JumpStart()
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                jumpStartTimer.Start();
                 momentum += tr.up * data.JumpForce;
                 OnJump.Invoke(momentum);
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
@@ -326,8 +344,19 @@ namespace AdvancePlayerController
 
             public void Die()
             {
+                StopMovement();
+                input.DisablePlayerActions();
+            }
+        
+            public void StopMovement()
+            {
                 mover.SetVelocity(Vector3.zero);
-                isDeath = true;
+            }
+            //Clears the Protagonist's cached input of actions like Jump
+            public void ClearInput()
+            {
+                if(jumpBuffer.IsRunning)
+                    jumpBuffer.Stop();
             }
 
             #region ---- EVENT LISTENERS ----
@@ -358,7 +387,12 @@ namespace AdvancePlayerController
             }
             private void OnStartedAttack()
             {
-               attackTimer.Start();
+                attackInput = true;
+            }
+
+            private void OnStopAttack()
+            {
+                attackInput = false;
             }
 
             #endregion

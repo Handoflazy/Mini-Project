@@ -105,6 +105,7 @@ namespace Platformer
 		}
 
 		public void EnablePlayerActions() => input.Enable();
+		public void DisablePlayerActions() => input.Disable();
 
 		public void OnJump(InputAction.CallbackContext context)
 		{

@@ -13,7 +13,7 @@ namespace Character
         [Header("Broadcasting On")]
         [SerializeField] private VoidEventChannel updateHealthUI;
         [SerializeField] private VoidEventChannel deathEvent;
-
+        
         public bool GetHit { get; set; }
         public bool IsDead { get; set; }
 

@@ -9,10 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1821292528207799408}
-  - component: {fileID: 8942015927137254788}
   - component: {fileID: 5598651362781503394}
   - component: {fileID: 6637988598853489644}
   - component: {fileID: 5244979540814600775}
+  - component: {fileID: 8942015927137254788}
+  - component: {fileID: 2222391869358768583}
+  - component: {fileID: 7214978253365961911}
+  - component: {fileID: 924230070395336894}
   m_Layer: 12
   m_Name: Enemy
   m_TagString: Enemy
@@ -36,25 +39,6 @@ Transform:
   - {fileID: 3990347073603282200}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8942015927137254788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4425858458575158432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b961427f560220498db2c78c728b101, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 3990347074575781671}
-  navMeshAgent: {fileID: 6637988598853489644}
-  detector: {fileID: 5244979540814600775}
-  wanderRadius: 10
-  idleTime: 3
-  attackTime: 1
-  IsDeath: 0
 --- !u!136 &5598651362781503394
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -118,6 +102,97 @@ MonoBehaviour:
   detectionRadius: 5.1
   attackRange: 1.3
   player: {fileID: 0}
+--- !u!114 &8942015927137254788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425858458575158432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b961427f560220498db2c78c728b101, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 3990347074575781671}
+  navMeshAgent: {fileID: 6637988598853489644}
+  detector: {fileID: 5244979540814600775}
+  wanderRadius: 10
+  idleTime: 3
+  attackTime: 1
+  isGamePlayReady: 0
+--- !u!114 &2222391869358768583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425858458575158432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83b9a838573e44fe8868b996c67ef908, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthConfigSO: {fileID: 11400000, guid: 3b1e1f2e64480784a97036948a64e3a7, type: 2}
+  currentHealthSO: {fileID: 11400000, guid: 97aac831dbb4e524eb0e7e294f773f16, type: 2}
+  updateHealthUI: {fileID: 0}
+  deathEvent: {fileID: 0}
+--- !u!114 &7214978253365961911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425858458575158432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd13ec6fe02a4fccae1d934b455d1a8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: 4313beb62772aec4d95f2651c19312b6, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5244979540814600775}
+        m_TargetAssemblyTypeName: Platformer.PlayerDetector, Assembly-CSharp
+        m_MethodName: SetUp
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8942015927137254788}
+        m_TargetAssemblyTypeName: Platformer.Enemy, Assembly-CSharp
+        m_MethodName: OnPlayerSpawn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &924230070395336894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425858458575158432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49747ca2c1404f1c828b3d1f9ed07c24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: ca05d2b548740284b8a4025984ee2d99, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &6803135556160096142
 PrefabInstance:
   m_ObjectHideFlags: 0

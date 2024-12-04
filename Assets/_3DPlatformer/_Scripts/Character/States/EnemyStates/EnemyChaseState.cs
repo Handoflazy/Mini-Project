@@ -19,6 +19,7 @@ namespace AdvancePlayerController.State_Machine.EnemyStates
         }
         
         public override void Update() {
+            Debug.Log(player);
             agent.SetDestination(player.position);
         }
     }

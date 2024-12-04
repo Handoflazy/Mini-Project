@@ -12,14 +12,12 @@ namespace AdvancePlayerController.State_Machine
         public override void OnEnter()
         {
             player.JumpStart();
-            animator.SetTrigger(JumpHash);
+            animator.SetBool(AirHash,true);
             player.OnGroundContactLost();
-     
         }
-
-        public override void FixedUpdate()
+        public override void OnExit()
         {
-           
+            animator.SetBool(AirHash,false);
         }
     }
 }

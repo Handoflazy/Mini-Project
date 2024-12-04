@@ -85,10 +85,10 @@ namespace System.SceneManagement
             _loadingCamera.gameObject.SetActive(Enable);
             _loadingCanvas.gameObject.SetActive(Enable);
         }
-        private void StartGamePlay()
-        {
-            OnSceneReady.Invoke();
-        }
+       void StartGamePlay()
+       {
+           OnSceneReady.Invoke();
+       }
     }
     
     public class LoadProgress : IProgress<float>

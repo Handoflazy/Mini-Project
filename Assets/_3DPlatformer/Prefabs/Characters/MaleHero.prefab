@@ -2393,6 +2393,7 @@ GameObject:
   - component: {fileID: 4647173154740897701}
   - component: {fileID: 839594402265514339}
   - component: {fileID: 5429978325886361803}
+  - component: {fileID: 2219974627400597837}
   m_Layer: 0
   m_Name: MaleHero
   m_TagString: Player
@@ -2502,13 +2503,15 @@ MonoBehaviour:
   ceilingDetector: {fileID: 5429978325886361803}
   cameraTransform: {fileID: 5797051797486011748}
   animator: {fileID: 2037866299723322763}
-  attacker: {fileID: 0}
+  attacker: {fileID: 2219974627400597837}
+  damageable: {fileID: 839594402265514339}
   useLocalMomentum: 1
-  attackTime: 0
+  attackTime: 1
   attackCooldown: 0
   RunMultiplier: 1.5
   runCooldownTime: 2
   runTime: 3
+  surprisedAnimationTime: 0.467
   currentState: 
 --- !u!114 &839594402265514339
 MonoBehaviour:
@@ -2540,6 +2543,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ceilingAngleLimit: 10
   isInDebugMode: 0
+--- !u!114 &2219974627400597837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7385184586051920071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 659cc4f7574e4b7bb908c9f1693cf562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0, y: 0, z: 0}
+  attackRadius: 0
+  attackPoint: 0
+  damageableMask:
+    serializedVersion: 2
+    m_Bits: 0
+  showGizmo: 0
+  OnSwingSword:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7402009350858902660
 GameObject:
   m_ObjectHideFlags: 0
