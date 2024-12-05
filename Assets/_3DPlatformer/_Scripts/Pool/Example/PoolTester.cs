@@ -9,18 +9,18 @@ namespace Platformer.Pool.Example
 {
     public class PoolTester: MonoBehaviour
     {
-        [FormerlySerializedAs("poolSo")] [FormerlySerializedAs("pool")] [SerializeField] private ParticlePoolSoSO poolSoSo = default;
+        [SerializeField] private ParticlePoolSO pool = default;
 
         private IEnumerator Start()
         {
-            List<PoolableParticle> particles = poolSoSo.Request(10) as List<PoolableParticle>;
+            List<ParticleSystem> particles = pool.Request(10) as List<ParticleSystem>;
             foreach (var particle in particles)
             {
                 particle.transform.position = Random.insideUnitSphere * 5f;
                 particle.Play();
                 yield return new WaitForSeconds(5f);
             }
-            poolSoSo.Return(particles);
+            pool.Return(particles);
         }
     }
 }

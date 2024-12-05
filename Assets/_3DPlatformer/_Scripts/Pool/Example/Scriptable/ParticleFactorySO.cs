@@ -4,15 +4,20 @@ using UnityEngine;
 namespace Platformer.Pool.Example
 {
     [CreateAssetMenu(fileName = "New Particle Factory", menuName = "Factory/Particle Factory")]
-    public class ParticleFactorySO : ComponentFactory<PoolableParticle>
+    public class ParticleFactorySO : FactorySO<ParticleSystem>
     {
         [SerializeField]
-        private PoolableParticle prefab = default;
+        private ParticleSystem prefab = default;
 
-        public override PoolableParticle Prefab
+        public ParticleSystem Prefab
         {
             get => prefab;
             set => prefab = value;
+        }
+
+        public override ParticleSystem Create()
+        {
+            return Instantiate(prefab);
         }
     }
 }

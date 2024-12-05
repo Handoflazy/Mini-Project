@@ -8,41 +8,46 @@ namespace Platformer.Pool
     /// Implements a Pool for Component types.
     /// </summary>
     /// <typeparam name="T">Specifies the component to pool.</typeparam
-    public abstract class ComponentPoolSO<T>: PoolSO<T> where T: Component, IPoolable
+    public abstract class ComponentPoolSO<T>: PoolSO<T> where T: Component
     {
-        public abstract int InitialPoolSize { get; set; }
-        public override IFactory<T> Factory { get; set; }
         private GameObject poolRootObject;
-        
-        private void InitializePool()
+        public override IFactory<T> Factory { get; set; }
+
+        private GameObject PoolRootObject
         {
-            poolRootObject = new GameObject(name);
-            DontDestroyOnLoad(poolRootObject);
-            for (int i = 0; i < InitialPoolSize; i++)
+            get
             {
-                available.Push(Create());
+                if (!Application.isPlaying)
+                {
+                    return null;
+                }
+
+                if (poolRootObject != null) return poolRootObject;
+                poolRootObject = new GameObject(name);
+                DontDestroyOnLoad(poolRootObject);
+
+                return poolRootObject;
             }
         }
+
         public override T Request()
         {
-            if (poolRootObject == null)
-            {
-                InitializePool();
-            }
-            return base.Request();
+            T member =  base.Request();
+            member.gameObject.SetActive(true);
+            return member;
         }
 
         public override void Return(T member)
         {
-            if(poolRootObject==null)
-                InitializePool();
+            member.transform.SetParent(PoolRootObject.transform);
+            member.gameObject.SetActive(false);
             base.Return(member);
         }
         
         protected override T Create()
         {
             T newMember = base.Create();
-            newMember.transform.SetParent(poolRootObject.transform);
+            newMember.transform.SetParent(PoolRootObject.transform);
             return newMember;
         }
         
@@ -50,9 +55,9 @@ namespace Platformer.Pool
         {
             base.OnDisable();
 #if UNITY_EDITOR
-            DestroyImmediate(poolRootObject);
+            DestroyImmediate(PoolRootObject);
 #else   
-            Destroy(_poolRootObject);
+            Destroy(PoolRootObject);
 #endif
         }
     }
