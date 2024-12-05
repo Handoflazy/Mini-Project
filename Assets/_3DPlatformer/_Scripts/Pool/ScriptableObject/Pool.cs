@@ -14,7 +14,6 @@ namespace Platformer.Pool
     {
         protected readonly Stack<T> available = new Stack<T>();
         public abstract IFactory<T> Factory { get; set; }
-        
         [SerializeField]
         private int initialPoolSize = default;
         public virtual void OnDisable()
@@ -23,10 +22,12 @@ namespace Platformer.Pool
         }
         protected virtual T Create() => Factory.Create();
 
+       
+
         public virtual T Request()
         {
             T member = available.Count > 0 ? available.Pop() : Create();
-            member.Initialize();
+            member.OnRequest();
             return member;
         }
 
@@ -42,7 +43,7 @@ namespace Platformer.Pool
 
         public virtual void Return(T member)
         {
-            member.Reset(() =>
+            member.OnReturn(() =>
             {
                 available.Push(member);
             });

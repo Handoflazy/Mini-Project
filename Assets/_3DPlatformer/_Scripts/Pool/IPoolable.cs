@@ -7,7 +7,7 @@ namespace Platformer.Pool
     /// </summary>
     public interface IPoolable
     {
-        void Initialize();
-        void Reset(Action onReset);
+        void OnRequest();
+        void OnReturn(Action onReset);
     }
 }

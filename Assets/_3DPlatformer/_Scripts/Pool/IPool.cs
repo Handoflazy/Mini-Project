@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Platformer.Factory;
 
 namespace Platformer.Pool
 {
@@ -10,8 +11,6 @@ namespace Platformer.Pool
     public interface IPool<T>
     {
         T Request();
-        IEnumerable<T> Request(int num);
         void Return(T member);
-        void Return(IEnumerable<T> members);
     }
 }

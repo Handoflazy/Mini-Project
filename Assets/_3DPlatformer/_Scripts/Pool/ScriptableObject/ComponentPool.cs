@@ -11,6 +11,7 @@ namespace Platformer.Pool
     public abstract class ComponentPool<T>: Pool<T> where T: Component, IPoolable
     {
         public abstract int InitialPoolSize { get; set; }
+        public override IFactory<T> Factory { get; set; }
         private GameObject poolRootObject;
         
         private void InitializePool()

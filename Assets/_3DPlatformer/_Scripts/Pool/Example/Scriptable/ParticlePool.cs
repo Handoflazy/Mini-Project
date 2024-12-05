@@ -10,7 +10,7 @@ namespace Platformer.Pool.Example
         [SerializeField]
         private int initialPoolSize;
 
-        public override IFactory<PoolableParticle> Factory
+        public  IFactory<PoolableParticle> Factory
         {
             get { return factory; }
             set { factory = value as ParticleFactory; }

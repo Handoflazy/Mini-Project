@@ -7,7 +7,7 @@ namespace Platformer.Pool.Example
     public class PoolableParticle : MonoBehaviour, IPoolable
     {
         [SerializeField] private ParticleSystem particleSystem = default;
-        public void Initialize()
+        public void OnRequest()
         {
             gameObject.SetActive(true);
         }
@@ -16,7 +16,7 @@ namespace Platformer.Pool.Example
         {
             particleSystem.Play();
         }
-        public void Reset(Action onReset)
+        public void OnReturn(Action onReset)
         {
             StartCoroutine(DoReset(onReset));
         }
