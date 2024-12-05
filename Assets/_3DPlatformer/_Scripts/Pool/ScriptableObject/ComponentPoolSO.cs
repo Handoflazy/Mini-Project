@@ -8,7 +8,7 @@ namespace Platformer.Pool
     /// Implements a Pool for Component types.
     /// </summary>
     /// <typeparam name="T">Specifies the component to pool.</typeparam
-    public abstract class ComponentPool<T>: Pool<T> where T: Component, IPoolable
+    public abstract class ComponentPoolSO<T>: PoolSO<T> where T: Component, IPoolable
     {
         public abstract int InitialPoolSize { get; set; }
         public override IFactory<T> Factory { get; set; }

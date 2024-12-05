@@ -1,19 +1,21 @@
 using Platformer.Factory;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 namespace Platformer.Pool.Example
 {
     [CreateAssetMenu(fileName = "New Particle Pool", menuName = "Pool/Particle Pool")]
-    public class ParticlePool: ComponentPool<PoolableParticle>
+    public class ParticlePoolSoSO: ComponentPoolSO<PoolableParticle>
     {
-        [SerializeField]
-        private ParticleFactory factory;
+        [FormerlySerializedAs("factory")] [SerializeField]
+        private ParticleFactorySO factorySo;
         [SerializeField]
         private int initialPoolSize;
 
-        public  IFactory<PoolableParticle> Factory
+        public  IFactory<PoolableParticle> FactorySo
         {
-            get { return factory; }
-            set { factory = value as ParticleFactory; }
+            get { return factorySo; }
+            set { factorySo = value as ParticleFactorySO; }
         }
         
         public override int InitialPoolSize
