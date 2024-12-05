@@ -12,28 +12,33 @@ namespace Platformer.Pool
     {
         public abstract int InitialPoolSize { get; set; }
         private GameObject poolRootObject;
+        
+        private void InitializePool()
+        {
+            poolRootObject = new GameObject(name);
+            DontDestroyOnLoad(poolRootObject);
+            for (int i = 0; i < InitialPoolSize; i++)
+            {
+                available.Push(Create());
+            }
+        }
         public override T Request()
         {
             if (poolRootObject == null)
             {
-                poolRootObject = new GameObject(name);
-                DontDestroyOnLoad(poolRootObject);
-                for (int i = 0; i < InitialPoolSize; i++)
-                {
-                    available.Push(Add());
-                }
+                InitializePool();
             }
             return base.Request();
         }
 
-        public override T Add()
+        public override void Return(T member)
         {
-            T newMember = base.Add();
-            newMember.transform.SetParent(poolRootObject.transform);
-            return newMember;
+            if(poolRootObject==null)
+                InitializePool();
+            base.Return(member);
         }
-
-        public override T Create()
+        
+        protected override T Create()
         {
             T newMember = base.Create();
             newMember.transform.SetParent(poolRootObject.transform);
@@ -43,7 +48,11 @@ namespace Platformer.Pool
         public override void OnDisable()
         {
             base.OnDisable();
+#if UNITY_EDITOR
             DestroyImmediate(poolRootObject);
+#else   
+            Destroy(_poolRootObject);
+#endif
         }
     }
 }

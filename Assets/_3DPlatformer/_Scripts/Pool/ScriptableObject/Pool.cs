@@ -17,25 +17,15 @@ namespace Platformer.Pool
         
         [SerializeField]
         private int initialPoolSize = default;
-        public virtual T Add()
-        {
-            return Factory.Create();
-        }
         public virtual void OnDisable()
         {
             available.Clear();
         }
-        public virtual T Create()
-        {
-            return Factory.Create();
-        }
+        protected virtual T Create() => Factory.Create();
+
         public virtual T Request()
         {
-            if (available.Count <= 0)
-            {
-                available.Push(Add());
-            }
-            T member = available.Pop();
+            T member = available.Count > 0 ? available.Pop() : Create();
             member.Initialize();
             return member;
         }

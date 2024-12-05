@@ -1,5 +1,6 @@
 using Platformer.Factory;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Platformer.Pool.Example
 {
@@ -7,12 +8,12 @@ namespace Platformer.Pool.Example
     public class ParticleFactory : ComponentFactorySO<PoolableParticle>
     {
         [SerializeField]
-        PoolableParticle _prefab = default;
+        PoolableParticle prefab = default;
 
         public override PoolableParticle Prefab
         {
-            get => _prefab;
-            set => _prefab = value;
+            get => prefab;
+            set => prefab = value;
         }
     }
 }

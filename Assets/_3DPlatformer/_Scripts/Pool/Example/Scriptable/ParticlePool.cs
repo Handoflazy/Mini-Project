@@ -18,14 +18,8 @@ namespace Platformer.Pool.Example
         
         public override int InitialPoolSize
         {
-            get
-            {
-                return initialPoolSize;
-            }
-            set
-            {
-                initialPoolSize = value;
-            }
+            get => initialPoolSize;
+            set => initialPoolSize = value;
         }
     }
 }
