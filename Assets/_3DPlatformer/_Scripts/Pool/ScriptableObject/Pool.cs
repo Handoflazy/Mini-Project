@@ -5,19 +5,21 @@ using UnityEngine.Serialization;
 
 namespace Platformer.Pool
 {
-    public abstract class PoolSO<T>: ScriptableObject, IPool<T> where T: IPoolable
+    
+    /// <summary>
+    /// A generic pool that generates members of type T on-demand via a factory.
+    /// </summary>
+    /// <typeparam name="T">Specifies the type of elements to pool.</typeparam>
+    public abstract class Pool<T>: ScriptableObject, IPool<T> where T: IPoolable
     {
-        private readonly Stack<T> available = new Stack<T>();
-        public abstract IFactory<T> Factory { get; }
+        protected readonly Stack<T> available = new Stack<T>();
+        public abstract IFactory<T> Factory { get; set; }
         
-        [FormerlySerializedAs("_initialPoolSize")] [SerializeField]
+        [SerializeField]
         private int initialPoolSize = default;
-        public virtual void OnEnable()
+        public virtual T Add()
         {
-            for (int i = 0; i < initialPoolSize; i++)
-            {
-                available.Push(Create());
-            }
+            return Factory.Create();
         }
         public virtual void OnDisable()
         {
@@ -27,20 +29,20 @@ namespace Platformer.Pool
         {
             return Factory.Create();
         }
-        public T Request()
+        public virtual T Request()
         {
             if (available.Count <= 0)
             {
-                available.Push(Create());
+                available.Push(Add());
             }
             T member = available.Pop();
             member.Initialize();
             return member;
         }
 
-        public IEnumerable<T> Request(int num)
+        public virtual IEnumerable<T> Request(int num = 1)
         {
-            List<T> members = new List<T>();
+            List<T> members = new List<T>(num);
             for (int i = 0; i < num; i++)
             {
                 members.Add(Request());
@@ -48,7 +50,7 @@ namespace Platformer.Pool
             return members;
         }
 
-        public void Return(T member)
+        public virtual void Return(T member)
         {
             member.Reset(() =>
             {
@@ -56,7 +58,7 @@ namespace Platformer.Pool
             });
         }
 
-        public void Return(IEnumerable<T> members)
+        public virtual void Return(IEnumerable<T> members)
         {
             foreach (T member in members)
             {
