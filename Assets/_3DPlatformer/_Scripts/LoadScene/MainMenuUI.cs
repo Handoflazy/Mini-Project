@@ -11,7 +11,7 @@ namespace Platformer.LoadScene
 {
     public class MainMenuUI : MonoBehaviour
     {
-        [SerializeField] private int loadGroupSceneIndex;
+        /*[SerializeField] private int loadGroupSceneIndex;
         [SerializeField] private Button playerButton;
         [SerializeField] private Button exitButton;
         private SceneLoader sceneLoader;
@@ -20,7 +20,7 @@ namespace Platformer.LoadScene
             sceneLoader = GlobalObjectManager.Instance.GetObject(10000).GetComponent<SceneLoader>();
             playerButton.onClick.AddListener(()=>_ = sceneLoader.LoadSceneGroup(loadGroupSceneIndex));
             exitButton.onClick.AddListener(()=>QuitHelpers.QuitGame());
-        }
+        }*/
 
     
     }

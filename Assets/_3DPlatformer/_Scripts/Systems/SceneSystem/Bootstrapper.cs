@@ -5,7 +5,7 @@ namespace Platformer.Mobile_Farming_Game._Scripts.Systems.SceneSystem
 {
     public class Bootstrapper : PersistentSingleton<Bootstrapper>
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static async void Init()
         {
             Debug.Log("Bootstrapper....");
