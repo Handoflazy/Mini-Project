@@ -21,6 +21,7 @@ namespace Platformer.Pool.Example
             pool = ScriptableObject.CreateInstance<ParticlePoolSO>();
             pool.name = gameObject.name;
             pool.Factory = factory;
+            pool.SetParent(this.transform);
             pool.Prewarm(InitialPoolSize);
             List<ParticleSystem> particles = pool.Request(2) as List<ParticleSystem>;
             foreach (var particle in particles)

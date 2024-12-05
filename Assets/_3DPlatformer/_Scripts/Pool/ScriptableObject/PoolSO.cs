@@ -20,6 +20,7 @@ namespace Platformer.Pool
         public virtual void OnDisable()
         {
             available.Clear();
+            HasBeenPrewarmed = false;
         }
 
         protected virtual T Create() => Factory.Create();

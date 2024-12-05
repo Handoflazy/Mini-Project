@@ -705,7 +705,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 237a63412f8d47f2b6b207ae12f2886c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolSo: {fileID: 11400000, guid: 2c7f9b13e2945544eadd9d94c3173728, type: 2}
+  pool: {fileID: 11400000, guid: 2c7f9b13e2945544eadd9d94c3173728, type: 2}
 --- !u!1 &1452494935
 GameObject:
   m_ObjectHideFlags: 0

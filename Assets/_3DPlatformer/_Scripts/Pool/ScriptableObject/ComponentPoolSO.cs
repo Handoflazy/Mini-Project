@@ -10,10 +10,11 @@ namespace Platformer.Pool
     /// <typeparam name="T">Specifies the component to pool.</typeparam
     public abstract class ComponentPoolSO<T>: PoolSO<T> where T: Component
     {
-        private GameObject poolRootObject;
+        
         public override IFactory<T> Factory { get; set; }
 
-        private GameObject PoolRootObject
+        private Transform poolRoot;
+        private Transform PoolRoot
         {
             get
             {
@@ -22,14 +23,20 @@ namespace Platformer.Pool
                     return null;
                 }
 
-                if (poolRootObject != null) return poolRootObject;
-                poolRootObject = new GameObject(name);
-                DontDestroyOnLoad(poolRootObject);
-
-                return poolRootObject;
+                if (poolRoot != null) return poolRoot;
+                poolRoot = new GameObject(name).transform;
+                poolRoot.SetParent(parent);
+                return poolRoot;
             }
         }
 
+        private Transform parent;
+
+        public void SetParent(Transform t)
+        {
+            parent = t;
+            PoolRoot.SetParent(parent);
+        }
         public override T Request()
         {
             T member =  base.Request();
@@ -39,7 +46,7 @@ namespace Platformer.Pool
 
         public override void Return(T member)
         {
-            member.transform.SetParent(PoolRootObject.transform);
+            member.transform.SetParent(PoolRoot);
             member.gameObject.SetActive(false);
             base.Return(member);
         }
@@ -47,7 +54,7 @@ namespace Platformer.Pool
         protected override T Create()
         {
             T newMember = base.Create();
-            newMember.transform.SetParent(PoolRootObject.transform);
+            newMember.transform.SetParent(PoolRoot);
             return newMember;
         }
         
@@ -55,7 +62,7 @@ namespace Platformer.Pool
         {
             base.OnDisable();
 #if UNITY_EDITOR
-            DestroyImmediate(PoolRootObject);
+            DestroyImmediate(poolRoot.gameObject);
 #else   
             Destroy(PoolRootObject);
 #endif

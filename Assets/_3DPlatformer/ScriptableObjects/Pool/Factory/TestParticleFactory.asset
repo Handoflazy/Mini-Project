@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2355baf4b7a7466aa5d7e01daf7db22b, type: 3}
   m_Name: TestParticleFactory
   m_EditorClassIdentifier: 
-  prefab: {fileID: -203212900473033556, guid: 08bdc4e7620f9d9438f90ae2404ecf27, type: 3}
+  prefab: {fileID: 8844981581216496126, guid: 9307008512a9c1c45ac122516378acfa, type: 3}
