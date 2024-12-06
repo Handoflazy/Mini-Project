@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Platformer.Pool.Example
 {
-    public class PoolTester: MonoBehaviour
+    public class PoolParticleTester: MonoBehaviour
     {
         [SerializeField] private ParticlePoolSO pool = default;
 

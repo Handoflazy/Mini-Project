@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2355baf4b7a7466aa5d7e01daf7db22b, type: 3}
-  m_Name: TestParticleFactory
-  m_EditorClassIdentifier: 
-  prefab: {fileID: 8844981581216496126, guid: 9307008512a9c1c45ac122516378acfa, type: 3}
+  m_Script: {fileID: 0}
+  m_Name: New Particle Factory
+  m_EditorClassIdentifier: Assembly-CSharp:Platformer.Pool.Example:ParticleFactorySO
+  prefab: {fileID: 7687676824579610738, guid: b350c8e5688fa584bbdd22d09dcec70d, type: 3}

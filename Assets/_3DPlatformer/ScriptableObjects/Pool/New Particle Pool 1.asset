@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e92e29f05a640119f91f5f450728b3f, type: 3}
   m_Name: New Particle Pool 1
   m_EditorClassIdentifier: 
-  initialPoolSize: 0
-  factory: {fileID: 11400000, guid: 6f50209c22823584b8f3d572a20d5c0f, type: 2}
-  initialPoolSize: 0
+  initialPoolSize: 5
+  factory: {fileID: 11400000, guid: 0a8d6513c6185374f870cf4f96f1a471, type: 2}
