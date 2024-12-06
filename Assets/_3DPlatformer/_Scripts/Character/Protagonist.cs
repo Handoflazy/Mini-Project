@@ -315,7 +315,8 @@ namespace AdvancePlayerController
             {
                 Vector3 collisionVelocity = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 OnLand.Invoke();
-                SoundManager.Instance.PlaySpatialSound(landVFX,null,transform.position);
+                if(collisionVelocity.magnitude>0.1f)
+                    SoundManager.Instance.PlaySpatialSound(landVFX,null,transform.position);
                 momentum = Vector3.zero;
             }
 
