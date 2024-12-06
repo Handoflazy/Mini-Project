@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Platformer.Systems.AudioSystem
 {
@@ -7,14 +8,14 @@ namespace Platformer.Systems.AudioSystem
     public class AudioCueSO : ScriptableObject
     {
         public bool looping = false;
-        [SerializeField] private AudioClipsGroup[] _audioClipGroups = default;
+         [SerializeField] private AudioClipsGroup[] audioClipGroups = default;
         public AudioClip[] GetClips()
         {
-            int numberOfClips = _audioClipGroups.Length;
+            int numberOfClips = audioClipGroups.Length;
             AudioClip[] resultingClips = new AudioClip[numberOfClips];
             for (int i = 0; i < numberOfClips; i++)
             {
-                resultingClips[i] = _audioClipGroups[i].GetNextClip();
+                resultingClips[i] = audioClipGroups[i].GetNextClip();
             }
             return resultingClips;
         }
@@ -25,17 +26,17 @@ namespace Platformer.Systems.AudioSystem
     {
         public SequenceMode sequenceMode = SequenceMode.RandomNoImmediateRepeat;
         public AudioClip[] audioClips;
-        private int _nextClipToPlay = -1;
-        private int _lastClipPlayed = -1;
+        private int nextClipToPlay = -1;
+        private int lastClipPlayed = -1;
         public AudioClip GetNextClip()
         {
             // Fast out if there is only one clip to play
             if(audioClips.Length == 1)
                 return audioClips[0];
-            if(_nextClipToPlay == -1)
+            if(nextClipToPlay == -1)
             {
                 // Index needs to be initialised: 0 if Sequential, random if otherwise
-                _nextClipToPlay = (sequenceMode == SequenceMode.Sequential) ? 0 : UnityEngine.Random.Range(0, audioClips.Length);
+                nextClipToPlay = (sequenceMode == SequenceMode.Sequential) ? 0 : UnityEngine.Random.Range(0, audioClips.Length);
             }
             else
             {
@@ -43,21 +44,21 @@ namespace Platformer.Systems.AudioSystem
                 switch (sequenceMode)
                 {
                     case SequenceMode.Random:
-                        _nextClipToPlay = UnityEngine.Random.Range(0, audioClips.Length);
+                        nextClipToPlay = UnityEngine.Random.Range(0, audioClips.Length);
                         break;
                     case SequenceMode.RandomNoImmediateRepeat:
                         do
                         {
-                            _nextClipToPlay = UnityEngine.Random.Range(0, audioClips.Length);
-                        } while (_nextClipToPlay == _lastClipPlayed);
+                            nextClipToPlay = UnityEngine.Random.Range(0, audioClips.Length);
+                        } while (nextClipToPlay == lastClipPlayed);
                         break;
                     case SequenceMode.Sequential:
-                        _nextClipToPlay = (int)Mathf.Repeat(_nextClipToPlay++, audioClips.Length);
+                        nextClipToPlay = (int)Mathf.Repeat(nextClipToPlay++, audioClips.Length);
                         break;
                 }
             }
-            _lastClipPlayed = _nextClipToPlay;
-            return audioClips[_nextClipToPlay];
+            lastClipPlayed = nextClipToPlay;
+            return audioClips[nextClipToPlay];
         }
         public enum SequenceMode
         {

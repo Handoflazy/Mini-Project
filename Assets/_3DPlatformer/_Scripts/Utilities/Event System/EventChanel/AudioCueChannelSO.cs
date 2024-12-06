@@ -1,17 +1,25 @@
+using System.Collections.Generic;
 using Platformer.Systems.AudioSystem;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Utilities.Event_System.EventChannel
 {
-   
-    public class AudioCueChannelSO
+    [CreateAssetMenu(menuName = "Events/AudioCue Channel")]
+    public class AudioCueChannelSO : ScriptableObject
     {
-        public UnityAction<AudioCueSO, AudioConfigurationSO, Vector3> eventRaised;
-        
-        public void Raise(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace)
+        private readonly HashSet<AudioCueListener> observers = new();
+
+        public void Invoke(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace)
         {
-            eventRaised.Invoke(audioCue, audioConfiguration, positionInSpace);
+            foreach (var observer in observers)
+            {
+                observer.Raise(audioCue,audioConfiguration,positionInSpace);
+            }
         }
+
+        public void Register(AudioCueListener observer) => observers.Add(observer);
+        public void DeRegister(AudioCueListener observer) => observers.Remove(observer);
     }
+    
 }

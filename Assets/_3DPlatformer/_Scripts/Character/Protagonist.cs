@@ -11,6 +11,7 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityUtils;
 using Utilities.Event_System.EventBus;
+using Utilities.Event_System.EventChannel;
 using IPredicate = AdvancePlayerController.State_Machine.IPredicate;
 
 namespace AdvancePlayerController
@@ -72,11 +73,9 @@ namespace AdvancePlayerController
 
             private bool attackInput;
 
-            [SerializeField] private AudioClip landVFX; //TODO: REMOVE
-
-
-            private EventBinding<PlayerEvents> playerEventBinding;
-            private EventBinding<TestEvents> testEventBinding;
+            [SerializeField] private AudioCueSO landSound;
+            [SerializeField] private AudioCueChannelSO vfxChannelSo;
+            [SerializeField] private AudioConfigurationSO landSettings;
 
             private void Awake()
             {
@@ -315,8 +314,8 @@ namespace AdvancePlayerController
             {
                 Vector3 collisionVelocity = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 OnLand.Invoke();
-                if(collisionVelocity.magnitude>0.1f)
-                    SoundManager.Instance.PlaySpatialSound(landVFX,null,transform.position);
+                /*if(collisionVelocity.magnitude>0.1f)
+                    vfxChannelSo.Invoke(landSound, landSettings,transform.position);*/
                 momentum = Vector3.zero;
             }
 
