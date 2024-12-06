@@ -4,8 +4,10 @@ using AdvancePlayerController.State_Machine;
 using Platformer._Scripts.ScriptableObject;
 using Platformer.Advanced;
 using Character;
+using Platformer.Systems.AudioSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityUtils;
 using Utilities.Event_System.EventBus;
@@ -60,14 +62,17 @@ namespace AdvancePlayerController
            
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
             private bool isJumpButtonHeld;
-            
+            [SerializeField]
             // ex: for animation effect
-            public event Action<Vector2> OnJump = delegate { };
-            public event Action<Vector2> OnLand = delegate { };
+            public UnityEvent OnJump;
+            public UnityEvent OnLand;
+            
             public event Action OnAttack = delegate { };
-            public event Action<bool> OnRun = delegate { };
+            public event Action OnRun = delegate { };
 
             private bool attackInput;
+
+            [SerializeField] private AudioClip landVFX; //TODO: REMOVE
 
 
             private EventBinding<PlayerEvents> playerEventBinding;
@@ -309,7 +314,8 @@ namespace AdvancePlayerController
             public void OnGroundContactRegained()
             {
                 Vector3 collisionVelocity = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                OnLand.Invoke(collisionVelocity);
+                OnLand.Invoke();
+                SoundManager.Instance.PlaySpatialSound(landVFX,null,transform.position);
                 momentum = Vector3.zero;
             }
 
@@ -337,7 +343,7 @@ namespace AdvancePlayerController
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 momentum += tr.up * data.JumpForce;
-                OnJump.Invoke(momentum);
+                OnJump.Invoke();
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
             }
             
@@ -376,13 +382,13 @@ namespace AdvancePlayerController
             private void OnStartedSprinting()
             {
                 if (sprintTimer.IsRunning || runCooldownTimer.IsRunning) return;
-                OnRun.Invoke(true);
+                OnRun.Invoke();
                 sprintTimer.Start();
 
             }
             private void OnStoppedSprinting()
             {
-                OnRun.Invoke(false);
+                OnRun.Invoke();
                 sprintTimer.Stop();
             }
             private void OnStartedAttack()

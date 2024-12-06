@@ -15,8 +15,6 @@ namespace Platformer.Pool
         protected readonly Stack<T> available = new Stack<T>();
         public abstract IFactory<T> Factory { get; set; }
         protected bool HasBeenPrewarmed { get; set; }
-        [SerializeField]
-        private int initialPoolSize = default;
         public virtual void OnDisable()
         {
             available.Clear();

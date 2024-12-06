@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: New Particle Factory
+  m_Name: Test Particle Factory
   m_EditorClassIdentifier: Assembly-CSharp:Platformer.Pool.Example:ParticleFactorySO
   prefab: {fileID: 7687676824579610738, guid: b350c8e5688fa584bbdd22d09dcec70d, type: 3}

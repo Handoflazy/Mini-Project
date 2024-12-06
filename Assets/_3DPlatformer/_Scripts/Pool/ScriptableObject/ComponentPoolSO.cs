@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Platformer.Factory;
 using UnityEngine;
 
@@ -58,11 +60,18 @@ namespace Platformer.Pool
             return newMember;
         }
         
+        public  IEnumerable<T> GetAvailable()
+        {
+            var getAvailable = new List<T>(available);
+            return getAvailable;
+        }
+        
         public override void OnDisable()
         {
             base.OnDisable();
 #if UNITY_EDITOR
-            DestroyImmediate(poolRoot.gameObject);
+            if(poolRoot)
+                DestroyImmediate(poolRoot.gameObject);
 #else   
             Destroy(PoolRootObject);
 #endif
