@@ -10,15 +10,20 @@ namespace Platformer.Systems.AudioSystem
     [RequireComponent(typeof(AudioCueListener))]
     public class AudioManager : MonoBehaviour
     {
-        [Header("Init Variables")]
-        [Tooltip ("Amount of sound emitters created on Start")]
-        public int initialPoolSize = 10;
-
+        [Header("SoundEmitters pool")]
+        [SerializeField] private SoundEmitterPoolSO pool;
+        [SerializeField] int initialPoolSize = 10;
         [SerializeField] private SoundEmitter prefab;
-        [SerializeField]
-        private GameObject soundEmittersContainer;
-        private SoundEmitterPoolSO pool;
-        private SoundEmitterFactory factory;
+        [SerializeField] private GameObject soundEmittersContainer;
+
+        [Header("Audio control")] // througt settingsUI
+        [SerializeField] private AudioMixer audioMixer = default;
+        [Range(0f, 1f)]
+        [SerializeField] private float masterVolume = 1f;
+        [Range(0f, 1f)]
+        [SerializeField] private float musicVolume = 1f;
+        [Range(0f, 1f)]
+        [SerializeField] private float sfxVolume = 1f;
         public SoundEmitterPoolSO Pool
         {
             get => Pool;
@@ -60,15 +65,8 @@ namespace Platformer.Systems.AudioSystem
         #endregion
         private void InitPool()
         {
-            factory = ScriptableObject.CreateInstance<SoundEmitterFactory>();
-            factory.Prefab = prefab;
-            factory.Prefab.name = "SoundEmitter Factory";
-
-            pool = ScriptableObject.CreateInstance<SoundEmitterPoolSO>();
-            pool.Factory = factory;
-            pool.name = "SoundEmitter Pool";
             pool.Prewarm(initialPoolSize);
-            pool.SetParent(soundEmittersContainer.transform);
+            pool.SetParent(this.transform);
         }
         public void PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
         {
