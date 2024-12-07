@@ -56,7 +56,7 @@ MonoBehaviour:
           iconNameOrGuid: Camera Icon
         - colorIndex: 0
           iconNameOrGuid: EventSystem Icon
-        - colorIndex: 0
+        - colorIndex: 2
           iconNameOrGuid: AvatarMask On Icon
     - goDatas_byGlobalId:
         keys:

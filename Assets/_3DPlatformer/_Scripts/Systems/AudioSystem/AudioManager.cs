@@ -165,10 +165,11 @@ namespace Platformer.Systems.AudioSystem
         public AudioCueKey PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
         {
             AudioClip[] clipsToPlay = audioCue.GetClips();
-            SoundEmitter[] soundEmitterArray = pool.Request(clipsToPlay.Length) as SoundEmitter[];
+            SoundEmitter[] soundEmitterArray = new SoundEmitter[clipsToPlay.Length];
             int nOfClips = clipsToPlay.Length;
             for (int i = 0; i < nOfClips; i++)
             {
+                soundEmitterArray[i] = pool.Request();
                 if (soundEmitterArray[i])
                 {
                     soundEmitterArray[i].PlayAudioClip(clipsToPlay[i], settings,audioCue.looping,position);
