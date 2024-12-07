@@ -4,6 +4,7 @@ using AdvancePlayerController.State_Machine;
 using Platformer._Scripts.ScriptableObject;
 using Platformer.Advanced;
 using Character;
+using Platformer._3DPlatformer._Scripts.Character;
 using Platformer.Systems.AudioSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -27,8 +28,9 @@ namespace AdvancePlayerController
             [SerializeField,Required] private Animator animator;
             [SerializeField,Required] private Attacker attacker;
             [SerializeField,Required] private Damageable damageable;
-            
-            
+            [SerializeField,Required] private PlayerEffectController playerEffectController;
+           
+            [SerializeField] private float MaxFallDistance = 8;
             public bool useLocalMomentum;
 
             private Transform tr;
@@ -39,16 +41,12 @@ namespace AdvancePlayerController
             private CountdownTimer jumpBuffer;
             private CountdownTimer sprintTimer;
             private CountdownTimer runCooldownTimer;
-            private CountdownTimer attackCooldownTimer;
-            private CountdownTimer attackTimer;
             private CountdownTimer surprisedTimer;
 
             #endregion
             
 
-            [Header("Attack Settings")] [SerializeField]
-            private float attackTime;
-            [SerializeField] private float attackCooldown;
+        
             
         
             private bool isRunPressing;
@@ -63,20 +61,7 @@ namespace AdvancePlayerController
            
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
             private bool isJumpButtonHeld;
-            [SerializeField]
-            // ex: for animation effect
-            public UnityEvent OnJump;
-            public UnityEvent OnLand;
-            
-            public event Action OnAttack = delegate { };
-            public event Action OnRun = delegate { };
-
             private bool attackInput;
-
-            [SerializeField] private AudioCueSO landSound;
-            [FormerlySerializedAs("vfxChannelSo")] [SerializeField] private AudioCueEventChannelSO vfxEventChannelSo;
-            [SerializeField] private AudioConfigurationSO landSettings;
-
             private void Awake()
             {
                 tr = transform;
@@ -135,10 +120,6 @@ namespace AdvancePlayerController
                 runCooldownTimer = new CountdownTimer(runCooldownTime);
                 surprisedTimer = new CountdownTimer(surprisedAnimationTime);
                 
-                attackCooldownTimer = new CountdownTimer(attackCooldown);
-                attackTimer = new CountdownTimer(attackTime);
-                attackTimer.OnTimerStop += () => attackCooldownTimer.Start();
-                
                 sprintTimer.OnTimerStop += () => runCooldownTimer.Start();
                 sprintTimer.OnTimerStop += OnStoppedSprinting;
             }
@@ -148,11 +129,11 @@ namespace AdvancePlayerController
             {
                 stateMachine = new StateMachine();
                 
-                var locomotionState = new LocomotionState(this, animator);
-                var jumpState = new JumpState(this, animator);
+                var locomotionState = new LocomotionState(this, animator,playerEffectController);
+                var jumpState = new JumpState(this, animator,playerEffectController);
                 var slidingState = new SlidingState(this, animator);
                 var risingState = new RisingState(this, animator);
-                var fallingState = new FallingState(this, animator);
+                var fallingState = new FallingState(this, animator, playerEffectController);
                 var idleAttackState = new IdleAttackState(this, animator);
                 var walkAttackState = new WalkAttackState(this, animator);
                 var dyingState = new DyingState(this, animator);
@@ -313,9 +294,11 @@ namespace AdvancePlayerController
             public void OnGroundContactRegained()
             {
                 Vector3 collisionVelocity = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                OnLand.Invoke();
-                /*if(collisionVelocity.magnitude>0.1f)
-                    vfxChannelSo.Invoke(landSound, landSettings,transform.position);*/
+                float maxSafeFallVelocity = Mathf.Sqrt(2*data.Gravity * data.FallGravityMult * MaxFallDistance);
+                float fallIntensity = Mathf.InverseLerp(0, maxSafeFallVelocity, collisionVelocity.magnitude);
+                playerEffectController.PlayLandParticles(fallIntensity);
+                if(collisionVelocity.magnitude>maxSafeFallVelocity)
+                    damageable.Kill(); // death by high fall
                 momentum = Vector3.zero;
             }
 
@@ -343,7 +326,6 @@ namespace AdvancePlayerController
             {
                 momentum = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 momentum += tr.up * data.JumpForce;
-                OnJump.Invoke();
                 momentum = useLocalMomentum ? tr.worldToLocalMatrix * momentum : momentum;
             }
             
@@ -382,13 +364,11 @@ namespace AdvancePlayerController
             private void OnStartedSprinting()
             {
                 if (sprintTimer.IsRunning || runCooldownTimer.IsRunning) return;
-                OnRun.Invoke();
                 sprintTimer.Start();
 
             }
             private void OnStoppedSprinting()
             {
-                OnRun.Invoke();
                 sprintTimer.Stop();
             }
             private void OnStartedAttack()

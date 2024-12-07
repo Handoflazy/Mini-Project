@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83b50960cbe74b03a00f827f863d510b, type: 3}
-  m_Name: SFX_GettingHit
+  m_Script: {fileID: 11500000, guid: 164f605b9f174648adb4198dde92b768, type: 3}
+  m_Name: Basic Attack
   m_EditorClassIdentifier: 
-  looping: 0
-  audioClipGroups:
-  - sequenceMode: 1
-    audioClips:
-    - {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
+  attackStrength: 0
+  attackReloadDuration: 0

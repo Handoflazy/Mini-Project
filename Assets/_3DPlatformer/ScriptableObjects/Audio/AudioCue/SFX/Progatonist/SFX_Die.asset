@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: SFX_Die
   m_EditorClassIdentifier: 
   looping: 0
-  audioClipGroups: []
+  audioClipGroups:
+  - sequenceMode: 1
+    audioClips:
+    - {fileID: 8300000, guid: e254e4ae0aa8bfb45bc402b3ed72bfb6, type: 3}
