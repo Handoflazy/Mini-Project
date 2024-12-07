@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utilities.Event_System.EventChannel;
 
 namespace Platformer.Systems.AudioSystem
@@ -14,12 +15,13 @@ namespace Platformer.Systems.AudioSystem
         [SerializeField] private bool playOnStart; 
         [Header("Configuration")]
         [SerializeField] private AudioConfigurationSO _audioConfiguration = default;
+        [FormerlySerializedAs("_audioCueEventChannel")]
         [Header("Broadcast On")]
-        [SerializeField] private AudioCueChannelSO _audioCueEventChannel = default;
+        [SerializeField] private AudioCueEventChannelSO audioCueEventEventChannel = default;
         [Button]
         public void PlayAudioCue()
         {
-            _audioCueEventChannel.Invoke(_audioCue, _audioConfiguration, transform.position);
+            audioCueEventEventChannel.RaisePlayEvent(_audioCue, _audioConfiguration, transform.position);
         }
 
         private void Start()

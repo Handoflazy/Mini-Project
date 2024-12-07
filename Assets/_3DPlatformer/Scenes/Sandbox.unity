@@ -131,8 +131,10 @@ GameObject:
   m_Component:
   - component: {fileID: 659138857}
   - component: {fileID: 659138858}
+  - component: {fileID: 659138860}
+  - component: {fileID: 659138859}
   m_Layer: 0
-  m_Name: SoundManager
+  m_Name: AudioManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,13 +167,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8c54dbf18fe46c69458bfa3d59c1e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pool: {fileID: 0}
   initialPoolSize: 10
-  prefab: {fileID: 0}
-  masterMixer: {fileID: 24300002, guid: 8bd3e4d3f377ba141a263b33e632d658, type: 2}
-  sfxMixer: {fileID: 0}
-  musicMixer: {fileID: 0}
-  soundEmitterPool: {fileID: 11400000, guid: 76854eaf31c1bca43b48000557c1c974, type: 2}
+  prefab: {fileID: 1093458469651037555, guid: 6c07e85596899f1459f23ac9de1556ff, type: 3}
   soundEmittersContainer: {fileID: 659138856}
+  audioMixer: {fileID: 0}
+  masterVolume: 1
+  musicVolume: 1
+  sfxVolume: 1
+--- !u!114 &659138859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659138856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a6f8f35b2944f4bb8f4c0f16ded7be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: 351dfb2b19d85bf4f8878f02717cfb73, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 659138858}
+        m_TargetAssemblyTypeName: Platformer.Systems.AudioSystem.AudioManager, Assembly-CSharp
+        m_MethodName: PlayAudioCue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &659138860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659138856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a6f8f35b2944f4bb8f4c0f16ded7be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: cacd16bdd5055394a991a2f1df35d8bd, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 659138858}
+        m_TargetAssemblyTypeName: Platformer.Systems.AudioSystem.AudioManager, Assembly-CSharp
+        m_MethodName: PlayAudioCue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &735507144
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,6 +555,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+--- !u!1 &1017252348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1017252349}
+  - component: {fileID: 1017252350}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1017252349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1017252348}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.078009, y: -3.4256442, z: 3.3112397}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1017252350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1017252348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dc07f69578c427b8f700744380580dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioCue: {fileID: 11400000, guid: c1b695154eb3b9042ae5543a66321c1e, type: 2}
+  playOnStart: 0
+  _audioConfiguration: {fileID: 11400000, guid: fcdb8c6a21d53894c8263ee67d815cd8,
+    type: 2}
+  _audioCueEventChannel: {fileID: 11400000, guid: 351dfb2b19d85bf4f8878f02717cfb73,
+    type: 2}
 --- !u!1 &1043611703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1034,6 +1143,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4647173154740897701, guid: c13621b831e78f145b3d404b7f256cd4,
+        type: 3}
+      propertyPath: vfxChannelSo
+      value: 
+      objectReference: {fileID: 11400000, guid: cacd16bdd5055394a991a2f1df35d8bd,
+        type: 2}
     - target: {fileID: 7114601868812510425, guid: c13621b831e78f145b3d404b7f256cd4,
         type: 3}
       propertyPath: smoothingFactor
@@ -1471,3 +1586,4 @@ SceneRoots:
   - {fileID: 1531320776}
   - {fileID: 1297668978}
   - {fileID: 659138857}
+  - {fileID: 1017252349}

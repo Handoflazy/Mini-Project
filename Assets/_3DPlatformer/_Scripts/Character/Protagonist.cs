@@ -74,7 +74,7 @@ namespace AdvancePlayerController
             private bool attackInput;
 
             [SerializeField] private AudioCueSO landSound;
-            [SerializeField] private AudioCueChannelSO vfxChannelSo;
+            [FormerlySerializedAs("vfxChannelSo")] [SerializeField] private AudioCueEventChannelSO vfxEventChannelSo;
             [SerializeField] private AudioConfigurationSO landSettings;
 
             private void Awake()

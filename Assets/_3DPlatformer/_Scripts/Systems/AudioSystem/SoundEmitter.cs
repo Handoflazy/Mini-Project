@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -10,65 +12,79 @@ namespace Platformer.Systems.AudioSystem
     public class SoundEmitter : MonoBehaviour
     {
         private AudioSource audioSource;
-        private float _lastUseTimestamp = 0;
         public event UnityAction<SoundEmitter> OnSoundFinishedPlaying;
 
         private void Awake()
         {
-            DontDestroyOnLoad(this);
             audioSource = this.GetOrAddComponent<AudioSource>();
-        }
-
-        private void Start()
-        {
             audioSource.playOnAwake = false;
         }
 
-        public void PlaySound(AudioClip clip,AudioConfigurationSO settings,bool hasToLoop, Vector3 position = default)
+        public void PlayAudioClip(AudioClip clip,AudioConfigurationSO settings,bool hasToLoop, Vector3 position = default)
         {
             audioSource.clip = clip;
-            ApplySettings(audioSource, settings);
+            settings.ApplyTo(audioSource);
             this.transform.position = position;
+            audioSource.time = 0f;
             audioSource.loop = hasToLoop;
 
             audioSource.Play();
+            if (!hasToLoop)
+            {
+                StartCoroutine(FinishedPlaying(clip.length));
+            }
+        }
+        public void FadeMusicIn(AudioClip musicClip, AudioConfigurationSO settings, float duration, float startTime = 0f)
+        {
+            PlayAudioClip(musicClip, settings, true);
+            audioSource.volume = 0f;
+            if (startTime <= audioSource.clip.length)
+                audioSource.time = startTime;
+
+            audioSource.DOFade(settings.Volume, duration);
         }
 
-        private void ApplySettings(AudioSource source, AudioConfigurationSO settings)
+        public float FadeMusicOut(float duration)
         {
-            source.outputAudioMixerGroup = settings.OutputAudioMixerGroup;
-            source.mute = settings.Mute;
-            source.bypassEffects = settings.BypassEffects;
-            source.bypassListenerEffects = settings.BypassListenerEffects;
-            source.bypassReverbZones = settings.BypassReverbZones;
-            source.priority = settings.Priority;
-            source.volume = settings.Volume;
-            source.pitch = settings.Pitch;
-            source.panStereo = settings.PanStereo;
-            source.spatialBlend = settings.SpatialBlend;
-            source.reverbZoneMix = settings.ReverbZoneMix;
-            source.dopplerLevel = settings.DopplerLevel;
-            source.spread = settings.Spread;
-            source.rolloffMode = settings.RolloffMode;
-            source.minDistance = settings.MinDistance;
-            source.maxDistance = settings.MaxDistance;
-            source.ignoreListenerVolume = settings.IgnoreListenerVolume;
-            source.ignoreListenerPause = settings.IgnoreListenerPause;
+            audioSource.DOFade(0f, duration).onComplete += OnFadeOutComplete;
+
+            return audioSource.time;
         }
 
-        public void StopSound()
+        private void OnFadeOutComplete()
         {
-            audioSource.Stop();
+            NotifyBeingDone();
         }
 
-        public bool IsInUse()
+        public AudioClip GetClip() => audioSource.clip;
+        public void Resume() => audioSource.Play();
+
+        public void Pause() => audioSource.Pause();
+
+        private IEnumerator FinishedPlaying(float clipLength)
         {
-            return audioSource.isPlaying;
+            yield return new WaitForSeconds(clipLength);
+
+            NotifyBeingDone();
         }
 
-        public bool isLooping()
+        private void NotifyBeingDone() => OnSoundFinishedPlaying.Invoke(this);
+
+
+        public void Stop() => audioSource.Stop();
+
+        public void Finish()
         {
-            return audioSource.loop;
+            if (audioSource.loop)
+            {
+                audioSource.loop = false;
+                float timeRemaining = audioSource.clip.length - audioSource.time;
+                StartCoroutine(FinishedPlaying(timeRemaining));
+            }
         }
+
+        public bool IsPlaying() => audioSource.isPlaying;
+
+        public bool IsLooping() => audioSource.loop;
     }
 }
