@@ -14,9 +14,6 @@ namespace Platformer.Systems.AudioSystem
         [Header("SoundEmitters pool")]
         [SerializeField] private SoundEmitterPoolSO pool;
         [SerializeField] int initialPoolSize = 10;
-        [SerializeField] private SoundEmitter prefab;
-        [SerializeField] private GameObject soundEmittersContainer;
-        
         
         [Header("Listening on channels")]
         [Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play SFXs")]
@@ -108,10 +105,6 @@ namespace Platformer.Systems.AudioSystem
                 soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
             soundEmitter.Stop();
             pool.Return(soundEmitter);
-            
-            //TODO: is the above enough?
-            //_soundEmitterVault.Remove(audioCueKey); is never called if StopAndClean is called after a Finish event
-            //How is the key removed from the vault?
         }
 
         #region mixer groups functions
