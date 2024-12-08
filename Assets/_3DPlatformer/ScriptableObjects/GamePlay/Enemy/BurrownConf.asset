@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a40d944d3b849c0b1e078c88447a7f9, type: 3}
   m_Name: BurrownConf
   m_EditorClassIdentifier: 
-  initialHealth: 0
+  initialHealth: 1000

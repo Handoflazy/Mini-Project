@@ -68,7 +68,10 @@ namespace Platformer.Systems.AudioSystem
             NotifyBeingDone();
         }
 
-        private void NotifyBeingDone() => OnSoundFinishedPlaying.Invoke(this);
+        private void NotifyBeingDone()
+        {
+            if (OnSoundFinishedPlaying != null) OnSoundFinishedPlaying.Invoke(this);
+        }
 
 
         public void Stop() => audioSource.Stop();

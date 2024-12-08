@@ -14,13 +14,14 @@ namespace Character
         [SerializeField] private VoidEventChannel updateHealthUI;
         [SerializeField] private VoidEventChannel deathEvent;
         
+        [field:SerializeField]
         public bool GetHit { get; set; }
         public bool IsDead { get; set; }
 
         private void Awake()
         {
             if (currentHealthSO == null) return;
-            //currentHealthSO = ScriptableObject.CreateInstance<HealthSO>();
+            currentHealthSO = ScriptableObject.CreateInstance<HealthSO>();
             currentHealthSO.SetMaxHealth(healthConfigSO.InitialHealth);
             currentHealthSO.SetCurrentHealth(healthConfigSO.InitialHealth);
 
@@ -52,6 +53,7 @@ namespace Character
             if(updateHealthUI!=null)
                 updateHealthUI.Invoke();
             GetHit = true;
+            print(currentHealthSO.CurrentHealth);
             if (currentHealthSO.CurrentHealth != 0) return;
             IsDead = true;
             

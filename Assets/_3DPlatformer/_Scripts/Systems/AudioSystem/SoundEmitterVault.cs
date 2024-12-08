@@ -12,6 +12,11 @@ namespace Platformer.Systems.AudioSystem
             emittersKey = new List<AudioCueKey>();
             emittersList = new List<SoundEmitter[]>();
         }
+
+        public int GetCount()
+        {
+            return emittersKey.Count;
+        }
         public AudioCueKey GetKey(AudioCueSO cue)
         {
             return new AudioCueKey(nextUniqueKey++, cue);
@@ -46,6 +51,24 @@ namespace Platformer.Systems.AudioSystem
         public bool Remove(AudioCueKey key)
         {
             int index = emittersKey.FindIndex(x => x == key);
+            return RemoveAt(index);
+        }
+
+        public bool Remove(SoundEmitter soundEmitter)
+        {
+            int index = -1;
+            for (int i = 0; i < emittersList.Count; i++)
+            {
+                for (int j = 0; j < emittersList[i].Length; j++)
+                {
+                    if (emittersList[i][j] == soundEmitter)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
             return RemoveAt(index);
         }
 

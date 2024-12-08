@@ -4,11 +4,11 @@ using Utilities.ImprovedTimers;
 
 namespace AdvancePlayerController.State_Machine
 {
-    public class GetttingHit : BaseState
+    public class GetttingHitState : BaseState
     {
         private readonly Damageable playerDamageable;
         private CountdownTimer surprisedTimer;
-        public GetttingHit(Protagonist player, Animator animator, Damageable damageable, CountdownTimer surprisedTimer) : base(player, animator)
+        public GetttingHitState(Protagonist player, Animator animator, Damageable damageable, CountdownTimer surprisedTimer) : base(player, animator)
         {
             this.surprisedTimer = surprisedTimer;
             playerDamageable = damageable;

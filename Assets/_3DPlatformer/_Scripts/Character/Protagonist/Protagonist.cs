@@ -77,7 +77,7 @@ namespace AdvancePlayerController
                 stateMachine.FixedUpdate();
                 mover.CheckForGround();
                 HandleMomentum();
-                var velocity = stateMachine.CurrentState is LocomotionState or WalkAttackState? CalculateMovementVelocity():Vector3.zero;
+                var velocity = stateMachine.CurrentState is IdleState or WalkAttackState or WalkState? CalculateMovementVelocity():Vector3.zero;
                 velocity = sprintTimer.IsRunning? velocity*RunMultiplier: velocity;
                 velocity += useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 mover.SetExtendSensorRange(IsGroundedStates());
@@ -129,7 +129,8 @@ namespace AdvancePlayerController
             {
                 stateMachine = new StateMachine();
                 
-                var locomotionState = new LocomotionState(this, animator,playerEffectController);
+                var idleState = new IdleState(this, animator);
+                var walkState = new WalkState(this, animator, playerEffectController);
                 var jumpState = new JumpState(this, animator,playerEffectController);
                 var slidingState = new SlidingState(this, animator);
                 var risingState = new RisingState(this, animator);
@@ -137,38 +138,47 @@ namespace AdvancePlayerController
                 var idleAttackState = new IdleAttackState(this, animator);
                 var walkAttackState = new WalkAttackState(this, animator);
                 var dyingState = new DyingState(this, animator);
-                var gettingHitState = new GetttingHit(this, animator, damageable,surprisedTimer);
+                var gettingHitState = new GetttingHitState(this, animator, damageable,surprisedTimer);
 
-                At(locomotionState,walkAttackState,new FuncPredicate(()=>attackInput&&GetInputVelocity()!=Vector3.zero));
-                At(locomotionState,idleAttackState,new FuncPredicate(()=>attackInput&&GetInputVelocity()==Vector3.zero));
+                At(idleState,walkState,new FuncPredicate(()=>GetInputVelocity()!=Vector3.zero));
+                At(idleState,idleAttackState,new FuncPredicate(()=>attackInput));
+                At(idleState,slidingState,new FuncPredicate(IsGroundTooSteep));
+                At(idleState,jumpState, new FuncPredicate(() => jumpBuffer.IsRunning));
+                At(idleState,risingState, new FuncPredicate(IsRising));
+                At(idleState,fallingState,new FuncPredicate(IsFalling));
+                At(idleState,fallingState,new FuncPredicate(()=>!mover.IsGrounded()));
+                //TODO: IDLE TO WALKATTACK
                 
-                At(locomotionState,slidingState,new FuncPredicate(IsGroundTooSteep));
-                At(locomotionState,jumpState, new FuncPredicate(() => jumpBuffer.IsRunning));
-                At(locomotionState,risingState, new FuncPredicate(IsRising));
-                At(locomotionState,fallingState,new FuncPredicate(IsFalling));
-                At(locomotionState,fallingState,new FuncPredicate(()=>!mover.IsGrounded()));
-                At(locomotionState,gettingHitState,new FuncPredicate(()=>damageable.GetHit));
+                At(walkState,idleAttackState,new FuncPredicate(()=>attackInput&&GetInputVelocity()==Vector3.zero));
+                At(walkState,idleState,new FuncPredicate(()=>GetInputVelocity()==Vector3.zero));
+                At(walkState,walkAttackState,new FuncPredicate(()=>attackInput));
+                At(walkState,slidingState,new FuncPredicate(IsGroundTooSteep));
+                At(walkState,jumpState, new FuncPredicate(() => jumpBuffer.IsRunning));
+                At(walkState,risingState, new FuncPredicate(IsRising));
+                At(walkState,fallingState,new FuncPredicate(()=>!mover.IsGrounded()));
+                
 
-                At(slidingState,locomotionState, new FuncPredicate(()=>!IsGroundTooSteep()));
+                At(slidingState,idleState, new FuncPredicate(()=>!IsGroundTooSteep()));
+                At(slidingState,walkState, new FuncPredicate(()=>!IsGroundTooSteep()&&GetInputVelocity()==Vector3.zero));
                 
                 At(jumpState, risingState, new FuncPredicate(IsRising));
-                At(jumpState,locomotionState,new FuncPredicate(()=>mover.IsGrounded()));
+                At(jumpState,idleState,new FuncPredicate(()=>mover.IsGrounded()));
+                At(jumpState,walkState,new FuncPredicate(()=>mover.IsGrounded()&&GetInputVelocity()==Vector3.zero));
                 
                 At(risingState,fallingState, new FuncPredicate(IsFalling));
                 At(risingState,fallingState, new FuncPredicate(()=>!isJumpButtonHeld));
                 At(risingState,fallingState, new FuncPredicate(()=>ceilingDetector.HitCeiling()));
                 
-                At(fallingState,locomotionState, new FuncPredicate(()=>mover.IsGrounded()));
+                At(fallingState,idleState, new FuncPredicate(()=>mover.IsGrounded()));
+                At(fallingState,idleState, new FuncPredicate(()=>mover.IsGrounded()&&GetInputVelocity()==Vector3.zero));
                 
-                At(idleAttackState,locomotionState, new FuncPredicate(()=>!attackInput));
-                At(idleAttackState,gettingHitState, new FuncPredicate(()=>damageable.GetHit));
+                At(idleAttackState,idleState, new FuncPredicate(()=>!attackInput));
                 
-                At(walkAttackState,locomotionState, new FuncPredicate(()=>!attackInput));
-                At(walkAttackState,gettingHitState, new FuncPredicate(()=>damageable.GetHit));
+                At(walkAttackState,idleState, new FuncPredicate(()=>!attackInput));
                 At(walkAttackState,idleAttackState, new FuncPredicate(()=>GetInputVelocity()==Vector3.zero));
                 
                 At(gettingHitState,dyingState,new FuncPredicate(()=>damageable.IsDead));
-                At(gettingHitState,locomotionState, new FuncPredicate(()=>!surprisedTimer.IsFinished));
+                At(gettingHitState,idleState, new FuncPredicate(()=>!surprisedTimer.IsFinished));
                 
                 Any(gettingHitState,new FuncPredicate(()=>damageable.GetHit));
                 stateMachine.SetState(fallingState);
@@ -199,7 +209,7 @@ namespace AdvancePlayerController
                 Vector3 horizontalMomentum = momentum - verticalMomentum;
                 verticalMomentum = HandleGravity(verticalMomentum);
 
-                if (stateMachine.CurrentState is LocomotionState or WalkAttackState &&
+                if (stateMachine.CurrentState is IdleState or WalkAttackState &&
                     VectorMath.GetDotProduct(verticalMomentum, tr.up) < 0f)
                     verticalMomentum = Vector3.zero;
                 if (!IsGroundedStates())
@@ -211,7 +221,7 @@ namespace AdvancePlayerController
                 {
                     HandleSliding(ref horizontalMomentum);
                 }
-                float friction = stateMachine.CurrentState is LocomotionState ? data.GroundFriction: data.AirFriction;
+                float friction = stateMachine.CurrentState is IdleState ? data.GroundFriction: data.AirFriction;
                 
                 horizontalMomentum = Vector3.MoveTowards(horizontalMomentum,Vector3.zero,friction*Time.deltaTime);
                 momentum = horizontalMomentum + verticalMomentum;
@@ -260,7 +270,7 @@ namespace AdvancePlayerController
                 horizontalMomentum += movementVelocity*Time.fixedDeltaTime; 
             }
 
-            private bool IsGroundedStates() => stateMachine.CurrentState is LocomotionState or SlidingState or IdleAttackState or WalkAttackState;
+            private bool IsGroundedStates() => stateMachine.CurrentState is IdleState or SlidingState or IdleAttackState or WalkAttackState or WalkState;
 
             void AdjustHorinzontalMomentum(ref Vector3 horizontalMomentum, Vector3 movementVelocity)
             {

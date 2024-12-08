@@ -49,6 +49,30 @@ namespace Platformer.Systems.AudioSystem
             
         }
 
+        private void OnDestroy()
+        {
+            SFXEventChannel.OnAudioCuePlayRequested =null;
+            SFXEventChannel.OnAudioCueStopRequested =null;
+            SFXEventChannel.OnAudioCueFinishRequested =null;
+
+            musicEventChannel.OnAudioCuePlayRequested =null;
+            musicEventChannel.OnAudioCueStopRequested =null;
+            
+        }
+        /// <summary>
+        /// This is only used in the Editor, to debug volumes.
+        /// It is called when any of the variables is changed, and will directly change the value of the volumes on the AudioMixer.
+        /// </summary>
+        void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                SetGroupVolume("MasterVolume", masterVolume);
+                SetGroupVolume("MusicVolume", musicVolume);
+                SetGroupVolume("SFXVolume", sfxVolume);
+            }
+        }
+
         private bool StopMusic(AudioCueKey emitterkey)
         {
             if (musicSoundEmitter != null && musicSoundEmitter.IsPlaying())
@@ -209,7 +233,8 @@ namespace Platformer.Systems.AudioSystem
 
         private void OnSoundEmitterFinishedPlaying(SoundEmitter amitterToReturn)
         {
-            pool.Return(amitterToReturn);
+            soundEmitterVault.Remove(amitterToReturn);
+            StopAndCleanEmitter(amitterToReturn);
         }
 
         private IEnumerator WaitForClipEnd(SoundEmitter emitter, AudioClip clip)

@@ -15,7 +15,6 @@ namespace Platformer.Systems.AudioSystem
         [SerializeField] private bool playOnStart; 
         [Header("Configuration")]
         [SerializeField] private AudioConfigurationSO _audioConfiguration = default;
-        [FormerlySerializedAs("_audioCueEventChannel")]
         [Header("Broadcast On")]
         [SerializeField] private AudioCueEventChannelSO audioCueEventEventChannel = default;
         [Button]

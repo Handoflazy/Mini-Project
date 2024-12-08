@@ -1,22 +1,23 @@
-using AdvancePlayerController;
 using Platformer._3DPlatformer._Scripts.Character;
 using UnityEngine;
 
 namespace AdvancePlayerController.State_Machine
 {
-    public class LocomotionState : BaseState
+    public class WalkState: BaseState
     {
         private float smoothSpeed = 0;
-        private PlayerEffectController dustController;
-        public LocomotionState(Protagonist player, Animator animator, PlayerEffectController dustController) : base(player, animator)
+        private readonly PlayerEffectController dustController;
+        public WalkState(Protagonist player, Animator animator, PlayerEffectController dustController) : base(player, animator)
         {
             this.dustController = dustController;
         }
 
         public override void OnEnter()
         {
-            dustController.EnableWalkParticles();
+            player.ClearInput();
             player.OnGroundContactRegained();
+            animator.SetBool(WalkHash,true);
+            dustController.EnableWalkParticles();
         }
 
         public override void Update()
@@ -24,11 +25,11 @@ namespace AdvancePlayerController.State_Machine
             var playerSpeed = player.GetMovementVelocity().magnitude;
             smoothSpeed = Mathf.SmoothStep(smoothSpeed, playerSpeed, 0.5f); //TODO: speedMultilier
             animator.SetFloat(SpeedHash,smoothSpeed);
-            animator.SetBool(WalkHash,playerSpeed>0.01f);
         }
 
         public override void OnExit()
         {
+            animator.SetBool(WalkHash,false);
             dustController.DisableWalkParticles();
         }
     }

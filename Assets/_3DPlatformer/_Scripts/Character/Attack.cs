@@ -16,6 +16,7 @@ namespace Platformer._3DPlatformer._Scripts.Character
         }
         private void OnTriggerEnter(Collider other)
         {
+            
             if (!other.CompareTag(gameObject.tag))
             {
                 if (other.TryGetComponent(out Damageable damageableComp))
