@@ -2,7 +2,7 @@ using Utilities.ImprovedTimers;
 using Platformer;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine.EnemyStates
+namespace State.EnemyStates
 {
     public class EnemyIdleState: EnemyBaseState
     {

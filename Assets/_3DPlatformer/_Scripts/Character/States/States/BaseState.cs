@@ -1,13 +1,13 @@
 using AdvancePlayerController;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public abstract class BaseState : IState
     {
         protected readonly Protagonist player;
         protected readonly Animator animator;
-        protected static readonly int AirHash = Animator.StringToHash("IsAirbome");
+        protected static readonly int AirboneHash = Animator.StringToHash("IsAirbome");
         protected static readonly int SpeedHash = Animator.StringToHash("MovingSpeed");
         protected static readonly int AttackHash = Animator.StringToHash("IsAttacking");
         protected static readonly int WalkHash = Animator.StringToHash("IsWalking");

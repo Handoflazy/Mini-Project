@@ -1,7 +1,7 @@
 using AdvancePlayerController;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class SlidingState : BaseState
     {
@@ -12,6 +12,11 @@ namespace AdvancePlayerController.State_Machine
         public override void OnEnter()
         {
             player.OnGroundContactRegained();
+            
+            animator.SetBool(AirboneHash,false);
+            animator.SetBool(WalkHash,false);
+            
+            player.StopMovement();
         }
     }
 }

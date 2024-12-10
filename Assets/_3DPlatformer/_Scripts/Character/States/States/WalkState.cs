@@ -1,7 +1,8 @@
+using AdvancePlayerController;
 using Platformer._3DPlatformer._Scripts.Character;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class WalkState: BaseState
     {
@@ -14,7 +15,7 @@ namespace AdvancePlayerController.State_Machine
 
         public override void OnEnter()
         {
-            player.ClearInput();
+            player.ClearInputCache();
             player.OnGroundContactRegained();
             animator.SetBool(WalkHash,true);
             dustController.EnableWalkParticles();

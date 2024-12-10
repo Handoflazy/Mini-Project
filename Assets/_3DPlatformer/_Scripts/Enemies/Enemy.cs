@@ -1,7 +1,7 @@
 using System.Collections;
 using AdvancePlayerController;
-using AdvancePlayerController.State_Machine;
-using AdvancePlayerController.State_Machine.EnemyStates;
+using State;
+using State.EnemyStates;
 using Utilities.ImprovedTimers;
 using Sirenix.OdinInspector;
 using UnityEngine;

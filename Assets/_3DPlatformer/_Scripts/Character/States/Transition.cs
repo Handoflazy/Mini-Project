@@ -1,5 +1,4 @@
-namespace AdvancePlayerController.State_Machine
-{
+
     public class Transition : ITransition
     {
         public IState To { get; }
@@ -11,4 +10,3 @@ namespace AdvancePlayerController.State_Machine
             Condition = condition;
         }
     }
-}

@@ -1,7 +1,7 @@
 using AdvancePlayerController;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class IdleAttackState : BaseState
     {
@@ -13,13 +13,9 @@ namespace AdvancePlayerController.State_Machine
         {
             animator.SetBool(WalkHash,false);
             animator.SetBool(AttackHash,true);
-            player.ClearInput();
+            
+            player.ClearInputCache();
             player.StopMovement();
-        }
-
-        public override void OnExit()
-        {
-            animator.SetBool(AttackHash,false);
         }
     }
 }

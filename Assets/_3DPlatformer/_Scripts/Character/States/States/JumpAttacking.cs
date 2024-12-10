@@ -4,25 +4,23 @@ using UnityEngine;
 
 namespace State
 {
-    public class JumpState : BaseState
+    public class JumpAttacking: BaseState
     {
-        private PlayerEffectController dustController;
-        public JumpState(Protagonist player, Animator animator, PlayerEffectController dustController) : base(player, animator)
+        private readonly PlayerEffectController dustController;
+        public JumpAttacking(Protagonist player, Animator animator, PlayerEffectController dustController) : base(player, animator)
         {
             this.dustController = dustController;
         }
 
         public override void OnEnter()
         {
-            player.JumpStart();
-            
-            animator.SetBool(AttackHash,false);
+            animator.SetBool(AttackHash, true);
             animator.SetBool(AirboneHash,true);
             
+            player.ClearInputCache();
             dustController.PlayJumpParticles();
             dustController.PlayLandParticles(1);
             
-            player.OnGroundContactLost();
         }
     }
 }

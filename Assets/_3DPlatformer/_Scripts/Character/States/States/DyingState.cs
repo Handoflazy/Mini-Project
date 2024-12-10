@@ -1,6 +1,7 @@
+using AdvancePlayerController;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class DyingState : BaseState
     {

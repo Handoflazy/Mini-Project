@@ -2,7 +2,7 @@ using Platformer;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace AdvancePlayerController.State_Machine.EnemyStates
+namespace State.EnemyStates
 {
     public class EnemyChaseState: EnemyBaseState
     {

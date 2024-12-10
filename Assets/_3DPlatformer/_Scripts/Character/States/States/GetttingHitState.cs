@@ -1,8 +1,9 @@
+using AdvancePlayerController;
 using Character;
 using UnityEngine;
 using Utilities.ImprovedTimers;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class GetttingHitState : BaseState
     {

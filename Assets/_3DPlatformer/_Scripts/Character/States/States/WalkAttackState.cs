@@ -1,6 +1,7 @@
+using AdvancePlayerController;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class WalkAttackState : BaseState
     {
@@ -12,7 +13,7 @@ namespace AdvancePlayerController.State_Machine
         {
             animator.SetBool(WalkHash,true);
             animator.SetBool(AttackHash,true);
-            player.ClearInput();
+            player.ClearInputCache();
         }
 
         public override void Update()

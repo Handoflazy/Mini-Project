@@ -1,7 +1,7 @@
 using AdvancePlayerController;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class RisingState: BaseState
     {
@@ -11,7 +11,7 @@ namespace AdvancePlayerController.State_Machine
 
         public override void OnEnter()
         {
-            animator.SetBool(AirHash,true);
+            animator.SetBool(AirboneHash,true);
         }
         
     }

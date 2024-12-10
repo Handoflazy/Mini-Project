@@ -351,7 +351,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -645,6 +645,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCollider: {fileID: 144389412}
+--- !u!114 &787132742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787132733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 412c0938dcc4495bbdd44feeab78c8f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimationEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1318511784}
+        m_TargetAssemblyTypeName: AdvancePlayerController.Protagonist, Assembly-CSharp
+        m_MethodName: ConsumeAttackInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &896086740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1403,6 +1430,18 @@ MonoBehaviour:
   jumpParticles: {fileID: 2073219583}
   slashEffect: {fileID: 2073219583}
   reverseSlashEffect: {fileID: 2073219583}
+--- !u!114 &1318511784 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4647173154740897701, guid: c13621b831e78f145b3d404b7f256cd4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1531320776}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318511772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 364c347401a44e33bcc06d2686015323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1452494935
 GameObject:
   m_ObjectHideFlags: 0
@@ -1740,6 +1779,11 @@ PrefabInstance:
       propertyPath: attackCollider
       value: 
       objectReference: {fileID: 144389412}
+    - target: {fileID: 2294888966694975845, guid: c13621b831e78f145b3d404b7f256cd4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3994938813745829849, guid: c13621b831e78f145b3d404b7f256cd4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1808,6 +1852,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4647173154740897701, guid: c13621b831e78f145b3d404b7f256cd4,
         type: 3}
+      propertyPath: protagonistAudio
+      value: 
+      objectReference: {fileID: 787132737}
+    - target: {fileID: 4647173154740897701, guid: c13621b831e78f145b3d404b7f256cd4,
+        type: 3}
       propertyPath: vfxEventChannelSo
       value: 
       objectReference: {fileID: 11400000, guid: cacd16bdd5055394a991a2f1df35d8bd,
@@ -1817,6 +1866,11 @@ PrefabInstance:
       propertyPath: playerEffectController
       value: 
       objectReference: {fileID: 1318511781}
+    - target: {fileID: 5844138879366695951, guid: c13621b831e78f145b3d404b7f256cd4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7114601868812510425, guid: c13621b831e78f145b3d404b7f256cd4,
         type: 3}
       propertyPath: smoothingFactor
@@ -1858,6 +1912,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 787132738}
+    - targetCorrespondingSourceObject: {fileID: 8699882769764560929, guid: c13621b831e78f145b3d404b7f256cd4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 787132742}
   m_SourcePrefab: {fileID: 100100000, guid: c13621b831e78f145b3d404b7f256cd4, type: 3}
 --- !u!1 &2046375963
 GameObject:
@@ -2143,6 +2201,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780677412506985110, guid: 0d2241106dc8d6645ae07043843520f3,
+        type: 3}
+      propertyPath: masterVolume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3780677412506985110, guid: 0d2241106dc8d6645ae07043843520f3,
         type: 3}

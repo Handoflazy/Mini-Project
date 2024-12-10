@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace AdvancePlayerController.State_Machine
-{
-    public class StateMachine
+public class StateMachine
     {
         private StateNode _current;
         private Dictionary<Type, StateNode> _nodes = new();
@@ -87,5 +84,3 @@ namespace AdvancePlayerController.State_Machine
             public void AddTransition(IState to, IPredicate condition) => Transitions.Add((new Transition(to, condition)));
         }
     }
-
-}

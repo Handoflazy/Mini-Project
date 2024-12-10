@@ -1,24 +1,21 @@
+using AdvancePlayerController;
 using UnityEngine;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class IdleState : BaseState
     {
         public IdleState(Protagonist player, Animator animator) : base(player, animator)
         {
         }
-
         public override void OnEnter()
         {
             player.OnGroundContactRegained();
-        }
-
-        public override void Update()
-        {
             animator.SetBool(WalkHash,false);
             animator.SetBool(AttackHash,false);
-            animator.SetBool(AirHash,false);
-            player.ClearInput();
+            animator.SetBool(AirboneHash,false);
+            animator.SetBool(SurprisedHash,false);
+            player.ClearInputCache();
             player.StopMovement();
         }
     }

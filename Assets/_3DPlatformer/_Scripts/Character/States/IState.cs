@@ -1,5 +1,4 @@
-namespace AdvancePlayerController.State_Machine
-{
+
     public interface IState
     {
         void OnEnter();
@@ -7,4 +6,3 @@ namespace AdvancePlayerController.State_Machine
         void FixedUpdate();
         void OnExit();
     }
-}

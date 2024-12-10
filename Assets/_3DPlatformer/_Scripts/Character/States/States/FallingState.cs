@@ -3,7 +3,7 @@ using Platformer._3DPlatformer._Scripts.Character;
 using UnityEngine;
 using Utilities.ImprovedTimers;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class FallingState : BaseState
     {
@@ -13,12 +13,12 @@ namespace AdvancePlayerController.State_Machine
 
         public override void OnEnter()
         {
-            animator.SetBool(AirHash,true);
+            animator.SetBool(AttackHash,false);
         }
 
         public override void OnExit()
         {
-            animator.SetBool(AirHash,false);
+            animator.SetBool(AirboneHash,false);
         }
     }
 }

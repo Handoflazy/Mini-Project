@@ -1,7 +1,7 @@
 using System;
-using AdvancePlayerController.State_Machine;
+using State;
 
-namespace AdvancePlayerController.State_Machine
+namespace State
 {
     public class FuncPredicate: IPredicate
     {
