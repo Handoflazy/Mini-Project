@@ -17,6 +17,7 @@ namespace State
         {
             player.ClearInputCache();
             player.OnGroundContactRegained();
+            animator.SetBool(AttackHash,false);
             animator.SetBool(WalkHash,true);
             dustController.EnableWalkParticles();
         }

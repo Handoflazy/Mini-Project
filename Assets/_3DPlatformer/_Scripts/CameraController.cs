@@ -1,6 +1,6 @@
 using System.Collections;
-using Cinemachine;
 using NaughtyAttributes;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Platformer

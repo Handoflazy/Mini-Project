@@ -55,7 +55,7 @@ namespace AdvancePlayerController
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
             [NonSerialized] private bool isRunPressing;
             [NonSerialized] private bool isJumpButtonHeld;
-            [NonSerialized] private bool attackInput;
+            [SerializeField] private bool attackInput;
             private void Awake()
             {
                 tr = transform;
@@ -112,7 +112,6 @@ namespace AdvancePlayerController
                 sprintTimer = new CountdownTimer(runTime);
                 runCooldownTimer = new CountdownTimer(runCooldownTime);
                 surprisedTimer = new CountdownTimer(surprisedAnimationTime);
-                
                 sprintTimer.OnTimerStop += () => runCooldownTimer.Start();
                 sprintTimer.OnTimerStop += OnStoppedSprinting;
             }
@@ -122,6 +121,7 @@ namespace AdvancePlayerController
             {
                 stateMachine = new StateMachine();
                 stateMachine.OnStateChange += (t) => currentState = t.ToString();
+                stateMachine.OnStateChange += (t) => print(t.ToString());
                 
                 var idleState = new IdleState(this, animator);
                 var walkState = new WalkState(this, animator, playerEffectController);
@@ -170,6 +170,7 @@ namespace AdvancePlayerController
                 #region Jump Ascending
 
                 At(jumpState, risingState, new FuncPredicate(IsRising));
+                At(jumpState,idleState,new FuncPredicate(mover.IsGrounded));
                 
                 At(risingState,fallingState, new FuncPredicate(IsFalling));
                 At(risingState,fallingState, new FuncPredicate(()=>!isJumpButtonHeld));
@@ -202,6 +203,8 @@ namespace AdvancePlayerController
                 #region Falling attacking
                 At(fallingAttacking,walkState, new FuncPredicate(()=>!attackInput&&mover.IsGrounded()&&IsMoving()));
                 At(fallingAttacking,idleState, new FuncPredicate(()=>!attackInput&&mover.IsGrounded()&&!IsMoving()));
+                
+                At(fallingAttacking,fallingState, new FuncPredicate(()=>!attackInput&&!mover.IsGrounded()));
                 #endregion
                 
                 #region Sliding
@@ -437,14 +440,17 @@ namespace AdvancePlayerController
 
             }
             private void OnStoppedSprinting() => sprintTimer.Stop();
-            private void OnStartedAttack() => attackInput = true;
+            private void OnStartedAttack()
+            {
+                attackInput = true;
+            }
 
             public void ConsumeAttackInput() => attackInput = false;
 
             #endregion
-           
-            
-            
-            
+
+
+
+
     }
 }

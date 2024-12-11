@@ -22,7 +22,7 @@ MonoBehaviour:
   SlideAccel: 2
   Gravity: 30
   FallGravityMult: 1.2
-  SlideGravity: 10
+  SlideGravity: 5
   FastFallGravityMult: 2
   MaxFallSpeed: 25
   SlopeLimit: 30

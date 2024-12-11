@@ -7,7 +7,7 @@ namespace Platformer.Utilities
     {
         public UnityEvent AnimationEvent;
 
-        public void Raise()
+        public void RaiseComsumeAttack()
         {
             AnimationEvent?.Invoke();
         }

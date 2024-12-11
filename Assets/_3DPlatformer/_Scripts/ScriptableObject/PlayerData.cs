@@ -40,9 +40,6 @@ namespace Platformer._Scripts.ScriptableObject
          [TabGroup("Physics", "Gravity")]
         public float SlideGravity = 20f;
         [TabGroup("Physics", "Gravity")]
-        [SerializeField]
-        private float FastFallGravityMult = 2f;
-        [TabGroup("Physics", "Gravity")]
         public float MaxFallSpeed = -20f;
         
 
