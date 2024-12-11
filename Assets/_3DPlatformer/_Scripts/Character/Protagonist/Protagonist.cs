@@ -49,6 +49,7 @@ namespace AdvancePlayerController
             [SerializeField] private float runCooldownTime = 2f;
             [SerializeField] private float runTime = 3f;
             [SerializeField] private float surprisedAnimationTime =1f;
+            [SerializeField] private float slideToJumpThreshold;
             [ReadOnly] [SerializeField] private string currentState;
            
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
@@ -177,6 +178,8 @@ namespace AdvancePlayerController
                 At(risingState,fallingState, new FuncPredicate(()=>IsFalling()&&attackInput));
                 At(risingState,fallingState, new FuncPredicate(()=>!isJumpButtonHeld&&attackInput));
                 At(risingState,fallingState, new FuncPredicate(()=>ceilingDetector.HitCeiling()&&attackInput));
+                
+                At(risingState,jumpAttacking, new FuncPredicate(()=>attackInput));
                 #endregion
 
                 #region Falling
@@ -203,7 +206,7 @@ namespace AdvancePlayerController
                 
                 #region Sliding
                 At(slidingState,idleState, new FuncPredicate(()=>!IsGroundTooSteep()));
-                At(slidingState,jumpState, new FuncPredicate(()=>jumpBuffer.IsRunning&&IsActuallyMoving(0.02f)));
+                At(slidingState,jumpState, new FuncPredicate(()=>jumpBuffer.IsRunning&&IsActuallyMoving(slideToJumpThreshold)));
                 #endregion
 
                 #region Idle Attacking
@@ -230,7 +233,7 @@ namespace AdvancePlayerController
 
             private bool IsActuallyMoving(float threshold)
             {
-                return momentum.sqrMagnitude > threshold * threshold;
+                return momentum.sqrMagnitude < threshold * threshold;
             }
 
 
@@ -267,23 +270,37 @@ namespace AdvancePlayerController
                 {
                     HandleSliding(ref horizontalMomentum);
                 }
-                float friction = IsGroundedStates() ? data.GroundFriction: data.AirFriction;
+                var friction = HandleFriction();
                 horizontalMomentum = Vector3.MoveTowards(horizontalMomentum,Vector3.zero,friction*Time.deltaTime);
                 momentum = horizontalMomentum + verticalMomentum;
-                if (stateMachine.CurrentState is SlidingState) {
-                    momentum = Vector3.ProjectOnPlane(momentum, mover.GetGroundNormal());
-                    if (VectorMath.GetDotProduct(momentum, tr.up) > 0f) {
-                        momentum = VectorMath.RemoveDotVector(momentum, tr.up);
-                    }
-            
-                    Vector3 slideDirection = Vector3.ProjectOnPlane(-tr.up, mover.GetGroundNormal()).normalized;
-                    momentum += slideDirection * (data.SlideGravity * Time.deltaTime);
+                if (stateMachine.CurrentState is SlidingState)
+                {
+                    HandleSliding();
                 }
                 
    
                 
                 
                 if(useLocalMomentum) momentum = tr.worldToLocalMatrix * momentum;
+            }
+
+            private float HandleFriction()
+            {
+                float friction = IsGroundedStates() ? data.GroundFriction: data.AirFriction;
+                if (stateMachine.CurrentState is SlidingState)
+                    friction = data.AirFriction;
+                return friction;
+            }
+
+            private void HandleSliding()
+            {
+                momentum = Vector3.ProjectOnPlane(momentum, mover.GetGroundNormal());
+                if (VectorMath.GetDotProduct(momentum, tr.up) > 0f) {
+                    momentum = VectorMath.RemoveDotVector(momentum, tr.up);
+                }
+            
+                Vector3 slideDirection = Vector3.ProjectOnPlane(-tr.up, mover.GetGroundNormal()).normalized;
+                momentum += slideDirection * (data.SlideGravity * Time.deltaTime);
             }
 
             private Vector3 HandleGravity(Vector3 verticalMomentum)
