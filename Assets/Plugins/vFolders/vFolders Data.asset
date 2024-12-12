@@ -28,6 +28,7 @@ MonoBehaviour:
     - 048965c94c7eec644b6805deffe53c86
     - 8a39a12cf61f5d54aa6dc89ce7c66b13
     - cfcb0768c99b87241a950535f9de478d
+    - 25db385bea694b6438ceab47cd09532f
     values:
     - colorIndex: 0
       iconNameOrGuid: cs Script Icon
@@ -57,3 +58,5 @@ MonoBehaviour:
       iconNameOrGuid: Settings Icon
     - colorIndex: 0
       iconNameOrGuid: Texture Icon
+    - colorIndex: 2
+      iconNameOrGuid: 

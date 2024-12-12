@@ -41,6 +41,7 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-656736bad88c7a149918e64db9be1c82-5910927258602339605-1918948829
         - globalObjectIdString: GlobalObjectId_V1-2-656736bad88c7a149918e64db9be1c82-381014649-0
         - globalObjectIdString: GlobalObjectId_V1-2-656736bad88c7a149918e64db9be1c82-7385184586051920071-1531320776
+        - globalObjectIdString: GlobalObjectId_V1-2-656736bad88c7a149918e64db9be1c82-1024125352-0
         values:
         - colorIndex: 0
           iconNameOrGuid: Light Icon
@@ -58,6 +59,8 @@ MonoBehaviour:
           iconNameOrGuid: EventSystem Icon
         - colorIndex: 2
           iconNameOrGuid: AvatarMask On Icon
+        - colorIndex: 4
+          iconNameOrGuid: 
     - goDatas_byGlobalId:
         keys:
         - globalObjectIdString: GlobalObjectId_V1-2-b492c86983cf3014fba0daaf04b5fe40-1700769367-0
