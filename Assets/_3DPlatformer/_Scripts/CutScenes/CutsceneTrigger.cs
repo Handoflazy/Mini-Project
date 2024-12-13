@@ -1,54 +1,35 @@
 using System;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace Platformer.CutScenes
 {
     public class CutsceneTrigger: MonoBehaviour
     {
-        [SerializeField] private CutsceneData CutsceneData;
-
-        [Tooltip(
-            "Play the cutscene on the Start, otherwise the cutscene will be triggered by colider. Make sure no overlap")]
+        [SerializeField] private CutsceneManager cutsceneManager;
+        [SerializeField] private PlayableDirector playableDirector;
+        
         [SerializeField] private bool playOnStart;
-        [SerializeField] private bool needToPressButton;
-        [SerializeField] private bool onlyOnce;
+        [SerializeField] private bool playOnce;
         private Vector3 position;
         private Quaternion rotation;
-
-        private void Awake()
-        {
-            position = transform.position;
-            rotation = transform.rotation;
-        }
-
         private void Start()
         {
             if (playOnStart)
             {
-                //TODO: CALL CutsceneManager to play cutscene data;
+                cutsceneManager.Play(playableDirector);
             }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!needToPressButton)
-            {
-                if (onlyOnce)
-                {
-                    Destroy(this);
-                }
-            }
-            else
-            {
-                //Interact
-            }
+            cutsceneManager.Play(playableDirector);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            //CutsceneManager.Instance.NotAbleToInteract();
-            transform.position = position;
-            transform.rotation = rotation;
+            if(playOnce)
+                Destroy(this);
         }
     }
 }
