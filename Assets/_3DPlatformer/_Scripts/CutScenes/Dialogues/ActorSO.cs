@@ -2,10 +2,14 @@ using UnityEngine;
 
 namespace Platformer.Dialogue
 {
-    [CreateAssetMenu(menuName = "CutsceneSystem/Actor")]
-    public class Actor : ScriptableObject
+    /// <summary>
+    /// Scriptable Object that represents an "Actor", that is the protagonist of a Dialogue
+    /// </summary>
+    [CreateAssetMenu(fileName = "newActor", menuName = "Dialogues/Actor")]
+    public class ActorSO : ScriptableObject
     {
         public string ActorName { get => _actorName; }
+
         [SerializeField] private string _actorName;
         //[SerializeField] private Sprite _face; // dialogue is not have portait now
     }
