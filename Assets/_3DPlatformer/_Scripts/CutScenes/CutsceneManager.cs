@@ -1,52 +1,70 @@
 using System;
+using Platformer.Dialogue;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Platformer.CutScenes
 {
     public class CutsceneManager : MonoBehaviour
     {
-        private PlayableDirector _activePlayableDirector;
-        [SerializeField] private InputReader _inputReader = default;
-        private CutsceneData _cutsceneData;
+        private PlayableDirector activePlayableDirector;
+        
+        [SerializeField] private InputReader inputReader = default;
+        [SerializeField] private DialogueManager dialogueManager = default;
+        
+        //can't no use playableGraph.IsPlaying cause we have Pause state while playing;
+        public bool IsCutscenePlaying => activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
 
-        private void Awake()
+        private bool isPause;
+
+        private void OnEnable()
         {
-            _inputReader.AdvanceDialogueEvent +=OnAdvance;
+            inputReader.AdvanceDialogueEvent +=OnAdvance;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
-            _inputReader.AdvanceDialogueEvent -=OnAdvance;
+            inputReader.AdvanceDialogueEvent -=OnAdvance;
         }
 
-        public void Play(PlayableDirector activePlayableDirector)
+        public void PlayCutscene(PlayableDirector activePlayableDirector)
         {
-            _activePlayableDirector = activePlayableDirector;
+            isPause = false;
+            this.activePlayableDirector = activePlayableDirector;
             activePlayableDirector.Play();
             activePlayableDirector.stopped += ctx => CutsceneEnded();
-            _inputReader.EnableDialogueInput();
+            inputReader.EnableDialogueInput();
+        }
+
+        public void PlayDialogueFromClip(DialogueLineSO dialogueLine)
+        {
+            dialogueManager.DisplayDialogueLine(dialogueLine);
         }
 
         void OnAdvance()
         {   
+            if(isPause)
+                ResumeTimeline();
         }
 
-        void PauseTimeline()
+        public void PauseTimeline()
         {
-            _activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
+            isPause = true;
+            activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
         }
 
-        void ResumeTimelien()
+        public void ResumeTimeline()
         {
-            _activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
+            isPause = false;
+            activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
         }
 
         void CutsceneEnded()
         {
-            _inputReader.EnableGameplayInput();
+            inputReader.EnableGameplayInput();
         }
     }
 }

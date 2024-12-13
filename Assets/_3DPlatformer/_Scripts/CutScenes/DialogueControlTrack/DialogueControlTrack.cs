@@ -5,20 +5,20 @@ using UnityEngine.Timeline;
 
 namespace Platformer.Dialogue
 {
-    [TrackClipType(typeof(DialogControlClip))]
+    [TrackClipType(typeof(DialogClip))]
     [TrackBindingType(typeof(CutsceneManager))]
     public class DialogueControlTrack : PlayableTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            var scriptPlayable = ScriptPlayable<DialogueControlMixerBehaviour>.Create(graph, inputCount); 
-            DialogueControlMixerBehaviour behaviour = scriptPlayable.GetBehaviour();
+            CutsceneManager cutsceneManagerRef = go.GetComponent<PlayableDirector>().GetGenericBinding(this) as CutsceneManager;
             foreach (TimelineClip clip in GetClips())
             {
-                // Needed?
+                DialogClip dialogueControlClip = clip.asset as DialogClip;
+                dialogueControlClip.cutsceneManager = cutsceneManagerRef;
             }
 
-            return scriptPlayable;
+            return base.CreateTrackMixer(graph, go, inputCount);
         }
         
     }

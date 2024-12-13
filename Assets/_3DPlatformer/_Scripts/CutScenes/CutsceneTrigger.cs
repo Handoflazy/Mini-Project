@@ -6,8 +6,8 @@ namespace Platformer.CutScenes
 {
     public class CutsceneTrigger: MonoBehaviour
     {
-        [SerializeField] private CutsceneManager cutsceneManager;
-        [SerializeField] private PlayableDirector playableDirector;
+        [SerializeField] private CutsceneManager cutsceneManager = default;
+        [SerializeField] private PlayableDirector playableDirector = default;
         
         [SerializeField] private bool playOnStart;
         [SerializeField] private bool playOnce;
@@ -17,13 +17,13 @@ namespace Platformer.CutScenes
         {
             if (playOnStart)
             {
-                cutsceneManager.Play(playableDirector);
+                cutsceneManager.PlayCutscene(playableDirector);
             }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            cutsceneManager.Play(playableDirector);
+            cutsceneManager.PlayCutscene(playableDirector);
         }
 
         private void OnTriggerExit(Collider other)
