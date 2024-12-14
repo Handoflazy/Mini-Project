@@ -21,6 +21,8 @@ namespace Platformer.CutScenes
         //can't use playableGraph.IsPlaying cause we have Pause state while playing;
         public bool IsCutscenePlaying => playableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
 
+        private void HandleDirectorStopped(PlayableDirector director) => CutsceneEnded();
+
         private bool isPause;
 
         private void OnEnable()
@@ -36,19 +38,36 @@ namespace Platformer.CutScenes
         public void PlayCutscene(PlayableDirector activePlayableDirector)
         {
             inputReader.EnableDialogueInput();
-            isPause = false;
-            
             playableDirector = activePlayableDirector;
+            
+            isPause = false;
             playableDirector.Play();
-            playableDirector.stopped += ctx => CutsceneEnded();
+            playableDirector.stopped += HandleDirectorStopped;
         }
 
         void OnAdvance()
-        {   
-            if(isPause)
+        {
+            if (isPause)
+            {
+                LineEnded();
                 ResumeTimeline();
+            }
         }
 
+        public void LineEnded()
+        {
+            dialogueManager.CutsceneDialogueEnded();
+        }
+        void CutsceneEnded()
+        {
+            if (playableDirector != null)
+            {
+                playableDirector.stopped -= HandleDirectorStopped;
+            }
+            dialogueManager.CutsceneDialogueEnded();
+            inputReader.EnableGameplayInput();
+        }
+        
         public void PauseTimeline()
         {
             isPause = true;
@@ -61,9 +80,5 @@ namespace Platformer.CutScenes
             playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
         }
 
-        void CutsceneEnded()
-        {
-            inputReader.EnableGameplayInput();
-        }
     }
 }

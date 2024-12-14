@@ -10,6 +10,7 @@ namespace Platformer.Dialogue
     {
         [SerializeField] public DialogueLineChannelSO PlayDialogueEvent;
         [SerializeField] public VoidEventChannel PauseTimelineEvent;
+        [SerializeField] public VoidEventChannel LineEndedEvent;
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             foreach (TimelineClip clip in GetClips())
@@ -17,6 +18,7 @@ namespace Platformer.Dialogue
                 DialogClip dialogClip = clip.asset as DialogClip;
                     dialogClip.PlayDialogueEvent = PlayDialogueEvent;
                     dialogClip.PauseTimelineEvent = PauseTimelineEvent;
+                    dialogClip.LineEndedEvent = LineEndedEvent;
             }
             return base.CreateTrackMixer(graph, go, inputCount);
         }

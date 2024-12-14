@@ -1,6 +1,8 @@
 using System;
 using Platformer.CutScenes;
 using Platformer.Dialogue;
+using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Serialization;
@@ -14,7 +16,8 @@ namespace Platformer.Dialogue
         public DialogueLineSO dialogueLine = default;
         [SerializeField] private ActorSO actor = default;
         [SerializeField] private bool PauseWhenClipEnd = default;//This won't work if the clip ends on the very last frame of the Timeline
-
+        
+        [ReadOnly] public VoidEventChannel LineEndedEvent;
         [HideInInspector] public DialogueLineChannelSO PlayDialogueEvent;
         [HideInInspector] public VoidEventChannel PauseTimeLineEvent;
         
@@ -31,7 +34,7 @@ namespace Platformer.Dialogue
             // the OnBehaviourPlay of the second clip is still called and thus its dialogueLine is played (prematurely). This check makes sure it's not.
             if (!Application.isPlaying) return; //TODO: Find a way to "play" dialogue lines even when scrubbing the Timeline not in Play Mode
             if (!playable.GetGraph()
-                    .IsPlaying()) return; //&& cutsceneManager.IsCutscenePlaying) Need to find an alternative to this, now noctice to decoupe two dialogue clip
+                    .IsPlaying() && playable.GetGraph().GetRootPlayable(0).GetSpeed()==0) return;
             if (dialogueLine != null)
             {
                 PlayDialogueEvent?.RaiseEvent(dialogueLine.Sentence, dialogueLine.Actor);
@@ -56,6 +59,10 @@ namespace Platformer.Dialogue
             {
                 if(PauseWhenClipEnd)
                     PauseTimeLineEvent.Invoke();
+                else
+                {
+                    LineEndedEvent.Invoke();
+                }
             }
         }
     }

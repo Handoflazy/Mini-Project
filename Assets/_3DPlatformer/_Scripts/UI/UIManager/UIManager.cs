@@ -33,9 +33,9 @@ namespace Platformer.UI.UIManager
         public void OpenUIDialogue(string dialogueLine, ActorSO actor)
         {
             bool isProtagonistTalking = (actor == mainProtagonist);
+            dialogueController.gameObject.SetActive(true);
             dialogueController.SetDialogue(dialogueLine, actor, isProtagonistTalking);
             //interactionPanel.gameObject.SetActive(false);
-            dialogueController.gameObject.SetActive(true);
         }
         public void CloseUIDialogue()
         {

@@ -12,13 +12,14 @@ namespace Platformer.Dialogue
 
         [HideInInspector] public DialogueLineChannelSO PlayDialogueEvent;
         [HideInInspector] public VoidEventChannel PauseTimelineEvent;
-        
+        [HideInInspector] public VoidEventChannel LineEndedEvent;
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
             
             ScriptPlayable<DialogueBehaviour> playable = ScriptPlayable<DialogueBehaviour>.Create(graph, template);
             template.PauseTimeLineEvent = PauseTimelineEvent;
             template.PlayDialogueEvent = PlayDialogueEvent;
+            template.LineEndedEvent = LineEndedEvent;
             return playable;
         }
 

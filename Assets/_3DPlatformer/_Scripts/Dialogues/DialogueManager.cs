@@ -14,44 +14,43 @@ namespace Platformer.CutScenes
     /// </summary>
     public class DialogueManager : MonoBehaviour
     {
-        [FormerlySerializedAs("actorList")] [SerializeField] private List<ActorSO> actorsList;
+        [SerializeField] private List<ActorSO> actorsList;
         [SerializeField] private InputReader inputReader;
 
-        [Header("Listener On")] [SerializeField]
-        private DialogueDataChannelSO startDialogue;
+        [Header("Listener On")] 
+        [SerializeField] private DialogueDataChannelSO startDialogue;
         
-        
-        [FormerlySerializedAs("openDialogueEvent")]
         [Header("Broadcasting on")] 
         [SerializeField] private DialogueLineChannelSO openUIDialogueEvent = default;
-
         [SerializeField] private VoidEventChannel closeUIDialogueEvent = default;
 
         private int counterDialogue; // current line in conservation.
-        private int counterLine; // current word 
         
         private DialogueDataSO currentDialogue = default;
-        
-        private bool ReachEndOfDialogue => counterDialogue >= currentDialogue.Conversation.Count;
-        private bool ReachedEndOfLine => counterLine >= currentDialogue.Conversation[counterDialogue].Sentence.Length;
+        private bool ReachEndOfDialogue => counterDialogue >= currentDialogue.Lines.Count;
 
         private void Start()
         {
             startDialogue.OnEventRaised += DisplayDialogueData;
         }
 
+        private void OnDisable()
+        {
+            startDialogue.OnEventRaised -= DisplayDialogueData;
+        }
+
         public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
         {
             counterDialogue = 0;
-            counterLine = 0;
             inputReader.EnableDialogueInput();
             inputReader.AdvanceDialogueEvent += OnAdvance;
             currentDialogue = dialogueDataSO;
-            if (currentDialogue.Conversation != null)
+            
+            if (currentDialogue.Lines != null)
             {
                 ActorSO currentActor =
-                    actorsList.Find(o => o.ActorId == currentDialogue.Conversation[counterDialogue].Actor.ActorId);
-                DisplayDialogueLine(currentDialogue.Conversation[counterDialogue].Sentence,currentActor);
+                    actorsList.Find(o => o.ActorId == currentDialogue.Lines[counterDialogue].Actor.ActorId);
+                DisplayDialogueLine(currentDialogue.Lines[counterDialogue].Sentence,currentActor);
             }
             else
             {
@@ -61,33 +60,11 @@ namespace Platformer.CutScenes
 
         private void OnAdvance()
         {
-            /*counterLine++;
-            if (!ReachedEndOfLine)
-            {
-                ActorSO currentActor = actorsList.Find(o => o.ActorId == currentDialogue.Conversation[counterDialogue].Actor.ActorId);
-                DisplayDialogueLine(currentDialogue.Conversation[counterDialogue].Sentence, currentActor);
-            }
-            else
-            {
-                counterDialogue++;
-                if (!ReachEndOfDialogue)
-                {
-                    counterLine = 0;
-                    ActorSO currentActor = actorsList.Find(o => o.ActorId == currentDialogue.Conversation[counterDialogue].Actor.ActorId);
-                    DisplayDialogueLine(currentDialogue.Conversation[counterDialogue].Sentence, currentActor);
-                    
-                }
-                else
-                {
-                    DialogueEndedAndCloseDialogueUI();
-                }
-            }*/
             counterDialogue++;
             if (!ReachEndOfDialogue)
             {
-                counterLine = 0;
-                ActorSO currentActor = actorsList.Find(o => o.ActorId == currentDialogue.Conversation[counterDialogue].Actor.ActorId);
-                DisplayDialogueLine(currentDialogue.Conversation[counterDialogue].Sentence, currentActor);
+                ActorSO currentActor = actorsList.Find(o => o.ActorId == currentDialogue.Lines[counterDialogue].Actor.ActorId);
+                DisplayDialogueLine(currentDialogue.Lines[counterDialogue].Sentence, currentActor);
                     
             }
             else
@@ -96,15 +73,23 @@ namespace Platformer.CutScenes
             }
             
         }
+        
 
-        public void DisplayDialogueLine(string dialogueLine, ActorSO actor)
+        public void DisplayDialogueLine(string dialogueLine, ActorSO actor, float charactersPerSecond = -1)
         {
             openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
         }
         private void DialogueEndedAndCloseDialogueUI()
         {
+            currentDialogue.FinishDialogue();
+            
             inputReader.AdvanceDialogueEvent -= OnAdvance;
             inputReader.EnableGameplayInput();
+            closeUIDialogueEvent.Invoke();
+        }
+
+        public void CutsceneDialogueEnded()
+        {
             closeUIDialogueEvent.Invoke();
         }
     }
