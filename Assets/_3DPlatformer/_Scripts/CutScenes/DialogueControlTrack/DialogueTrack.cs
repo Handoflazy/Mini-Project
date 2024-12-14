@@ -7,7 +7,7 @@ namespace Platformer.Dialogue
 {
     [TrackClipType(typeof(DialogClip))]
     [TrackBindingType(typeof(CutsceneManager))]
-    public class DialogueControlTrack : PlayableTrack
+    public class DialogueTrack : PlayableTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
@@ -15,7 +15,7 @@ namespace Platformer.Dialogue
             foreach (TimelineClip clip in GetClips())
             {
                 DialogClip dialogueControlClip = clip.asset as DialogClip;
-                dialogueControlClip.cutsceneManager = cutsceneManagerRef;
+                if (dialogueControlClip != null) dialogueControlClip.cutsceneManager = cutsceneManagerRef;
             }
 
             return base.CreateTrackMixer(graph, go, inputCount);

@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInputActions",
+    "name": "GameInput",
     "maps": [
         {
             "name": "Player",
@@ -1002,6 +1002,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TestExit",
+                    "type": "Button",
+                    "id": "18d3dc30-676c-4979-bab7-a64d707443ec",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1118,11 +1127,22 @@
                 {
                     "name": "",
                     "id": "2061f0f3-08a6-4cc1-96e7-3241b7558130",
-                    "path": "",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "AdvanceDialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98e3b0d1-cc11-40cd-b8e6-9470a92ebe2f",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TestExit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

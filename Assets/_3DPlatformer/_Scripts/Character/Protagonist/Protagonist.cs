@@ -121,7 +121,6 @@ namespace AdvancePlayerController
             {
                 stateMachine = new StateMachine();
                 stateMachine.OnStateChange += (t) => currentState = t.ToString();
-                stateMachine.OnStateChange += (t) => print(t.ToString());
                 
                 var idleState = new IdleState(this, animator);
                 var walkState = new WalkState(this, animator, playerEffectController);

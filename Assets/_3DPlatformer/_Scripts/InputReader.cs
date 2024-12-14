@@ -1,15 +1,12 @@
-using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using static GameInput;
 
 
 namespace Platformer
 {
 	[CreateAssetMenu(fileName ="InputReader",menuName ="Platformer/Input/InputReader"),]
-	public class InputReader : DescriptionBaseSO, IPlayerActions, IDialoguesActions, IMenusActions
+	public class InputReader : DescriptionBaseSO, GameInput.IPlayerActions, GameInput.IDialoguesActions, GameInput.IMenusActions
 	{
 		//TODO: SPECIFIC GAME STATE CAN'T RECEIVED INPUT;
 		
@@ -93,9 +90,9 @@ namespace Platformer
 
 		public void EnableDialogueInput()
 		{
+			input.Dialogues.Enable();
 			input.Player.Disable();
 			input.Menus.Disable();
-			input.Dialogues.Enable();
 		}
 		private void DisableAllInput()
 		{
@@ -268,7 +265,20 @@ namespace Platformer
 		public void OnAdvanceDialogue(InputAction.CallbackContext context)
 		{
 			if (context.phase == InputActionPhase.Performed)
+			{
+				
 				AdvanceDialogueEvent.Invoke();
+			}
+		}
+
+		public void OnTestExit(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+			{
+				
+				Debug.Log("Exit");
+				EnableGameplayInput();
+			}
 		}
 	}
 }

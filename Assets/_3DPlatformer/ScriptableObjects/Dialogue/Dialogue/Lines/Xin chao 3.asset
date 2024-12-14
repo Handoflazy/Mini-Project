@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd9f809b4b95e3498ee1574a1b09588, type: 3}
-  m_Name: Male Hero
+  m_Script: {fileID: 11500000, guid: 8d0e2b9ad24149b3984a4780b9d6376b, type: 3}
+  m_Name: Xin chao 3
   m_EditorClassIdentifier: 
-  _actorName: Hero
+  _actor: {fileID: 11400000, guid: fc8118d82113b81439e75f1ca7cd4894, type: 2}
+  _sentence: 3

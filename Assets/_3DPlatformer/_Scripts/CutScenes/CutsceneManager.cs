@@ -1,5 +1,6 @@
 using System;
 using Platformer.Dialogue;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -10,13 +11,15 @@ namespace Platformer.CutScenes
 {
     public class CutsceneManager : MonoBehaviour
     {
-        private PlayableDirector activePlayableDirector;
+        [FormerlySerializedAs("activePlayableDirector")] [SerializeField,Required]
+        private PlayableDirector playableDirector;
         
         [SerializeField] private InputReader inputReader = default;
         [SerializeField] private DialogueManager dialogueManager = default;
         
-        //can't no use playableGraph.IsPlaying cause we have Pause state while playing;
-        public bool IsCutscenePlaying => activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
+        
+        //can't use playableGraph.IsPlaying cause we have Pause state while playing;
+        public bool IsCutscenePlaying => playableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
 
         private bool isPause;
 
@@ -32,16 +35,17 @@ namespace Platformer.CutScenes
 
         public void PlayCutscene(PlayableDirector activePlayableDirector)
         {
-            isPause = false;
-            this.activePlayableDirector = activePlayableDirector;
-            activePlayableDirector.Play();
-            activePlayableDirector.stopped += ctx => CutsceneEnded();
             inputReader.EnableDialogueInput();
+            isPause = false;
+            
+            playableDirector = activePlayableDirector;
+            playableDirector.Play();
+            playableDirector.stopped += ctx => CutsceneEnded();
         }
 
-        public void PlayDialogueFromClip(DialogueLineSO dialogueLine)
+        public void PlayDialogueFromClip(string dialogueLine, ActorSO actor)
         {
-            dialogueManager.DisplayDialogueLine(dialogueLine);
+            dialogueManager.DisplayDialogueLine(dialogueLine,actor );
         }
 
         void OnAdvance()
@@ -53,13 +57,13 @@ namespace Platformer.CutScenes
         public void PauseTimeline()
         {
             isPause = true;
-            activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
+            playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
         }
 
-        public void ResumeTimeline()
+        void ResumeTimeline()
         {
             isPause = false;
-            activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
+            playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
         }
 
         void CutsceneEnded()
