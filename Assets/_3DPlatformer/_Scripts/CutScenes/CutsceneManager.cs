@@ -43,11 +43,6 @@ namespace Platformer.CutScenes
             playableDirector.stopped += ctx => CutsceneEnded();
         }
 
-        public void PlayDialogueFromClip(string dialogueLine, ActorSO actor)
-        {
-            dialogueManager.DisplayDialogueLine(dialogueLine,actor );
-        }
-
         void OnAdvance()
         {   
             if(isPause)

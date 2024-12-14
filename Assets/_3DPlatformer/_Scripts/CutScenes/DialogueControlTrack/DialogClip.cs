@@ -2,17 +2,23 @@ using Platformer.CutScenes;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using Utilities.Event_System.EventChannel;
 
 namespace Platformer.Dialogue
 {
     public class DialogClip : PlayableAsset,  ITimelineClipAsset
     {
         [SerializeField] private DialogueBehaviour template = new DialogueBehaviour();
-        [HideInInspector] public CutsceneManager cutsceneManager;
+
+        [HideInInspector] public DialogueLineChannelSO PlayDialogueEvent;
+        [HideInInspector] public VoidEventChannel PauseTimelineEvent;
+        
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
-            template.cutsceneManager = cutsceneManager;
+            
             ScriptPlayable<DialogueBehaviour> playable = ScriptPlayable<DialogueBehaviour>.Create(graph, template);
+            template.PauseTimeLineEvent = PauseTimelineEvent;
+            template.PlayDialogueEvent = PlayDialogueEvent;
             return playable;
         }
 
