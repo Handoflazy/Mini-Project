@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Serialization;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Platformer.Dialogue
 {
@@ -17,7 +17,7 @@ namespace Platformer.Dialogue
         [SerializeField] private ActorSO actor = default;
         [SerializeField] private bool PauseWhenClipEnd = default;//This won't work if the clip ends on the very last frame of the Timeline
         
-        [ReadOnly] public VoidEventChannel LineEndedEvent;
+        [HideInInspector] public VoidEventChannel LineEndedEvent;
         [HideInInspector] public DialogueLineChannelSO PlayDialogueEvent;
         [HideInInspector] public VoidEventChannel PauseTimeLineEvent;
         

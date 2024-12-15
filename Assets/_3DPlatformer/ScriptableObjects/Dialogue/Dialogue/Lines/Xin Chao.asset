@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d0e2b9ad24149b3984a4780b9d6376b, type: 3}
   m_Name: Xin Chao
   m_EditorClassIdentifier: 
-  _actor: {fileID: 11400000, guid: 1aadca9c792fc2d44b6036ee30e6b2fd, type: 2}
-  _sentence: 1
+  _actor: {fileID: 11400000, guid: 8c7aa30d4e25bb446b31ed1050034adf, type: 2}
+  _sentence: Xin Chao toi la matt

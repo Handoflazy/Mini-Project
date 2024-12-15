@@ -585,6 +585,12 @@ MonoBehaviour:
         asset: {fileID: 102900000, guid: 17378ada42dc6c047a476c8d206439f3, type: 3}
         guid: 17378ada42dc6c047a476c8d206439f3
       SceneType: 2
+  - GroupName: SandboxScene
+    Scenes:
+    - Reference:
+        asset: {fileID: 102900000, guid: 656736bad88c7a149918e64db9be1c82, type: 3}
+        guid: 656736bad88c7a149918e64db9be1c82
+      SceneType: 0
   OnSceneReady: {fileID: 11400000, guid: ca05d2b548740284b8a4025984ee2d99, type: 2}
 --- !u!114 &737470394
 MonoBehaviour:

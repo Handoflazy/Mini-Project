@@ -1,16 +1,17 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Platformer.Dialogue
 {
     [TrackClipType(typeof(DialogClip))]
     public class DialogueTrack : PlayableTrack
     {
-        [SerializeField] public DialogueLineChannelSO PlayDialogueEvent;
-        [SerializeField] public VoidEventChannel PauseTimelineEvent;
-        [SerializeField] public VoidEventChannel LineEndedEvent;
+        [SerializeField,Required] public DialogueLineChannelSO PlayDialogueEvent;
+        [SerializeField,Required] public VoidEventChannel PauseTimelineEvent;
+        [SerializeField,Required] public VoidEventChannel LineEndedEvent;
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             foreach (TimelineClip clip in GetClips())

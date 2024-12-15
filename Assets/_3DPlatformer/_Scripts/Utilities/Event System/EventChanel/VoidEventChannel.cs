@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Platformer;
 using UnityEngine;
 
-namespace Utilities.Event_System.EventChannel
+namespace Utilities.EventChannel
 {
     [CreateAssetMenu(menuName = "Events/Void Channel")]
     public class VoidEventChannel: DescriptionBaseSO

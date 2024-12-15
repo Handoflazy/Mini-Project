@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab24ff7d2cb40f4b0056f4566204639, type: 3}
   m_Name: "Hero Ch\xECe"
   m_EditorClassIdentifier: 
-  TimelineAsset: {fileID: 0}
-  Conversation:
-  - Figure: {fileID: 0}
-    Actorname: 
-    Sentence: 
+  lines:
+  - {fileID: 11400000, guid: c55807a399e7f41408de45810f0fc131, type: 2}
+  - {fileID: 11400000, guid: 7919b80cc88398247975cabc5a5e59f4, type: 2}
+  - {fileID: 11400000, guid: 7d86ff8982236c1409cf12bc1a455220, type: 2}
+  endOfDialogueEvent: {fileID: 0}
+  dialogueType: 1

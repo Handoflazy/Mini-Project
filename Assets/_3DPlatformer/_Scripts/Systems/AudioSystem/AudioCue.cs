@@ -3,7 +3,7 @@ using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Platformer.Systems.AudioSystem
 {

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using Utilities.EventChannel;
 
 namespace Platformer.CutScenes
 {
@@ -13,23 +14,28 @@ namespace Platformer.CutScenes
         [SerializeField] private bool playOnce;
         private Vector3 position;
         private Quaternion rotation;
+
+        [SerializeField] private PlayableDirectorChannelSO playCutsceneEvent;
         private void Start()
         {
+            playableDirector = GetComponent<PlayableDirector>();
             if (playOnStart)
             {
-                cutsceneManager.PlayCutscene(playableDirector);
+                playCutsceneEvent?.RaiseEvent(playableDirector);
             }
+        }
+        public void PlaySpecificCutscene()
+        {
+            if (playCutsceneEvent != null)
+                playCutsceneEvent.RaiseEvent(playableDirector);
+
+            if (playOnce)
+                Destroy(this);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            cutsceneManager.PlayCutscene(playableDirector);
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if(playOnce)
-                Destroy(this);
+            PlaySpecificCutscene();
         }
     }
 }

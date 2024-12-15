@@ -4,7 +4,7 @@ using Platformer.Dialogue;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Utilities.Event_System.EventChannel
+namespace Utilities.EventChannel
 {
     [CreateAssetMenu(menuName = "Events/UI/Dialogue line Channel")]
     public class DialogueLineChannelSO : DescriptionBaseSO

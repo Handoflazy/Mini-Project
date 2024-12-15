@@ -1,7 +1,7 @@
 using System;
 using Platformer.ScriptableObjectData;
 using UnityEngine;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Platformer.Systems.SpawnSystem
 {

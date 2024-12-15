@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d0e2b9ad24149b3984a4780b9d6376b, type: 3}
   m_Name: Xin chao 3
   m_EditorClassIdentifier: 
-  _actor: {fileID: 11400000, guid: fc8118d82113b81439e75f1ca7cd4894, type: 2}
-  _sentence: 3
+  _actor: {fileID: 11400000, guid: 49e9de7b360fc234eab31d3da86acc90, type: 2}
+  _sentence: 'Xin chao toi la truong lan
+
+'

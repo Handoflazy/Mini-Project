@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Timeline;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Platformer.Dialogue
 {

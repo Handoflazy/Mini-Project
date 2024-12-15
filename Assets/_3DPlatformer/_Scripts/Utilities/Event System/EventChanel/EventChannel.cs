@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Platformer;
 
-namespace Utilities.Event_System.EventChannel
+namespace Utilities.EventChannel
 {
     public abstract class EventChannel<T> : DescriptionBaseSO
     {

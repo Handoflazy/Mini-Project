@@ -5,7 +5,7 @@ using Platformer.Pool.Example;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Serialization;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Platformer.Systems.AudioSystem
 {

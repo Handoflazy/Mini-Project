@@ -2,7 +2,7 @@ using Platformer.CutScenes;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Platformer.Dialogue
 {

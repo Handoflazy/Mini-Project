@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace System.SceneManagement
 {

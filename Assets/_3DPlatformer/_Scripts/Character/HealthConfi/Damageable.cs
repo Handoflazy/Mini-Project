@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Character
 {

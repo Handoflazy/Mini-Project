@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Utilities.Event_System.EventChannel
+namespace Utilities.EventChannel
 {
     public class VoidListener : MonoBehaviour
     {

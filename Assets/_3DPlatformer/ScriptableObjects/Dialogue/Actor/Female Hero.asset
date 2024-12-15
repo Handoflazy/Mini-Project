@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bd9f809b4b95e3498ee1574a1b09588, type: 3}
   m_Name: Female Hero
   m_EditorClassIdentifier: 
-  _actorName: Hero
+  actorId: 1
+  _actorName: Daisy

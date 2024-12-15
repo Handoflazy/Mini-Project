@@ -2,7 +2,7 @@ using System;
 using Platformer.Dialogue;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 namespace Platformer.UI.UIManager
 {

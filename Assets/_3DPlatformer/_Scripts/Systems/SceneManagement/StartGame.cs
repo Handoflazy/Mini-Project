@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Utilities.Event_System.EventChannel;
+using Utilities.EventChannel;
 
 
 

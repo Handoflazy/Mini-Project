@@ -6,17 +6,21 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Utilities.EventChannel;
 
 namespace Platformer.CutScenes
 {
     public class CutsceneManager : MonoBehaviour
     {
-        [FormerlySerializedAs("activePlayableDirector")] [SerializeField,Required]
-        private PlayableDirector playableDirector;
-        
         [SerializeField] private InputReader inputReader = default;
         [SerializeField] private DialogueManager dialogueManager = default;
+
+        [Header("Listening On")] 
+        [SerializeField] private PlayableDirectorChannelSO playCutSceneEvent = default;
+        [SerializeField] private DialogueLineChannelSO playDialogueLineEvent = default;
         
+        
+        private PlayableDirector playableDirector;
         
         //can't use playableGraph.IsPlaying cause we have Pause state while playing;
         public bool IsCutscenePlaying => playableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
@@ -28,11 +32,25 @@ namespace Platformer.CutScenes
         private void OnEnable()
         {
             inputReader.AdvanceDialogueEvent +=OnAdvance;
+            playCutSceneEvent.OnEventRaised += PlayCutscene;
         }
 
         private void OnDisable()
         {
             inputReader.AdvanceDialogueEvent -=OnAdvance;
+            playCutSceneEvent.OnEventRaised -= PlayCutscene;
+            playDialogueLineEvent.OnEventRaised -= PlayDialogueFromClip;
+        }
+
+        private void Start()
+        {
+            playCutSceneEvent.OnEventRaised += PlayCutscene;
+            playDialogueLineEvent.OnEventRaised += PlayDialogueFromClip;
+        }
+
+        private void PlayDialogueFromClip(string dialogueLine, ActorSO actor)
+        {
+            dialogueManager.DisplayDialogueLine(dialogueLine, actor);
         }
 
         public void PlayCutscene(PlayableDirector activePlayableDirector)

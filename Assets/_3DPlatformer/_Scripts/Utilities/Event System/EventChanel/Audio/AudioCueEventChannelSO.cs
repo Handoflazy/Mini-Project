@@ -3,7 +3,7 @@ using Platformer.Systems.AudioSystem;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Utilities.Event_System.EventChannel
+namespace Utilities.EventChannel
 {
     [CreateAssetMenu(menuName = "Events/AudioCue Channel")]
     public class AudioCueEventChannelSO : ScriptableObject

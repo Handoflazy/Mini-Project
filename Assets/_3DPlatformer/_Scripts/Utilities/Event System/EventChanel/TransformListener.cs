@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Utilities.Event_System.EventChannel
+namespace Utilities.EventChannel
 {
     public class TransformListener: EventListenter<Transform>{}
 }

@@ -547,9 +547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47d5c2be25a8427c977ada1eb6b14a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadGroupSceneIndex: 1
-  playerButton: {fileID: 0}
-  exitButton: {fileID: 0}
 --- !u!1 &166605204
 GameObject:
   m_ObjectHideFlags: 0
@@ -1682,7 +1679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7976915876f4e0496829c5639502010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneGroupIndexToLoad: 1
+  sceneGroupIndexToLoad: 3
   loadLocation: {fileID: 11400000, guid: 8cbabc70dedfeb14cb6cfa6ab388f35a, type: 2}
 --- !u!1 &972108828
 GameObject:

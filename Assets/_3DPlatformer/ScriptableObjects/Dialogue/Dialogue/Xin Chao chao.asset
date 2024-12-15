@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab24ff7d2cb40f4b0056f4566204639, type: 3}
   m_Name: Xin Chao chao
   m_EditorClassIdentifier: 
-  Conversation:
-  - {fileID: 11400000, guid: c55807a399e7f41408de45810f0fc131, type: 2}
+  lines: []
+  endOfDialogueEvent: {fileID: 0}
+  dialogueType: 0

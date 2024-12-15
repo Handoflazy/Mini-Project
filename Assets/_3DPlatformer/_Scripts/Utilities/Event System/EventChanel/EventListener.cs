@@ -1,4 +1,4 @@
-namespace Utilities.Event_System.EventChannel
+namespace Utilities.EventChannel
 {
     public class EventListener : EventListenter<Empty>
     {

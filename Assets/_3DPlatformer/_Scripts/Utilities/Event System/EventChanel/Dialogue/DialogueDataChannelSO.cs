@@ -3,7 +3,7 @@ using Platformer.Dialogue;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Utilities.Event_System.EventChannel
+namespace Utilities.EventChannel
 {
     /// <summary>
     /// This class is used for talk interaction events.
