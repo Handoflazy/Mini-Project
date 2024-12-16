@@ -11,7 +11,8 @@ namespace Platformer
        protected enum SpawnPointStratgyType
         {
             Linear,
-            Random
+            Random,
+            Circle
         }
 
         protected virtual void Awake()

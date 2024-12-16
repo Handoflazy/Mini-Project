@@ -1,5 +1,6 @@
 using System;
 using Platformer.Dialogue;
+using Platformer.GamePlay;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Platformer.CutScenes
     {
         [SerializeField] private InputReader inputReader = default;
         [SerializeField] private DialogueManager dialogueManager = default;
+        [SerializeField] private GameStateSO gameState = default;
 
         [Header("Listening On")] 
         [SerializeField] private PlayableDirectorChannelSO playCutSceneEvent = default;
@@ -56,6 +58,7 @@ namespace Platformer.CutScenes
         public void PlayCutscene(PlayableDirector activePlayableDirector)
         {
             inputReader.EnableDialogueInput();
+            gameState.UpdateGameState(GameState.Cutscene);
             playableDirector = activePlayableDirector;
             
             isPause = false;
@@ -82,6 +85,7 @@ namespace Platformer.CutScenes
             {
                 playableDirector.stopped -= HandleDirectorStopped;
             }
+            gameState.UpdateGameState(GameState.Gameplay);
             dialogueManager.CutsceneDialogueEnded();
             inputReader.EnableGameplayInput();
         }

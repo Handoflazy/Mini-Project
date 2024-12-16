@@ -5,6 +5,7 @@ using Platformer._Scripts.ScriptableObject;
 using Platformer.Advanced;
 using Character;
 using Platformer._3DPlatformer._Scripts.Character;
+using Platformer.GamePlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityUtils;
@@ -23,7 +24,9 @@ namespace AdvancePlayerController
             [SerializeField,Required] private Damageable damageable;
             [SerializeField,Required] private PlayerEffectController playerEffectController;
             [SerializeField,Required] private ProtagonistAudio protagonistAudio;
+            
             [SerializeField] private float MaxFallDistance = 8;
+            [SerializeField] private float combatTime = 8;
             public bool useLocalMomentum;
 
             private Transform tr;
@@ -35,6 +38,7 @@ namespace AdvancePlayerController
             private CountdownTimer sprintTimer;
             private CountdownTimer runCooldownTimer;
             private CountdownTimer surprisedTimer;
+        
 
             #endregion
             
@@ -81,6 +85,11 @@ namespace AdvancePlayerController
                 ceilingDetector.Reset();
                 
                
+            }
+
+            public void UpdateCombatMode(bool isCombatMode)
+            {
+                animator.SetBool("IsCombat", isCombatMode);
             }
 
             private void OnEnable()

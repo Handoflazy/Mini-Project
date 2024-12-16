@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Platformer.Dialogue;
+using Platformer.GamePlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -16,6 +17,7 @@ namespace Platformer.CutScenes
     {
         [SerializeField] private List<ActorSO> actorsList;
         [SerializeField] private InputReader inputReader;
+        [SerializeField] private GameStateSO gameState;
 
         [Header("Listener On")] 
         [SerializeField] private DialogueDataChannelSO startDialogue;
@@ -41,6 +43,11 @@ namespace Platformer.CutScenes
 
         public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
         {
+            if (gameState.CurrentGameState != GameState.Cutscene)
+            {
+                gameState.UpdateGameState(GameState.Dialogue);
+            }
+            
             counterDialogue = 0;
             inputReader.EnableDialogueInput();
             inputReader.AdvanceDialogueEvent += OnAdvance;
@@ -79,19 +86,21 @@ namespace Platformer.CutScenes
         {
             openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
         }
+        public void CutsceneDialogueEnded()
+        {
+            closeUIDialogueEvent.Invoke();
+        }
         private void DialogueEndedAndCloseDialogueUI()
         {
             currentDialogue.FinishDialogue();
             
             inputReader.AdvanceDialogueEvent -= OnAdvance;
-            inputReader.EnableGameplayInput();
             closeUIDialogueEvent.Invoke();
+            gameState.ResetToPreviousGameState();
+            if(gameState.CurrentGameState == GameState.Gameplay || gameState.CurrentGameState == GameState.Combat)
+                inputReader.EnableGameplayInput();
         }
 
-        public void CutsceneDialogueEnded()
-        {
-            closeUIDialogueEvent.Invoke();
-        }
     }
    
 }
