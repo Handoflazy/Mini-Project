@@ -15,7 +15,7 @@ namespace Platformer._3DPlatformer._Scripts.Character
 
         private void Start()
         {
-            combatTimer = new CountdownTimer(30);
+            combatTimer = new CountdownTimer(10);
             combatTimer.OnTimerStart += () => gameState.UpdateGameState(GameState.Combat);
             combatTimer.OnTimerStop += () => gameState.UpdateGameState(GameState.Gameplay);
         }

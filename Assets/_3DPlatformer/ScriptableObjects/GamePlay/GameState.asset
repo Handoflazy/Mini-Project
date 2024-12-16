@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58aa063c89da488991921761e06eec20, type: 3}
   m_Name: GameState
   m_EditorClassIdentifier: 
-  _guid: 
+  _guid: a7751dc6faee8be438feaa8ce56da869
   description: 
   currentGameState: 0
-  previousGameState: 0
-  onCombatStateEvent: {fileID: 0}
+  previousGameState: 6
+  onCombatStateEvent: {fileID: 11400000, guid: d1802942116685a43bde8424182da726, type: 2}

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Utilities.Tools
 {
-    public class ClickToPlaceHelper : MonoBehaviour
+    public class ClickToPlace : MonoBehaviour
     {
         [Tooltip("Vertical offset above the clicked point. Useful to avoid spawn points to be directly ON the geometry which might cause issues.")]
         [SerializeField] private float _verticalOffset = 0.1f;

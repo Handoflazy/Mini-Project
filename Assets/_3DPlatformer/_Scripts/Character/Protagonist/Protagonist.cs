@@ -4,6 +4,7 @@ using State;
 using Platformer._Scripts.ScriptableObject;
 using Platformer.Advanced;
 using Character;
+using Platformer;
 using Platformer._3DPlatformer._Scripts.Character;
 using Platformer.GamePlay;
 using Sirenix.OdinInspector;
@@ -15,18 +16,16 @@ namespace AdvancePlayerController
     public class Protagonist : MonoBehaviour
     {
             [Header("Elements")]
-            [SerializeField,Required] Platformer.InputReader input;
-            [SerializeField,Required] PlayerData data;
+            [SerializeField,Required] private InputReader input;
+            [SerializeField,Required] private PlayerData data;
             [SerializeField,Required] private CeilingDetector ceilingDetector;
-            [SerializeField,Required] Transform cameraTransform;
+            [SerializeField,Required] private Transform cameraTransform;
             [SerializeField,Required] private Animator animator;
             [SerializeField,Required] private Attacker attacker;
             [SerializeField,Required] private Damageable damageable;
             [SerializeField,Required] private PlayerEffectController playerEffectController;
             [SerializeField,Required] private ProtagonistAudio protagonistAudio;
             
-            [SerializeField] private float MaxFallDistance = 8;
-            [SerializeField] private float combatTime = 8;
             public bool useLocalMomentum;
 
             private Transform tr;
@@ -38,28 +37,12 @@ namespace AdvancePlayerController
             private CountdownTimer sprintTimer;
             private CountdownTimer runCooldownTimer;
             private CountdownTimer surprisedTimer;
-        
-
             #endregion
-            
-
-        
-            
-        
-            [Header("Run Settings")]
-            [SerializeField]
-            private float RunMultiplier = 1.5f;
-
-            [SerializeField] private float runCooldownTime = 2f;
-            [SerializeField] private float runTime = 3f;
-            [SerializeField] private float surprisedAnimationTime =1f;
-            [SerializeField] private float slideToJumpThreshold;
-            [ReadOnly] [SerializeField] private string currentState;
-           
+            [ReadOnly] [SerializeField] private string currentState;// for debug
             private Vector3 momentum, savedVelocity, savedMovementVelocity;
             [NonSerialized] private bool isRunPressing;
             [NonSerialized] private bool isJumpButtonHeld;
-            [SerializeField] private bool attackInput;
+            [NonSerialized] private bool attackInput;
             private void Awake()
             {
                 tr = transform;
@@ -76,7 +59,7 @@ namespace AdvancePlayerController
                 mover.CheckForGround();
                 HandleMomentum();
                 var velocity = stateMachine.CurrentState is WalkAttackState or WalkState? CalculateMovementVelocity():Vector3.zero;
-                velocity = sprintTimer.IsRunning? velocity*RunMultiplier: velocity;
+                velocity = sprintTimer.IsRunning? velocity*data.RunMultiplier: velocity;
                 velocity += useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
                 mover.SetExtendSensorRange(IsGroundedStates());
                 mover.SetVelocity(velocity);
@@ -87,7 +70,7 @@ namespace AdvancePlayerController
                
             }
 
-            public void UpdateCombatMode(bool isCombatMode)
+            public void UpdateCombatMode(bool isCombatMode) // TODO:Remove later
             {
                 animator.SetBool("IsCombat", isCombatMode);
             }
@@ -118,9 +101,9 @@ namespace AdvancePlayerController
             private void SetUpTimers()
             {
                 jumpBuffer = new CountdownTimer(data.JumpInputBufferTime);
-                sprintTimer = new CountdownTimer(runTime);
-                runCooldownTimer = new CountdownTimer(runCooldownTime);
-                surprisedTimer = new CountdownTimer(surprisedAnimationTime);
+                sprintTimer = new CountdownTimer(data.RunTime);
+                runCooldownTimer = new CountdownTimer(data.RunCooldownTime);
+                surprisedTimer = new CountdownTimer(data.SurprisedAnimationTime);
                 sprintTimer.OnTimerStop += () => runCooldownTimer.Start();
                 sprintTimer.OnTimerStop += OnStoppedSprinting;
             }
@@ -217,7 +200,7 @@ namespace AdvancePlayerController
                 
                 #region Sliding
                 At(slidingState,idleState, new FuncPredicate(()=>!IsGroundTooSteep()));
-                At(slidingState,jumpState, new FuncPredicate(()=>jumpBuffer.IsRunning&&IsActuallyMoving(slideToJumpThreshold)));
+                At(slidingState,jumpState, new FuncPredicate(()=>jumpBuffer.IsRunning&&IsActuallyMoving(data.SlideToJumpThreshold)));
                 #endregion
 
                 #region Idle Attacking
@@ -278,20 +261,12 @@ namespace AdvancePlayerController
                 }
                 
                 if (stateMachine.CurrentState is SlidingState) 
-                {
                     HandleSliding(ref horizontalMomentum);
-                }
                 var friction = HandleFriction();
                 horizontalMomentum = Vector3.MoveTowards(horizontalMomentum,Vector3.zero,friction*Time.deltaTime);
                 momentum = horizontalMomentum + verticalMomentum;
                 if (stateMachine.CurrentState is SlidingState)
-                {
                     HandleSliding();
-                }
-                
-   
-                
-                
                 if(useLocalMomentum) momentum = tr.worldToLocalMatrix * momentum;
             }
 
@@ -325,12 +300,6 @@ namespace AdvancePlayerController
                         verticalMomentum -= transform.up*(data.Gravity*data.FallGravityMult*Time.deltaTime);
                         break;
                 }
-
-                float maxFallSpeed = data.MaxFallSpeed;
-                if (verticalMomentum.magnitude > maxFallSpeed)
-                {
-                    verticalMomentum = verticalMomentum.normalized * maxFallSpeed;
-                }
                 return verticalMomentum;
             }
 
@@ -360,7 +329,6 @@ namespace AdvancePlayerController
                 {   
                     horizontalMomentum += movementVelocity * (data.AirControlRate * Time.deltaTime);
                     horizontalMomentum = Vector3.ClampMagnitude(horizontalMomentum, data.RunMaxSpeed);
-                   
                 }
                
                
@@ -377,7 +345,7 @@ namespace AdvancePlayerController
             public void OnGroundContactRegained()
             {
                 Vector3 collisionVelocity = useLocalMomentum ? tr.localToWorldMatrix * momentum : momentum;
-                float maxSafeFallVelocity = Mathf.Sqrt(2*data.Gravity * data.FallGravityMult * MaxFallDistance);
+                float maxSafeFallVelocity = Mathf.Sqrt(2*data.Gravity * data.FallGravityMult * data.MaxFallDistance);
                 float fallIntensity = Mathf.InverseLerp(0, maxSafeFallVelocity, collisionVelocity.magnitude);
                 playerEffectController.PlayLandParticles(fallIntensity);
                 if(collisionVelocity.magnitude>maxSafeFallVelocity)
