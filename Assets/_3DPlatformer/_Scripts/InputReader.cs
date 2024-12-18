@@ -19,8 +19,10 @@ namespace Platformer
 		public event UnityAction InventoryActionButtonEvent = delegate { };
 		public event UnityAction SaveActionButtonEvent = delegate { };
 		public event UnityAction ResetActionButtonEvent = delegate { };
-		
-		
+
+		public event UnityAction<int> AbilityPressedEvent = delegate { };
+
+
 		public event UnityAction<Vector2> MoveEvent = delegate{};
 		public event UnityAction<Vector2,bool> CameraMoveEvent = delegate { };
 		public event UnityAction EnableMouseControlCamera = delegate { };
@@ -175,6 +177,34 @@ namespace Platformer
 				}
 			
 		}
+
+		public void OnAbility1(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+			{
+				Debug.Log($"Ability 1 Used");
+				AbilityPressedEvent.Invoke(0);
+			}
+		}
+
+		public void OnAbility2(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+			{
+				Debug.Log($"Ability 2 Used");
+				AbilityPressedEvent.Invoke(1);
+			}
+		}
+
+		public void OnAbility3(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+			{
+				Debug.Log($"Ability 3 Used");
+				AbilityPressedEvent.Invoke(2);
+			}
+		}
+
 		private static bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
 		public void OnMoveSelection(InputAction.CallbackContext context)
 		{

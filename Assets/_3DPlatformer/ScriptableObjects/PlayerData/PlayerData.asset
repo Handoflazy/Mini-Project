@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RunMaxSpeed: 5.212
   AirControlRate: 1
-  runAcceleration: 5.212
-  runDecceleration: 5.212
   JumpHeight: 3
   JumpTimeToApex: 0.6
-  SlideSpeed: 3
-  SlideAccel: 2
+  RunMultiplier: 1.5
+  SlideToJumpThreshold: 1
   Gravity: 30
   FallGravityMult: 1.2
   SlideGravity: 5
-  FastFallGravityMult: 2
-  MaxFallSpeed: 25
+  MaxFallDistance: 15
   SlopeLimit: 30
   GroundFriction: 21.9
   AirFriction: 1
   CoyoteTime: 0.15
   JumpInputBufferTime: 0.1
+  RunCooldownTime: 2
+  RunTime: 3
+  SurprisedAnimationTime: 1

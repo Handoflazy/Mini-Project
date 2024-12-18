@@ -5,11 +5,14 @@ using Platformer._Scripts.ScriptableObject;
 using Platformer.Advanced;
 using Character;
 using Platformer;
+using Platformer.AbilitySystem;
 using Platformer.Character;
 using Platformer.GamePlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityUtils;
+using Utilities.Event_System.EventBus;
+
 namespace AdvancePlayerController
 {
     [RequireComponent(typeof(Damageable))]
@@ -44,12 +47,16 @@ namespace AdvancePlayerController
             [NonSerialized] private bool isRunPressing;
             [NonSerialized] private bool isJumpButtonHeld;
             [NonSerialized] private bool attackInput;
+            
+            EventBinding<PlayerAnimationEvent> abilityEventBinding;
             private void Awake()
             {
                 tr = transform;
                 mover = GetComponent<PlayerMover>();
                 SetUpTimers();
                 SetupStateMachine();
+
+               
             }
             private void Start() => input.EnablePlayerActions();
 
@@ -76,6 +83,10 @@ namespace AdvancePlayerController
                 animator.SetBool("IsCombat", isCombatMode);
             }
 
+            public void PlayAbility(PlayerAnimationEvent animationEvent)
+            {
+                animator.Play(animationEvent.animationHash);
+            }
             private void OnEnable()
             {
                 input.JumpEvent += OnJumpInitiated;
@@ -83,6 +94,9 @@ namespace AdvancePlayerController
                 input.StartedRunning += OnStartedSprinting;
                 input.StoppedRunning += OnStoppedSprinting;
                 input.AttackEvent += OnStartedAttack;
+
+                abilityEventBinding = new EventBinding<PlayerAnimationEvent>(PlayAbility);
+                EventBus<PlayerAnimationEvent>.Register(abilityEventBinding);
                 //
 
             }
@@ -96,6 +110,8 @@ namespace AdvancePlayerController
                 input.StartedRunning -= OnStartedSprinting;
                 input.StoppedRunning -= OnStoppedSprinting;
                 input.AttackEvent -= OnStartedAttack;
+                
+                EventBus<PlayerAnimationEvent>.Deregister(abilityEventBinding);
                 //
                 
             }
