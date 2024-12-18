@@ -53,7 +53,6 @@ namespace Character
             if(updateHealthUI!=null)
                 updateHealthUI.Invoke();
             GetHit = true;
-            print(currentHealthSO.CurrentHealth);
             if (currentHealthSO.CurrentHealth != 0) return;
             IsDead = true;
             
@@ -65,6 +64,7 @@ namespace Character
         }
         public void Kill()
         {
+            Debug.Log("Who Kill");
             ReceiveAnAttack(currentHealthSO.CurrentHealth);
         }
         public void Revive()

@@ -4,7 +4,7 @@ using Platformer.GamePlay;
 using UnityEngine;
 using Utilities.ImprovedTimers;
 
-namespace Platformer._3DPlatformer._Scripts.Character
+namespace Platformer.Character
 {
     public class Attack: MonoBehaviour
     {

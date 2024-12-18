@@ -2,7 +2,7 @@ using Platformer.Systems.AudioSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Platformer._3DPlatformer._Scripts.Character
+namespace Platformer.Character
 {
     public class ProtagonistAudio : CharacterAudio
     {

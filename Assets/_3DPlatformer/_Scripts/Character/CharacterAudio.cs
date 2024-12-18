@@ -5,7 +5,7 @@ using UnityEngine;
 using Utilities.EventChannel;
 using Utilities.ImprovedTimers;
 
-namespace Platformer._3DPlatformer._Scripts.Character
+namespace Platformer.Character
 {
     public class CharacterAudio : MonoBehaviour
     {

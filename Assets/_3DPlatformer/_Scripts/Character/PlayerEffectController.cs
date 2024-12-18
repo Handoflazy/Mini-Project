@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Platformer._3DPlatformer._Scripts.Character
+namespace Platformer.Character
 {
     public class PlayerEffectController: MonoBehaviour
     {

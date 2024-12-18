@@ -1,5 +1,5 @@
 using AdvancePlayerController;
-using Platformer._3DPlatformer._Scripts.Character;
+using Platformer.Character;
 using UnityEngine;
 using Utilities.ImprovedTimers;
 

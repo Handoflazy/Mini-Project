@@ -5,7 +5,7 @@ using Platformer._Scripts.ScriptableObject;
 using Platformer.Advanced;
 using Character;
 using Platformer;
-using Platformer._3DPlatformer._Scripts.Character;
+using Platformer.Character;
 using Platformer.GamePlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -21,7 +21,6 @@ namespace AdvancePlayerController
             [SerializeField,Required] private CeilingDetector ceilingDetector;
             [SerializeField,Required] private Transform cameraTransform;
             [SerializeField,Required] private Animator animator;
-            [SerializeField,Required] private Attacker attacker;
             [SerializeField,Required] private Damageable damageable;
             [SerializeField,Required] private PlayerEffectController playerEffectController;
             [SerializeField,Required] private ProtagonistAudio protagonistAudio;
@@ -31,15 +30,17 @@ namespace AdvancePlayerController
             private Transform tr;
             private PlayerMover mover;
             private StateMachine stateMachine;
-
+            
+            
             #region Timers
             private CountdownTimer jumpBuffer;
             private CountdownTimer sprintTimer;
             private CountdownTimer runCooldownTimer;
             private CountdownTimer surprisedTimer;
             #endregion
-            [ReadOnly] [SerializeField] private string currentState;// for debug
-            private Vector3 momentum, savedVelocity, savedMovementVelocity;
+            [ReadOnly] 
+            [SerializeField] private string currentState;// for debug
+            [NonSerialized] private Vector3 momentum, savedVelocity, savedMovementVelocity;
             [NonSerialized] private bool isRunPressing;
             [NonSerialized] private bool isJumpButtonHeld;
             [NonSerialized] private bool attackInput;
@@ -348,8 +349,12 @@ namespace AdvancePlayerController
                 float maxSafeFallVelocity = Mathf.Sqrt(2*data.Gravity * data.FallGravityMult * data.MaxFallDistance);
                 float fallIntensity = Mathf.InverseLerp(0, maxSafeFallVelocity, collisionVelocity.magnitude);
                 playerEffectController.PlayLandParticles(fallIntensity);
-                if(collisionVelocity.magnitude>maxSafeFallVelocity)
+                if (collisionVelocity.magnitude > maxSafeFallVelocity)
+                {
+                    print(collisionVelocity.magnitude);
                     damageable.Kill(); // death by high fall
+                    
+                }
                 momentum = Vector3.zero;
             }
 
